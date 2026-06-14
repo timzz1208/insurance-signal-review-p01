@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <title>公開訊號觀察｜MVP 測試版</title>
+  <style>
+    :root {
+      --ink: #17211b;
+      --muted: #607067;
+      --paper: #fbfaf5;
+      --card: #ffffff;
+      --line: #dfe6df;
+      --forest: #174d37;
+      --forest-soft: #e7f1eb;
+      --amber: #9a5c12;
+      --amber-soft: #fff4dd;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 10% 0%, #e7f1eb 0, transparent 32rem),
+        var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    header {
+      padding: 28px 18px 24px;
+      background: var(--forest);
+      color: #fff;
+    }
+
+    .header-inner,
+    main,
+    footer {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #bfddcc;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .14em;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Noto Serif TC", serif;
+      font-size: clamp(28px, 8vw, 44px);
+      line-height: 1.14;
+      letter-spacing: -.03em;
+    }
+
+    .intro {
+      max-width: 600px;
+      margin: 12px 0 0;
+      color: #e5f1e9;
+      font-size: 15px;
+    }
+
+    main { padding: 18px 14px 32px; }
+
+    .notice {
+      margin-bottom: 18px;
+      padding: 15px 16px;
+      border: 1px solid #e7c88d;
+      border-radius: 14px;
+      background: var(--amber-soft);
+      color: #67400f;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 24px 2px 14px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-family: Georgia, "Noto Serif TC", serif;
+      font-size: 24px;
+    }
+
+    .count {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .signals {
+      display: grid;
+      gap: 18px;
+    }
+
+    .signal-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      box-shadow: 0 8px 24px rgba(23, 77, 55, .07);
+    }
+
+    .card-top {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f7faf7;
+    }
+
+    .signal-code {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .topic {
+      min-width: 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
+    .card-body {
+      min-width: 0;
+      padding: 17px 16px 18px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--forest);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
+    .summary {
+      margin: 0 0 16px;
+      color: #27342c;
+      font-size: 16px;
+      overflow-wrap: anywhere;
+    }
+
+    .note {
+      margin: 0 0 12px;
+      padding: 12px 13px;
+      border-left: 3px solid var(--forest);
+      border-radius: 8px;
+      background: var(--forest-soft);
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .note.contact {
+      border-left-color: var(--amber);
+      background: var(--amber-soft);
+    }
+
+    .thread-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+      margin-top: 16px;
+      border-radius: 12px;
+      background: var(--forest);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      text-decoration: none;
+      touch-action: manipulation;
+    }
+
+    .thread-link:focus-visible {
+      outline: 3px solid #e9b65b;
+      outline-offset: 3px;
+    }
+
+    footer {
+      padding: 0 14px calc(30px + env(safe-area-inset-bottom));
+    }
+
+    .feedback {
+      padding: 18px;
+      border-radius: 16px;
+      background: #17211b;
+      color: #fff;
+    }
+
+    .feedback h2 {
+      margin: 0 0 7px;
+      font-family: Georgia, "Noto Serif TC", serif;
+      font-size: 21px;
+    }
+
+    .feedback p {
+      margin: 0;
+      color: #dce8e0;
+      font-size: 14px;
+    }
+
+    @media (min-width: 680px) {
+      header { padding: 42px 24px 36px; }
+      main { padding: 26px 20px 42px; }
+      .signals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .signal-card { display: flex; flex-direction: column; }
+      .card-body { display: flex; flex: 1; flex-direction: column; }
+      .thread-link { margin-top: auto; }
+      footer { padding-inline: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <p class="eyebrow">SIGNAL REVIEW · MVP</p>
+      <h1>公開訊號觀察</h1>
+      <p class="intro">整理近期公開貼文中的工作與職涯話題，協助主管進行人工判斷與討論。</p>
+    </div>
+  </header>
+
+  <main>
+    <aside class="notice">
+      本頁為內部 MVP 測試版本，內容僅供人工判斷與討論，不代表正式招募名單。請勿大量聯絡、請勿自動化聯繫、請勿任意轉傳。
+    </aside>
+
+    <div class="section-head">
+      <h2>本期觀察</h2>
+      <span class="count">共 11 筆</span>
+    </div>
+
+    <section class="signals" aria-label="公開訊號觀察清單">
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S001</span><span class="topic">主題：工作模式</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文提問人是否一定要從事全職工作，並表示自己不適合目前常見的全職工作模式。</p>
+          <p class="note"><strong>初步觀察：</strong>公開談到對工作型態的疑問，可作為了解其職涯想法的起點，仍需人工判斷。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>先交流理想的工作彈性與生活安排，不直接推介職缺。</p>
+          <a class="thread-link" href="https://www.threads.net/@maggie0627_/post/DZVk81eE-fu" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S002</span><span class="topic">主題：轉換跑道</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文表示已想清楚離職，原因是公司高壓風氣，並希望嘗試其他行業或兼職寫作。</p>
+          <p class="note"><strong>初步觀察：</strong>公開分享轉換跑道與兼職可能性，可先理解其下一步規劃。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>從離職後想嘗試的方向開始聊，尊重對方是否願意延伸交流。</p>
+          <a class="thread-link" href="https://www.threads.net/@1182hyc/post/DYuC_M0j1_u" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S003</span><span class="topic">主題：人生下一階段</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文分享結束超過十年的工作，預計先休息、旅行與陪伴家人，再往人生下一階段前進。</p>
+          <p class="note"><strong>初步觀察：</strong>正處於公開描述的職涯轉換期，適合先聽取其下一階段想法。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>從休息安排與未來方向交流，不急著提出工作建議。</p>
+          <a class="thread-link" href="https://www.threads.net/@xieyingchang/post/DZN9NvRk53k" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S004</span><span class="topic">主題：生涯規劃</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文詢問如何正式提出離職，並說明因生涯規劃希望轉換跑道。</p>
+          <p class="note"><strong>初步觀察：</strong>公開提到轉換跑道與離職溝通，可先了解其規劃與顧慮。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>先分享生涯轉換經驗，讓對方自行決定是否繼續討論。</p>
+          <a class="thread-link" href="https://www.threads.net/@18y_152cm/post/DYoBq7skpnL" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S005</span><span class="topic">主題：保險服務經驗</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文分享汽車保險未正確登記的經驗，並詢問保險公司與業務的處理方式是否合理。</p>
+          <p class="note"><strong>初步觀察：</strong>這是公開的保險服務討論，適合先釐清問題與提供一般經驗交流。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>以回應其公開問題為主，不延伸為未經邀請的招募對話。</p>
+          <a class="thread-link" href="https://www.threads.net/@gary712152000/post/DZcs3_jGQMc" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S006</span><span class="topic">主題：兼職與正職</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文詢問是否有人只做兼職，並表示正職的壓力較大、感覺不划算。</p>
+          <p class="note"><strong>初步觀察：</strong>公開討論兼職與正職的取捨，可先了解對方重視的工作條件。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>從工作彈性與穩定性的取捨交流，不預設對方正在求職。</p>
+          <a class="thread-link" href="https://www.threads.net/@kurumi91015/post/DZZtL6tCX_N" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S007</span><span class="topic">主題：時間彈性</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文提到即將實習找工作的焦慮，以及未來上班後較難自由安排時間的顧慮。</p>
+          <p class="note"><strong>初步觀察：</strong>公開關注工作與個人時間的平衡，適合先理解其工作選擇標準。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>先交流如何評估不同工作的時間彈性，不急著提供方案。</p>
+          <a class="thread-link" href="https://www.threads.net/@l1iii_n/post/DY1icukEUYi" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S008</span><span class="topic">主題：工作適應</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文分享找到工作並做滿一個月，但仍常請假、排斥上班，並向其他人詢問經驗。</p>
+          <p class="note"><strong>初步觀察：</strong>內容涉及工作適應感受，應以關懷與傾聽為優先，不做強烈判斷。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>若互動，先回應其公開提問並保持界線，避免立即談招募。</p>
+          <a class="thread-link" href="https://www.threads.net/@celinewang0926/post/DZAbAUOFMCC" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S009</span><span class="topic">主題：離職預告</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文詢問離職預告期應依勞基法或多留預備期，並提到延長日期可能增加負擔。</p>
+          <p class="note"><strong>初步觀察：</strong>公開討論離職安排，可先了解其實際考量，不推定後續職涯選擇。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>從離職交接經驗切入，讓對方自行決定是否談下一步。</p>
+          <a class="thread-link" href="https://www.threads.net/@quithejob/post/DY6yeuZmo5g" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S010</span><span class="topic">主題：保險業觀感</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文詢問保險業務是否真的比直銷更讓人敬而遠之。</p>
+          <p class="note"><strong>初步觀察：</strong>公開提出對保險業務的疑問，適合作為理解產業觀感的討論素材。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>如要互動，先聽取其看法，不以說服或招募為目的。</p>
+          <a class="thread-link" href="https://www.threads.net/@du.fei/post/DZeEBLUkyi2" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+
+      <article class="signal-card">
+        <div class="card-top"><span class="signal-code">S011</span><span class="topic">主題：短期工作體驗</span></div>
+        <div class="card-body">
+          <span class="label">公開貼文摘要</span>
+          <p class="summary">貼文尋找澎湖短期打工換宿機會，希望工時不要太長，並分享餐飲服務與社群經營經驗。</p>
+          <p class="note"><strong>初步觀察：</strong>公開說明短期工作偏好與既有經驗，可先了解其對工作內容的期待。</p>
+          <p class="note contact"><strong>低壓交流方向：</strong>從打工換宿與工作條件交流，不把短期需求直接解讀為長期求職。</p>
+          <a class="thread-link" href="https://www.threads.net/@linda.10.25.s/post/DZbrPbsne9W" target="_blank" rel="noopener noreferrer">開啟原始公開貼文</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <section class="feedback">
+      <h2>使用後回報</h2>
+      <p>使用後請回報哪些訊號已查看、適合接觸或已收到回覆。回報時提供卡片上的訊號代碼即可，例如：S003、S007。</p>
+    </section>
+  </footer>
+</body>
+</html>
