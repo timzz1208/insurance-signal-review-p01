@@ -1,104 +1,104 @@
 1
-00:00:02,250 --> 00:00:07,960
+00:00:02,250 --> 00:00:07,237
 臺中東邊的山城新社，雲霧繚繞著層層河階台地。
 <i>Xinshe, a mountain town east of Taichung, wrapped in mist over its river terraces.</i>
 
 2
-00:00:08,160 --> 00:00:14,385
+00:00:07,437 --> 00:00:12,608
 兩百年前，客家先民在這裡開墾，建起九個庄頭。
 <i>Two centuries ago, Hakka settlers cleared this land and founded nine villages.</i>
 
 3
-00:00:21,984 --> 00:00:27,843
+00:00:20,208 --> 00:00:24,732
 相傳一百八十多年前，一名採樟工人上山躲雨。
 <i>Legend says that over 180 years ago, a camphor worker sheltered from the rain.</i>
 
 4
-00:00:28,044 --> 00:00:33,520
+00:00:24,933 --> 00:00:29,305
 他發現一尊淋濕的媽祖神像，便將她迎回庄裡。
 <i>He found a rain-soaked statue of Mazu and carried her home to the village.</i>
 
 5
-00:00:35,620 --> 00:00:40,724
+00:00:31,405 --> 00:00:35,766
 媽祖屢顯靈驗，九個庄頭決定輪流奉祀。
 <i>Mazu answered many prayers, so nine villages agreed to host her in turn.</i>
 
 6
-00:00:40,924 --> 00:00:46,205
+00:00:35,966 --> 00:00:41,293
 山頂、新社、土城、畚箕湖……九庄輪流迎請媽祖。
 <i>Shanding, Xinshe, Tucheng, Benjihu... nine villages take turns welcoming her.</i>
 
 7
-00:00:48,305 --> 00:00:53,221
+00:00:43,392 --> 00:00:47,346
 她不住廟宇，而是住進爐主家中的紅壇。
 <i>She has no temple; she lives at the red altar in the host family's home.</i>
 
 8
-00:00:53,420 --> 00:00:57,425
+00:00:47,546 --> 00:00:51,237
 所以人們說，九庄媽是「有神無廟」。
 <i>That is why people say she is "a goddess without a temple."</i>
 
 9
-00:00:59,526 --> 00:01:05,745
+00:00:53,337 --> 00:00:58,584
 誰來當爐主？信徒虔誠擲筊，請媽祖親自挑選。
 <i>Who will host her? Devotees cast moon blocks and let Mazu choose.</i>
 
 10
-00:01:07,845 --> 00:01:12,733
+00:01:00,684 --> 00:01:04,770
 每年農曆初三到初七，擇一天出巡遊庄。
 <i>Each year, on one day between the 3rd and 7th of Lunar New Year, she tours.</i>
 
 11
-00:01:12,933 --> 00:01:18,629
+00:01:04,970 --> 00:01:09,464
 天還沒亮，信眾就提燈集合，恭迎媽祖起駕。
 <i>Before dawn, devotees gather with lanterns to escort Mazu out.</i>
 
 12
-00:01:20,729 --> 00:01:25,597
+00:01:11,564 --> 00:01:16,131
 神轎出發，鑼鼓與鞭炮聲響徹山間小路。
 <i>The palanquin sets off; gongs, drums and firecrackers fill the mountain lanes.</i>
 
 13
-00:01:25,797 --> 00:01:29,891
+00:01:16,331 --> 00:01:20,078
 這是全臺灣每年最早登場的媽祖遶境。
 <i>It is the earliest Mazu procession of the year in all of Taiwan.</i>
 
 14
-00:01:31,991 --> 00:01:37,300
+00:01:22,178 --> 00:01:26,549
 沿途信徒跪在路旁鑽轎腳，祈求一年平安。
 <i>Along the way, devotees kneel to pass beneath the palanquin, praying for peace.</i>
 
 15
-00:01:39,400 --> 00:01:45,301
+00:01:28,649 --> 00:01:33,892
 輪值庄頭辦桌款待，八庄挺一庄，人情最濃。
 <i>The host village sets out a feast; eight villages stand by one, full of warmth.</i>
 
 16
-00:01:47,401 --> 00:01:53,613
+00:01:35,992 --> 00:01:41,298
 吉時一到，香爐過爐交接，媽祖在新爐主家安座。
 <i>At the auspicious hour, the incense burner passes on, and Mazu settles in her new home.</i>
 
 17
-00:01:55,713 --> 00:02:01,900
+00:01:43,398 --> 00:01:48,379
 二〇〇九年，九庄媽遶境登錄為臺中民俗文化資產。
 <i>In 2009, the procession was registered as a Taichung folk cultural heritage.</i>
 
 18
-00:02:02,100 --> 00:02:08,434
+00:01:48,579 --> 00:01:53,493
 水底寮退出後，新社庄多輪一次，仍守九年一輪。
 <i>When Shuidiliao withdrew, Xinshe took an extra turn to keep the nine-year cycle.</i>
 
 19
-00:02:10,534 --> 00:02:15,498
+00:01:55,593 --> 00:01:58,947
 九年一輪，媽祖走過每一戶人家的門口。
 <i>Every nine years, Mazu passes by the door of every family.</i>
 
 20
-00:02:15,698 --> 00:02:20,473
+00:01:59,147 --> 00:02:02,654
 沒有廟宇的高牆，她就住在人們的心裡。
 <i>Without temple walls, she lives in the hearts of her people.</i>
 
 21
-00:02:20,673 --> 00:02:26,450
+00:02:02,854 --> 00:02:07,291
 兩百年的香火，一代接著一代，繼續走下去。
 <i>Two hundred years of incense, passed from generation to generation, walk on.</i>

@@ -256,6 +256,7 @@ put(sfx, s + 0.2, bp(noise(1.8), 1500, 7000) * env(int(1.8 * SR), 0.2, 0.8) * (0
 put(sfx, s + 3.8, lp(noise(0.25), 300) * np.exp(-tsec(0.25) * 20), 0.5)  # seal stamp
 s = st('closing')
 for i, (t0, x) in enumerate([(2.0, 1250), (3.1, 820), (4.6, 1550), (6.4, 1050), (7.6, 700), (9.4, 1380), (10.6, 980), (12.1, 1600), (13.0, 860), (14.2, 1250), (15.0, 600), (15.9, 1500)]):
+    if t0 + 0.9 > dur('closing'): continue  # burst would happen after the scene has faded out: no picture, so no sound
     pan = (x - 960) / 960 * 0.7
     tw = tsec(0.9); f = 900 + 1400 * tw / 0.9
     put(sfx, s + t0, np.sin(2 * np.pi * np.cumsum(f) / SR) * env(len(tw), 0.05, 0.3) * 0.3 + hp(noise(0.9), 3000) * 0.1, 0.09, pan)

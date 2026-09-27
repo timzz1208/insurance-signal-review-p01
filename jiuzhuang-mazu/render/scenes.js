@@ -422,7 +422,7 @@ const SCENES = {
     o += txt(960, 430, '新社九庄媽進香', { size: 96, weight: 700, op: prog(tl, 0.3, 1.2), ls: 8 });
     o += txt(960, 500, 'The Nine-Village Mazu of Xinshe', { font: 'EB Garamond', italic: true, size: 40, op: prog(tl, 0.6, 1.2) });
     const lines = [
-      '旁白・畫面・配樂　皆以程式原創繪製與合成',
+      '旁白：VoAI 子墨　畫面・配樂：程式原創繪製與合成',
       '資料來源：臺中市文化資產處、國家文化資產網、臺中市政府新聞、',
       '臺中學資料庫、自由時報、ETtoday、聯合新聞網',
       '謹向新社九庄媽信眾與九庄庄頭致敬'

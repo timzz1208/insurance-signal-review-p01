@@ -1,7 +1,8 @@
 """Split one long narration recording (voice/full.*, e.g. all 21 lines generated at once in VoAI)
 into voice/01.wav ... voice/NN.wav, then verify each piece against the script with offline ASR.
 Sentence boundaries = the N-1 longest pauses (sentence-final pauses are longer than comma pauses)."""
-import glob, json, subprocess, sys, difflib, numpy as np, soundfile as sf, imageio_ffmpeg
+import glob, json, subprocess, sys, difflib, os, numpy as np, soundfile as sf, imageio_ffmpeg, sherpa_onnx, opencc
+strip = lambda s: "".join(c for c in s if "\u4e00" <= c <= "\u9fff")
 SR = 24000
 src = (glob.glob("voice/full.*") or sys.exit("put the whole recording at voice/full.wav (or .mp3)"))[0]
 lines = [l.get("tts", l["zh"]) for sc in json.load(open("script.json"))["scenes"] for l in sc["lines"]]
@@ -20,10 +21,33 @@ while i < a1:
     else: i += 1
 need = len(lines) - 1
 if len(runs) < need: sys.exit(f"found only {len(runs)} pauses, need {need}")
-cuts = sorted(sorted(runs, reverse=True)[:need], key=lambda r: r[1])
-bounds = [a0] + [(r[1] + r[2]) // 2 for r in cuts] + [a1 + 1]
-print(f"{src}: {len(x) / SR:.1f}s, shortest sentence pause used {min(r[0] for r in cuts) * 10} ms, longest comma pause left {sorted(runs, reverse=True)[need][0] * 10 if len(runs) > need else 0} ms")
-import sherpa_onnx, opencc, os
+# Choose the N-1 cut points by dynamic programming over candidate pauses: each segment's length
+# should match its share of the script's characters, and longer pauses are preferred as cuts.
+# (Sentence pauses can be barely longer than comma pauses, so "longest N-1 pauses" is not enough.)
+cands = [r for r in runs if r[0] >= 12]
+cpos = [a0] + [(r[1] + r[2]) / 2 for r in cands] + [a1 + 1]
+clen = [0] + [r[0] for r in cands] + [0]
+nch = [len(strip(l)) for l in lines]; rate = (a1 - a0) / sum(nch)
+M, K = len(cpos), len(lines)
+INF = 1e18; cost = np.full((K + 1, M), INF); back = np.zeros((K + 1, M), int); cost[0][0] = 0
+for k in range(1, K + 1):
+    exp = nch[k - 1] * rate
+    for j in range(1, M):
+        if k < K and j == M - 1: continue
+        if k == K and j != M - 1: continue
+        best, bi = INF, 0
+        for i in range(j):
+            if cost[k - 1][i] >= INF: continue
+            d = cpos[j] - cpos[i]
+            c = cost[k - 1][i] + ((d - exp) / (0.25 * exp + 30)) ** 2 - (0 if j == M - 1 else 0.15 * clen[j])
+            if c < best: best, bi = c, i
+        cost[k][j], back[k][j] = best, bi
+path, j = [], M - 1
+for k in range(K, 0, -1): path.append(j); j = back[k][j]
+path = path[::-1]
+cuts = [cands[j - 1] for j in path[:-1]]
+bounds = [a0] + [int(cpos[j]) for j in path]
+print(f"{src}: {len(x) / SR:.1f}s, {len(cands)} candidate pauses, shortest pause used as a sentence cut {min(r[0] for r in cuts) * 10} ms")
 D = os.environ.get("ASR_DIR", "/tmp/claude-0/-home-user-insurance-signal-review-p01/209ba1a0-5e5b-51b7-b14f-a021e3bef3cf/scratchpad/tts/sherpa-onnx-paraformer-zh-small-2024-03-09")
 asr = sherpa_onnx.OfflineRecognizer.from_paraformer(paraformer=f"{D}/model.int8.onnx", tokens=f"{D}/tokens.txt", num_threads=4) if os.path.isdir(D) else None
 t2s = opencc.OpenCC("t2s"); strip = lambda s: "".join(c for c in s if "一" <= c <= "鿿")

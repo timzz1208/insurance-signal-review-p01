@@ -44,6 +44,13 @@ async function shot(ctx, frame) {
     const ctx = await openPage(browser, port);
     for (let f = 0; f < total; f++) { await ctx.page.evaluate(f => renderFrame(f), f); if (ctx.errs.length) throw new Error(`frame ${f}: ` + ctx.errs.join('\n')); }
     console.log('check ok', total, 'frames');
+  } else if (mode === 'range') {  // re-render frames [a, b) into one segment: node tools/render.js range a b out.mp4
+    const [a, b] = arg.split(',').map(Number), ctx = await openPage(browser, port);
+    const ff = spawn(FFMPEG, ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(TL.fps), '-c:v', 'png', '-i', '-',
+      '-c:v', 'libx264', '-preset', 'medium', '-crf', '16', '-pix_fmt', 'yuv420p', '-tune', 'animation', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    const done = new Promise((res, rej) => ff.on('close', c => c === 0 ? res() : rej(new Error('ffmpeg ' + c))));
+    for (let f = a; f < b; f++) { const { png } = await shot(ctx, f); if (!ff.stdin.write(png)) await new Promise(r => ff.stdin.once('drain', r)); }
+    ff.stdin.end(); await done; console.log('range', a, b, 'done');
   } else if (mode === 'stills') {
     const ctx = await openPage(browser, port); fs.mkdirSync(out, { recursive: true });
     for (const s of arg.split(',')) { const f = Math.round(parseFloat(s) * TL.fps); const { png, label } = await shot(ctx, f); fs.writeFileSync(path.join(out, `f${String(f).padStart(5, '0')}.png`), png); console.log(s, f, label); }
