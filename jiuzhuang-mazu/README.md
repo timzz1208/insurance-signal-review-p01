@@ -83,8 +83,8 @@
 
 指定的 VoAI TTS（子墨／Neo／穩健）在這次的執行環境中無法連線：網路政策封鎖了 `voai.ai`、`connect.voai.ai`，環境裡也沒有 VoAI API 金鑰。
 所以目前的版本改用離線的 Kokoro v1.1-zh（sherpa-onnx）沉穩男聲 `sid 67`，語速 0.92。
-要換回 VoAI，只需把 `tools/tts.py` 的 `tts.generate(...)` 改成呼叫 VoAI API 並寫出同樣的 `build/vo/NN.wav`，再執行 `./make.sh`。
-時間軸、字幕、配樂會自動依新的秒數重新排好。
+換成 VoAI 子墨的方法：依 `voice/旁白稿.txt` 逐句生成，存成 `voice/01.wav` 到 `voice/21.wav`（mp3/m4a 也可），
+再執行 `./make.sh`。`tools/tts.py` 發現 21 個檔案都在時，會自動改用這些錄音，並依新秒數重排時間軸、字幕、配樂與畫面。
 
 ## 重新建置
 

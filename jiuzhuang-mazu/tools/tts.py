@@ -1,6 +1,9 @@
 """Generate narration for every script line, trim silence, measure durations,
-and build timeline.json that drives visuals, subtitles and audio."""
-import json, sys, os, numpy as np, soundfile as sf
+and build timeline.json that drives visuals, subtitles and audio.
+
+If voice/01.* ... voice/NN.* exist for every line (wav/mp3/m4a, e.g. exported from VoAI 子墨),
+those recordings are used instead of the offline TTS voice."""
+import json, sys, os, glob, subprocess, numpy as np, soundfile as sf, imageio_ffmpeg
 sys.path.insert(0, os.path.dirname(__file__))
 from tts_common import make_tts
 
@@ -10,7 +13,16 @@ SID, SPEED, SR = 67, 0.92, 24000
 LEAD, GAP, TAIL, FIRST_LEAD = 1.2, 0.7, 1.4, 2.4
 script = json.load(open("script.json"))
 os.makedirs("build/vo", exist_ok=True)
-tts = make_tts()
+N_LINES = sum(len(sc["lines"]) for sc in script["scenes"])
+EXT = {int(os.path.basename(f).split(".")[0]): f for f in glob.glob("voice/[0-9][0-9].*") if f.rsplit(".", 1)[-1].lower() in ("wav", "mp3", "m4a", "aac", "flac", "ogg")}
+USE_EXT = all(i in EXT for i in range(1, N_LINES + 1))
+if EXT and not USE_EXT: sys.exit(f"voice/ has {len(EXT)} of {N_LINES} lines; missing {sorted(set(range(1, N_LINES + 1)) - set(EXT))}")
+print("narration source:", "voice/ recordings" if USE_EXT else f"offline TTS sid {SID}")
+tts = None if USE_EXT else make_tts()
+
+def load_ext(path):  # decode any format to mono float32 at SR with ffmpeg
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-i", path, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    x = np.frombuffer(raw, np.float32).copy(); return x / max(1e-6, np.abs(x).max()) * 0.9
 
 def trim(x, thr=0.01, pad=0.06):
     idx = np.where(np.abs(x) > thr)[0]
@@ -26,9 +38,9 @@ for si, sc in enumerate(script["scenes"]):
         for li, ln in enumerate(sc["lines"]):
             txt = ln.get("tts", ln["zh"])
             for k, v in FIX.items(): txt = txt.replace(k, v)
-            a = tts.generate(txt, sid=SID, speed=SPEED)
-            x = trim(np.array(a.samples, dtype=np.float32))
-            n += 1; path = f"build/vo/{n:02d}.wav"; sf.write(path, x, SR)
+            n += 1
+            x = trim(load_ext(EXT[n])) if USE_EXT else trim(np.array(tts.generate(txt, sid=SID, speed=SPEED).samples, dtype=np.float32))
+            path = f"build/vo/{n:02d}.wav"; sf.write(path, x, SR)
             d = len(x) / SR
             lines.append(dict(n=n, zh=ln["zh"], en=ln["en"], wav=path, start=round(t, 3), dur=round(d, 3)))
             t += d + (GAP if li < len(sc["lines"]) - 1 else 0)
