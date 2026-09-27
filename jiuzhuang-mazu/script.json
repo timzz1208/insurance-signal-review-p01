@@ -1,0 +1,53 @@
+{
+  "title_zh": "新社九庄媽進香",
+  "title_en": "The Nine-Village Mazu of Xinshe",
+  "scenes": [
+    { "id": "opening", "night": false, "lines": [
+      { "zh": "臺中東邊的山城新社，雲霧繚繞著層層河階台地。", "en": "Xinshe, a mountain town east of Taichung, wrapped in mist over its river terraces." },
+      { "zh": "兩百年前，客家先民在這裡開墾，建起九個庄頭。", "en": "Two centuries ago, Hakka settlers cleared this land and founded nine villages." }
+    ]},
+    { "id": "title", "night": false, "hold": 5.5, "lines": [] },
+    { "id": "rain", "night": false, "lines": [
+      { "zh": "相傳一百八十多年前，一名採樟工人上山躲雨。", "en": "Legend says that over 180 years ago, a camphor worker sheltered from the rain." },
+      { "zh": "他發現一尊淋濕的媽祖神像，便將她迎回庄裡。", "en": "He found a rain-soaked statue of Mazu and carried her home to the village." }
+    ]},
+    { "id": "villages", "night": false, "lines": [
+      { "zh": "媽祖屢顯靈驗，九個庄頭決定輪流奉祀。", "en": "Mazu answered many prayers, so nine villages agreed to host her in turn." },
+      { "zh": "山頂、新社、土城、畚箕湖……九庄輪流迎請媽祖。", "en": "Shanding, Xinshe, Tucheng, Benjihu... nine villages take turns welcoming her." }
+    ]},
+    { "id": "altar", "night": false, "lines": [
+      { "zh": "她不住廟宇，而是住進爐主家中的紅壇。", "en": "She has no temple; she lives at the red altar in the host family's home." },
+      { "zh": "所以人們說，九庄媽是「有神無廟」。", "en": "That is why people say she is \"a goddess without a temple.\"" }
+    ]},
+    { "id": "poe", "night": false, "lines": [
+      { "zh": "誰來當爐主？信徒虔誠擲筊，請媽祖親自挑選。", "en": "Who will host her? Devotees cast moon blocks and let Mazu choose." }
+    ]},
+    { "id": "dawn", "night": true, "lines": [
+      { "zh": "每年農曆初三到初七，擇一天出巡遊庄。", "en": "Each year, on one day between the 3rd and 7th of Lunar New Year, she tours." },
+      { "zh": "天還沒亮，信眾就提燈集合，恭迎媽祖起駕。", "en": "Before dawn, devotees gather with lanterns to escort Mazu out." }
+    ]},
+    { "id": "procession", "night": false, "lines": [
+      { "zh": "神轎出發，鑼鼓與鞭炮聲響徹山間小路。", "en": "The palanquin sets off; gongs, drums and firecrackers fill the mountain lanes." },
+      { "zh": "這是全臺灣每年最早登場的媽祖遶境。", "en": "It is the earliest Mazu procession of the year in all of Taiwan." }
+    ]},
+    { "id": "crawl", "night": false, "lines": [
+      { "zh": "沿途信徒跪在路旁鑽轎腳，祈求一年平安。", "en": "Along the way, devotees kneel to pass beneath the palanquin, praying for peace." }
+    ]},
+    { "id": "feast", "night": false, "lines": [
+      { "zh": "輪值庄頭辦桌款待，八庄挺一庄，人情最濃。", "en": "The host village sets out a feast; eight villages stand by one, full of warmth." }
+    ]},
+    { "id": "transfer", "night": false, "lines": [
+      { "zh": "吉時一到，香爐過爐交接，媽祖在新爐主家安座。", "en": "At the auspicious hour, the incense burner passes on, and Mazu settles in her new home." }
+    ]},
+    { "id": "heritage", "night": false, "lines": [
+      { "zh": "二〇〇九年，九庄媽遶境登錄為臺中民俗文化資產。", "tts": "兩千零九年，九庄媽遶境，登錄為臺中民俗文化資產。", "en": "In 2009, the procession was registered as a Taichung folk cultural heritage." },
+      { "zh": "水底寮退出後，新社庄多輪一次，仍守九年一輪。", "en": "When Shuidiliao withdrew, Xinshe took an extra turn to keep the nine-year cycle." }
+    ]},
+    { "id": "closing", "night": true, "lines": [
+      { "zh": "九年一輪，媽祖走過每一戶人家的門口。", "en": "Every nine years, Mazu passes by the door of every family." },
+      { "zh": "沒有廟宇的高牆，她就住在人們的心裡。", "en": "Without temple walls, she lives in the hearts of her people." },
+      { "zh": "兩百年的香火，一代接著一代，繼續走下去。", "en": "Two hundred years of incense, passed from generation to generation, walk on." }
+    ]},
+    { "id": "end", "night": true, "hold": 8.0, "lines": [] }
+  ]
+}
