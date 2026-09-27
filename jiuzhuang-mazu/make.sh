@@ -3,7 +3,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 FF=$(python3 -c "import imageio_ffmpeg as i;print(i.get_ffmpeg_exe())")
-python3 tools/tts.py                      # 1. narration + measured durations -> build/timeline.json
+ls voice/full.* >/dev/null 2>&1 && python3 tools/split_voice.py   # 0. one long VoAI recording -> voice/01..NN.wav
+python3 tools/tts.py                      # 1. narration (voice/ recordings if present) + measured durations -> build/timeline.json
 python3 tools/asr_check.py                # 2. pronunciation check (offline ASR transcript vs script)
 python3 tools/audio.py                    # 3. score + SFX + ducking + -15 LUFS -> build/mix.wav
 node tools/render.js video 4              # 4. every frame rendered, painted, then captured
