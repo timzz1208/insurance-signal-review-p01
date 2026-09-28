@@ -8,17 +8,30 @@
 
 ## 0. 先準備好 skill（用你自己的 GitHub 權限直接取得，不用公開安裝）
 - repo：`timzz1208/insurance-signal-review-p01`，分支：`claude/nhi-trillion-reels-carousel-n5u2md`
-- 用你已經授權的 GitHub 身分（gh CLI、GITHUB_TOKEN 或 SSH 都可以）clone 這個分支：
+- **不要 clone 整個 repo。** 這個分支的完整歷史約 92 MB、最新版本約 33 MB（主要是影片和圖片），曾經因此兩次傳輸逾時。你需要的只有 `skills/` 和 `prompts/`，約 128 KB。用 sparse＋shallow 的方式只取這兩個資料夾：
   ```bash
-  gh repo clone timzz1208/insurance-signal-review-p01 ~/work/insurance-signal-review-p01 -- -b claude/nhi-trillion-reels-carousel-n5u2md
-  # 或：git clone -b claude/nhi-trillion-reels-carousel-n5u2md git@github.com:timzz1208/insurance-signal-review-p01.git ~/work/insurance-signal-review-p01
+  git clone -c core.autocrlf=false --depth 1 --filter=blob:none --sparse \
+    -b claude/nhi-trillion-reels-carousel-n5u2md \
+    https://github.com/timzz1208/insurance-signal-review-p01.git <工作目錄>/insurance-signal-review-p01
+  git -C <工作目錄>/insurance-signal-review-p01 sparse-checkout set skills prompts
   ```
-  已經 clone 過的話，改成 `git -C ~/work/insurance-signal-review-p01 pull`，確保拿到最新版。
+  - 需要參考成品原始碼時，才加：`git -C <工作目錄>/insurance-signal-review-p01 sparse-checkout add nhi-risk`（約 33 MB）。
+  - 已經取得過的話，改成 `git -C <工作目錄>/insurance-signal-review-p01 pull`。
+  - 如果 clone 失敗、只留下不完整的目錄，先問我能不能刪掉，再重試。**不要自己刪。**
 - 讓 Hermes 載入這個 skill（二選一）：
-  - 在 `~/.hermes/config.yaml` 的 `skills.external_dirs` 加上 `~/work/insurance-signal-review-p01/skills`。這樣 repo 更新後，pull 一下就是最新版。
+  - 在 `~/.hermes/config.yaml` 的 `skills.external_dirs` 加上 `<工作目錄>/insurance-signal-review-p01/skills`。這樣 repo 更新後，pull 一下就是最新版。
   - 或把 `skills/handdrawn-reels/` 整個資料夾複製到 `~/.hermes/skills/creative/handdrawn-reels/`。
 - 完整讀過 `SKILL.md`、`references/workflow.md`、`references/pitfalls.md`，接下來的所有工作都照這三份文件做。
-- 參考作品也在同一個 repo：`nhi-risk/`（成品、README、原始碼）。新作品開一個新資料夾，**不要改動 `nhi-risk/`**。完成後 commit＋push 到同一個 repo 的新分支（例如 `reels/<主題>`），不要直接推到 main。
+- 參考作品是同一個 repo 的 `nhi-risk/`（成品、README、原始碼）。新作品開一個新資料夾，**不要改動 `nhi-risk/`**。完成後 commit＋push 到同一個 repo 的新分支（例如 `reels/<主題>`），不要直接推到 main。
+
+## 0.5 Windows 環境（到了製作階段才需要；挑題材階段不用）
+這套管線是在 Linux 上開發和驗證的：腳本是 bash，預設路徑是 Linux 路徑，Chromium 也是預裝好的。在 Windows 上，一定要先處理下面這幾點：
+1. **優先用 WSL（Ubuntu）執行整條管線**，所有東西都能原樣運作。沒有 WSL 時才改用 Git Bash，而且要確認 `python3` 這個指令存在（Windows 上常常只有 `python` 或 `py -3`，可以建一個 alias 或捷徑）。
+2. **工作目錄不要放在有中文或空格的路徑底下**，例如 `C:\Users\李麗芬\...`。ffmpeg、Chromium、Python 遇到這類路徑可能出錯。WSL 請用 `~/work/`，Git Bash 請用 `C:\work\`。
+3. **換行字元**：clone 時已經加了 `-c core.autocrlf=false`。如果仍然出現 `bash: $'\r': command not found`，就是 .sh 檔被轉成 CRLF 了，執行 `sed -i 's/\r$//' make.sh scripts/*.sh` 修正。
+4. **Chromium 不是預裝的**：`npm install` 之後，在專案目錄執行一次 `npx playwright install chromium`（playwright 已經釘在 1.56.1，會自動抓對應的版本）。
+5. **模型路徑**：`setup_env.sh` 預設把離線模型放在 `/tmp/claude-0/models`，Windows 不適用。執行前先 `export MODELS_DIR=~/models`，之後每次執行管線都要設定同一個值。
+6. 第一次跑的時候，先用 `node tools/render.js check` 和 `node tools/render.js stills 1,5 build/test` 確認能渲染，再跑完整的 `./make.sh`。渲染速度依 CPU 核心數而定，可以調整 `render.js video` 的 worker 數量。
 
 ## 1. 到第二大腦找素材
 - 位置：【第二大腦位置，例如 Obsidian vault 路徑 ~/Notes、Notion 資料庫名稱、或資料夾路徑】

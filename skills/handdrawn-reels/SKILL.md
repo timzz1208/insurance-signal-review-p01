@@ -1,7 +1,7 @@
 ---
 name: handdrawn-reels
 description: 製作手繪線稿風格的 IG Reels 直式動畫短片（1080×1920、30fps）與 4:5 輪播圖（1080×1350），包含事實查證、旁白稿、VoAI 旁白切句、依旁白實測秒數排時間軸、中文字幕燒錄＋.srt、程式合成配樂與音效、-15 LUFS、逐格 QA、截圖確認與交付。當使用者要做觀念型／知識型短影音、IG Reels、輪播圖、手繪動畫、解說動畫，或提到沿用 nhi-risk／jiuzhuang-mazu 的做法時使用。Use for hand-drawn line-art explainer Reels + carousel production with narration-timed animation.
-version: 1.1.0
+version: 1.2.0
 metadata:
   hermes:
     tags: [video, reels, instagram, animation, svg, carousel, narration, zh-TW]
@@ -70,6 +70,13 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 - 雲端環境可能擋掉政府網站和新聞網站的直接連線。遇到時改用 WebSearch 摘要交叉比對，並在 README 和回報裡**明講查證限制**。
 - 前作可能在別的分支：用 `git log --all --name-only` 找，用 `git archive` 唯讀取出，不要修改前作。
 - 只改聲音時，不必重新渲染畫面：重跑 `audio.py`，再用 ffmpeg 重新 mux 就好。
+- **取得這個 skill 時不要 clone 整個 repo**（完整歷史約 92 MB、最新版本約 33 MB，會逾時）。用 `git clone --depth 1 --filter=blob:none --sparse`，再 `sparse-checkout set skills`，只取約 128 KB。
+- **Windows**：
+  - 優先用 WSL；用 Git Bash 時要確認 `python3` 指令存在。
+  - 工作路徑不要有中文或空格。
+  - clone 加 `-c core.autocrlf=false`；如果出現 `$'\r'` 錯誤，就把 .sh 轉回 LF。
+  - 要自己執行 `npx playwright install chromium`。
+  - `MODELS_DIR` 改成自己的路徑（預設的 `/tmp/claude-0/models` 只適用於 Claude Code 雲端）。
 
 ## 檔案清單（全部都是這個 skill 的一部分，安裝時要一起取得）
 
