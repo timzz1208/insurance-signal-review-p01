@@ -1,0 +1,13 @@
+{
+  "name": "nhi-risk-reels",
+  "version": "1.0.0",
+  "description": "健保破兆，為什麼你還是要準備醫療費｜IG Reels hand-drawn line-art animation + carousel",
+  "scripts": {
+    "build": "./make.sh"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@fontsource/iansui": "^5.3.0",
+    "playwright": "1.56.1"
+  }
+}
