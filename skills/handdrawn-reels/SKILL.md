@@ -1,7 +1,7 @@
 ---
 name: handdrawn-reels
 description: 製作手繪線稿風格的 IG Reels 直式動畫短片（1080×1920、30fps）與 4:5 輪播圖（1080×1350），包含事實查證、旁白稿、VoAI 旁白切句、依旁白實測秒數排時間軸、中文字幕燒錄＋.srt、程式合成配樂與音效、-15 LUFS、逐格 QA、截圖確認與交付。當使用者要做觀念型／知識型短影音、IG Reels、輪播圖、手繪動畫、解說動畫，或提到沿用 nhi-risk／jiuzhuang-mazu 的做法時使用。Use for hand-drawn line-art explainer Reels + carousel production with narration-timed animation.
-version: 1.5.0
+version: 1.6.0
 metadata:
   hermes:
     tags: [video, reels, instagram, animation, svg, carousel, narration, zh-TW]
@@ -40,7 +40,8 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 
 1. **事實查證（先查再寫）**。使用者的前提若不成立，**停下來**，回報實際數字，用選項讓使用者決定（Claude Code 用 AskUserQuestion，其他 agent 直接列選項詢問）。不可以自行改寫，也不可以捏造。所有來源寫進 README 和片尾小字。
 2. **旁白稿**：每句 30 字內、句尾有標點、一句一行。子墨約 0.20 秒/字，45～60 秒大約 200 字、13 句。把全文貼給使用者。
-3. **不等真人錄音**：先用臨時 TTS（Kokoro，speed 1.3）把整條管線、畫面、QA、輪播都做完，截圖給使用者確認。
+3. **旁白稿定稿後，優先請使用者先生成 VoAI 旁白，再開始做畫面**。這樣時間軸一開始就是真實秒數，畫面事件可以直接對準念到關鍵字的時間，不用做兩次，也最省 token。片長超出時，在設計畫面之前就先決定要加速（`voice_tempo`）還是刪句。**生成旁白之後就不能再改字**，要改就得重新生成。
+   使用者一時無法生成、或旁白稿還可能修改時，才先用臨時 TTS（Kokoro，speed 1.3）做草稿版，截圖給使用者確認。
 4. 收到 VoAI 整段音檔 → 放到 `voice/full.mp3` → 跑 `./make.sh`（會自動切句並逐句 ASR 驗證）→ 重做 QA、重新截圖。如果片長超過目標，先縮短停頓；還是超過就問使用者要不要設 `voice_tempo` 加速。
 5. 交付：commit＋push，把影片和總覽圖傳給使用者（Claude Code 用 SendUserFile），回報時長、各場景秒數、LUFS／真峰值、QA 結果、待辦事項。
 
