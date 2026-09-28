@@ -1,0 +1,110 @@
+[
+ {
+  "t": 0.3,
+  "kind": "thump",
+  "g": 0.5,
+  "scene": "cover"
+ },
+ {
+  "t": 1.1,
+  "kind": "strike",
+  "g": 0.4,
+  "scene": "cover"
+ },
+ {
+  "t": 3.714,
+  "kind": "page",
+  "g": 0.5,
+  "scene": "cover"
+ },
+ {
+  "t": 5.613,
+  "kind": "write",
+  "d": 0.9,
+  "g": 0.45,
+  "scene": "cover"
+ },
+ {
+  "t": 10.882,
+  "kind": "page",
+  "g": 0.5,
+  "scene": "reframe"
+ },
+ {
+  "t": 13.017,
+  "kind": "click",
+  "g": 0.4,
+  "scene": "reframe"
+ },
+ {
+  "t": 18.968,
+  "kind": "write",
+  "d": 1.65,
+  "g": 0.5,
+  "scene": "feedback"
+ },
+ {
+  "t": 22.103,
+  "kind": "page",
+  "g": 0.5,
+  "scene": "feedback"
+ },
+ {
+  "t": 23.003,
+  "kind": "click",
+  "g": 0.4,
+  "scene": "feedback"
+ },
+ {
+  "t": 29.637,
+  "kind": "blip",
+  "n": 0,
+  "g": 0.35,
+  "scene": "pattern"
+ },
+ {
+  "t": 30.187,
+  "kind": "blip",
+  "n": 1,
+  "g": 0.35,
+  "scene": "pattern"
+ },
+ {
+  "t": 30.587,
+  "kind": "blip",
+  "n": 2,
+  "g": 0.35,
+  "scene": "pattern"
+ },
+ {
+  "t": 33.243,
+  "kind": "write",
+  "d": 1.1,
+  "g": 0.45,
+  "scene": "pattern"
+ },
+ {
+  "t": 42.13,
+  "kind": "click",
+  "g": 0.3,
+  "scene": "close"
+ },
+ {
+  "t": 42.41,
+  "kind": "click",
+  "g": 0.3,
+  "scene": "close"
+ },
+ {
+  "t": 42.69,
+  "kind": "click",
+  "g": 0.3,
+  "scene": "close"
+ },
+ {
+  "t": 48.646,
+  "kind": "page",
+  "g": 0.5,
+  "scene": "close"
+ }
+]

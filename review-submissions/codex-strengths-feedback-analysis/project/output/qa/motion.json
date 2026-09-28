@@ -1,0 +1,82 @@
+[
+  {
+    "scene": "cover",
+    "times": [
+      0.0,
+      0.6666666666666666,
+      1.3,
+      4.5,
+      5.6,
+      6.7
+    ],
+    "content_roi_mean_difference": [
+      1.077053697295912,
+      4.104491862104319
+    ],
+    "note": "Pixel change alone is not semantic QA; visually inspect the event sheet."
+  },
+  {
+    "scene": "reframe",
+    "times": [
+      10.766666666666667,
+      11.233333333333333,
+      11.833333333333334,
+      12.9,
+      13.4,
+      14.0
+    ],
+    "content_roi_mean_difference": [
+      7.495290272971934,
+      3.057900807381776
+    ],
+    "note": "Pixel change alone is not semantic QA; visually inspect the event sheet."
+  },
+  {
+    "scene": "feedback",
+    "times": [
+      18.933333333333334,
+      19.733333333333334,
+      20.833333333333332,
+      22.066666666666666,
+      22.666666666666668,
+      23.866666666666667
+    ],
+    "content_roi_mean_difference": [
+      2.169998718441625,
+      4.658631295655517
+    ],
+    "note": "Pixel change alone is not semantic QA; visually inspect the event sheet."
+  },
+  {
+    "scene": "pattern",
+    "times": [
+      29.633333333333333,
+      30.233333333333334,
+      31.233333333333334,
+      33.233333333333334,
+      33.833333333333336,
+      34.63333333333333
+    ],
+    "content_roi_mean_difference": [
+      18.88649237472767,
+      4.113744713571704
+    ],
+    "note": "Pixel change alone is not semantic QA; visually inspect the event sheet."
+  },
+  {
+    "scene": "close",
+    "times": [
+      42.1,
+      42.86666666666667,
+      44.0,
+      48.63333333333333,
+      49.13333333333333,
+      49.733333333333334
+    ],
+    "content_roi_mean_difference": [
+      8.246462898885044,
+      14.121209791105985
+    ],
+    "note": "Pixel change alone is not semantic QA; visually inspect the event sheet."
+  }
+]

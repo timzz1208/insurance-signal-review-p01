@@ -1,0 +1,12 @@
+w0 0/400  5s
+w0 60/400  31s
+w0 120/400  53s
+w0 180/400  75s
+w0 240/400  96s
+w0 300/400  117s
+w0 360/400  138s
+worker 0 done frames 0-399
+worker 3 done frames 1200-1596
+worker 1 done frames 400-799
+worker 2 done frames 800-1199
+frames 1597 time 158 s

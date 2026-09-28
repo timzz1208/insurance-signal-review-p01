@@ -1,0 +1,55 @@
+{
+  "issues": [],
+  "video": {
+    "codec_name": "h264",
+    "width": 1080,
+    "height": 1920,
+    "r_frame_rate": "30/1",
+    "duration": "53.233333",
+    "nb_frames": "1597"
+  },
+  "audio": {
+    "codec_name": "aac",
+    "sample_rate": "48000",
+    "duration": "53.212000",
+    "start_time": "0.000000"
+  },
+  "subtitles": 17,
+  "files": [
+    {
+      "path": "output\\strengths_feedback_analysis.mp4",
+      "bytes": 12019094,
+      "sha256": "c79bbb2015052d30b3e9245f8c980319990ef9c2beea06d7a7fa12b06919b0a8"
+    },
+    {
+      "path": "output\\strengths_feedback_analysis.srt",
+      "bytes": 1401,
+      "sha256": "115d9b598d34f42a04288f1e5a0f6de238d4fa71621469b83c275602707f454f"
+    },
+    {
+      "path": "output\\carousel\\01_cover.png",
+      "bytes": 1535234,
+      "sha256": "02bba543928276297bf3ec244e2841d0f142299e4493ed317847e6c932991549"
+    },
+    {
+      "path": "output\\carousel\\02_reframe.png",
+      "bytes": 1501640,
+      "sha256": "e660bf9b627ab4cad1689867b80a99f2d5c95a66715dc46e2b53fddd22843a71"
+    },
+    {
+      "path": "output\\carousel\\03_feedback.png",
+      "bytes": 1641349,
+      "sha256": "ffeb3970d7153f27b993d63e5876b23e017bf73f1788cbaf250f3658055763e6"
+    },
+    {
+      "path": "output\\carousel\\04_pattern.png",
+      "bytes": 1615975,
+      "sha256": "c574fca383eb3c52846393cfbf3843cf5f373b9287bbf99b5924f8e840814f10"
+    },
+    {
+      "path": "output\\carousel\\05_close.png",
+      "bytes": 2167777,
+      "sha256": "eb1da87bda529289557a7633e64af260dd5c024d896b9c1d6952838ff473315e"
+    }
+  ]
+}

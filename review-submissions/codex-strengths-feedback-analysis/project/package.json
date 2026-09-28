@@ -1,0 +1,13 @@
+{
+  "name": "strengths-feedback-analysis-reels",
+  "version": "1.0.0",
+  "description": "別急著補短板，先找出你的超預期｜IG Reels hand-drawn line-art animation + carousel",
+  "scripts": {
+    "build": "./make.sh"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@fontsource/iansui": "^5.3.0",
+    "playwright": "1.56.1"
+  }
+}

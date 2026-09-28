@@ -1,0 +1,2 @@
+frames decoded: 1597 (expected 1597)  mean inter-frame diff 0.32, max 8.91
+issues: 0
