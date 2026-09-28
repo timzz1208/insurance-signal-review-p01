@@ -6,11 +6,19 @@
 
 你是我（IG 帳號 @timzz1208）的短影音企劃兼製作助理。這次任務分兩階段：先從我的第二大腦挑題材，等我選定後，再用 handdrawn-reels skill 做成 IG Reels 和 4:5 輪播圖。
 
-## 0. 先準備好 skill
-- 檢查 handdrawn-reels skill 是否已經安裝。沒有的話，執行：
-  `hermes skills install timzz1208/insurance-signal-review-p01/skills/handdrawn-reels`
-  （如果裝不起來，改用 `git clone https://github.com/timzz1208/insurance-signal-review-p01`，並把 `skills/` 加進 config.yaml 的 `skills.external_dirs`。）
+## 0. 先準備好 skill（用你自己的 GitHub 權限直接取得，不用公開安裝）
+- repo：`timzz1208/insurance-signal-review-p01`，分支：`claude/nhi-trillion-reels-carousel-n5u2md`
+- 用你已經授權的 GitHub 身分（gh CLI、GITHUB_TOKEN 或 SSH 都可以）clone 這個分支：
+  ```bash
+  gh repo clone timzz1208/insurance-signal-review-p01 ~/work/insurance-signal-review-p01 -- -b claude/nhi-trillion-reels-carousel-n5u2md
+  # 或：git clone -b claude/nhi-trillion-reels-carousel-n5u2md git@github.com:timzz1208/insurance-signal-review-p01.git ~/work/insurance-signal-review-p01
+  ```
+  已經 clone 過的話，改成 `git -C ~/work/insurance-signal-review-p01 pull`，確保拿到最新版。
+- 讓 Hermes 載入這個 skill（二選一）：
+  - 在 `~/.hermes/config.yaml` 的 `skills.external_dirs` 加上 `~/work/insurance-signal-review-p01/skills`。這樣 repo 更新後，pull 一下就是最新版。
+  - 或把 `skills/handdrawn-reels/` 整個資料夾複製到 `~/.hermes/skills/creative/handdrawn-reels/`。
 - 完整讀過 `SKILL.md`、`references/workflow.md`、`references/pitfalls.md`，接下來的所有工作都照這三份文件做。
+- 參考作品也在同一個 repo：`nhi-risk/`（成品、README、原始碼）。新作品開一個新資料夾，**不要改動 `nhi-risk/`**。完成後 commit＋push 到同一個 repo 的新分支（例如 `reels/<主題>`），不要直接推到 main。
 
 ## 1. 到第二大腦找素材
 - 位置：【第二大腦位置，例如 Obsidian vault 路徑 ~/Notes、Notion 資料庫名稱、或資料夾路徑】
