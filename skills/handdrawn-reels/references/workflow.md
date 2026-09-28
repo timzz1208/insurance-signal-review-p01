@@ -4,7 +4,7 @@
 > - `jiuzhuang-mazu/`：新社九庄媽進香，16:9 橫式，在分支 `claude/jiuzhang-mazu-procession-animation-sd4sby`
 > - `nhi-risk/`：健保破兆，IG Reels 直式＋4:5 輪播，在分支 `claude/nhi-trillion-reels-carousel-n5u2md`
 >
-> 新作品用 `scripts/new_project.sh` 從 `template/` 建立，再改 `script.json`、`render/scenes.js`、`tools/audio.py` 的樂譜段落。
+> 新作品用 `scripts/new_project.sh` 從 `templates/project/` 建立，再改 `script.json`、`render/scenes.js`、`tools/audio.py` 的樂譜段落。
 > 不要改動舊作品的資料夾。踩雷紀錄在 `pitfalls.md`，動手前請先讀完。
 
 ---

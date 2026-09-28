@@ -8,7 +8,7 @@ set -euo pipefail
 [ $# -eq 2 ] || { echo "usage: $0 <target_dir> <output_name>"; exit 1; }
 SKILL="$(cd "$(dirname "$0")/.." && pwd)"; T="$1"; NAME="$2"
 [ -e "$T" ] && { echo "$T already exists; refusing to overwrite"; exit 1; }
-cp -r "$SKILL/template" "$T"
+cp -r "$SKILL/templates/project" "$T"
 sed -i "s/__NAME__/$NAME/" "$T/make.sh"
 mkdir -p "$T/output/stills" "$T/output/carousel" "$T/output/review" "$T/build"
 chmod +x "$T/make.sh"
