@@ -54,6 +54,15 @@ function subtitles(t) {
   return out;
 }
 
+// Account signature: @handle (teal, bold) | series label. Reel: handle top-left just inside the IG safe area,
+// on its own layer so it stays put through scene crossfades. Card: top-left, page number top-right.
+const HANDLE = '@timzz1208', SERIES = '醫療風險';
+function brand(x, y, size, series = true) {
+  const w = measure(HANDLE, size), bar = measure('  ｜  ', size, 400);
+  return T(x, y, HANDLE, { size, anchor: 'start', fill: TH.teal }) + (series ? T(x + w, y, '  ｜  ', { size, anchor: 'start', fill: TH.faint, weight: 400 }) +
+    T(x + w + bar, y, SERIES, { size, anchor: 'start', fill: TH.ink, weight: 400 }) : '');
+}
+
 function guides() {
   if (!GUIDES) return '';
   const r = 'fill="#ff00aa" fill-opacity="0.13" stroke="#ff00aa" stroke-width="2" stroke-dasharray="10 8"';
@@ -89,6 +98,7 @@ function renderFrame(frame) {
     $('a' + k).innerHTML = r.art; $('t' + k).innerHTML = r.txt;
   }
   $('subs').innerHTML = subtitles(t);
+  $('extra').innerHTML = brand(60, 262, 30, false);   // handle only: the series label would touch scene 4/5 headlines
   $('guides').innerHTML = guides();
   boil(frame);
   return active.map(a => a[0].id).join('+');
@@ -103,8 +113,8 @@ function renderCard(i) {
   $('slot0').setAttribute('display', 'inline'); $('slot0').setAttribute('opacity', '1'); $('slot1').setAttribute('display', 'none');
   $('a0').innerHTML = `<g transform="${tf}">${r.art}</g>`; $('t0').innerHTML = `<g transform="${tf}">${r.txt}</g>`;
   $('subs').innerHTML = '';
-  $('extra').innerHTML = T(64, 64, `${String(i + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`, { size: 28, anchor: 'start', fill: TH.faint, weight: 400 }) +
-    S(handLine([[64, 80], [150, 79]], 1, 3), 1, { w: 2, op: 0.5 }) +
+  $('extra').innerHTML = brand(64, 70, 28) +
+    T(1016, 70, `${String(i + 1).padStart(2, '0')} / ${String(n).padStart(2, '0')}`, { size: 28, anchor: 'end', fill: TH.faint, weight: 400 }) +
     (i < n - 1 ? T(1016, 1312, '往左滑 →', { size: 28, anchor: 'end', fill: TH.faint, weight: 400 }) : '');
   boil(i * 3);
   return sc.id;
@@ -119,7 +129,7 @@ function collectEvents() {
 
 async function init() {
   TLINE = await (await fetch('/build/timeline.json')).json();
-  const all = JSON.stringify(TLINE) + SOURCES.join('') + '$0123456789,.，。：？「」（）・／→↑−—保單保多少誰付健保有錢你的醫療全部免費公共醫療支出個人自費仍存在藥費差額自費項目年度億元新藥未給付前特殊醫材自付差額單人病房病房費差額收入中斷收入缺口薪資單真正落到家庭身上的不只有醫藥費處理的是社會一起扛的風險個人保障掉到你家裡的那一塊現金流健保越完整不代表商業保險就不重要而是你更該搞清楚哪些已經有人幫你扛哪些沒有下一次看保單先別問先問這筆風險最後明年健保總額首度破兆協商共識待衛福部核定為什麼你還是可能要自己準備醫療費保障內容往左滑Rx';
+  const all = JSON.stringify(TLINE) + SOURCES.join('') + HANDLE + SERIES + ' ｜' + '$0123456789,.，。：？「」（）・／→↑−—保單保多少誰付健保有錢你的醫療全部免費公共醫療支出個人自費仍存在藥費差額自費項目年度億元新藥未給付前特殊醫材自付差額單人病房病房費差額收入中斷收入缺口薪資單真正落到家庭身上的不只有醫藥費處理的是社會一起扛的風險個人保障掉到你家裡的那一塊現金流健保越完整不代表商業保險就不重要而是你更該搞清楚哪些已經有人幫你扛哪些沒有下一次看保單先別問先問這筆風險最後明年健保總額首度破兆協商共識待衛福部核定為什麼你還是可能要自己準備醫療費保障內容往左滑Rx';
   await document.fonts.load('400 48px "Iansui"', all);
   await document.fonts.ready;
   BG = makeTexture();
