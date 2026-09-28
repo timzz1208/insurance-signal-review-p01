@@ -1,7 +1,7 @@
 ---
 name: handdrawn-reels
 description: 製作手繪線稿風格的 IG Reels 直式動畫短片（1080×1920、30fps）與 4:5 輪播圖（1080×1350），包含事實查證、旁白稿、VoAI 旁白切句、依旁白實測秒數排時間軸、中文字幕燒錄＋.srt、程式合成配樂與音效、-15 LUFS、逐格 QA、截圖確認與交付。當使用者要做觀念型／知識型短影音、IG Reels、輪播圖、手繪動畫、解說動畫，或提到沿用 nhi-risk／jiuzhuang-mazu 的做法時使用。Use for hand-drawn line-art explainer Reels + carousel production with narration-timed animation.
-version: 1.2.0
+version: 1.3.0
 metadata:
   hermes:
     tags: [video, reels, instagram, animation, svg, carousel, narration, zh-TW]
@@ -13,7 +13,7 @@ metadata:
 一套已經實際交付過的製作管線：SVG 手繪線稿元件、線條邊畫邊出現、手繪抖動、米白紙紋理、
 依旁白實測秒數排時間軸、字幕燒錄＋.srt、合成配樂與音效、旁白時音樂自動壓低、-15 LUFS、逐格 QA。
 
-**開工前必讀**：`references/pitfalls.md`（27 條真的踩過的雷）。完整做法在 `references/workflow.md`。
+**開工前必讀**：`references/pitfalls.md`（33 條真的踩過的雷）。完整做法在 `references/workflow.md`。
 
 ## 快速開始
 
@@ -25,7 +25,7 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 ./make.sh                                                   # 完整管線 → output/
 ```
 
-`templates/project/` 是「健保破兆」那支作品的完整原始碼，已經驗證過可以跑。**場景內容是範例**，換主題時要改寫的是：
+`templates/project/` 是「好的老師，最後會讓學生慢慢不需要你」那支作品的完整原始碼，已經驗證過可以跑（置中版面、bounds 檢查為 0）。前一支「健保破兆」在 repo 的 `nhi-risk/`，可以當第二個參考。**場景內容是範例**，換主題時要改寫的是：
 
 | 檔案 | 要改什麼 |
 |---|---|
@@ -46,7 +46,7 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 
 ## 必須遵守的規格
 
-- **IG 安全區**：上 220、下 380、右 120px 不放重要文字；內容中心線 x = 510。字幕框底貼齊 y = 1530，只放中文。
+- **IG 安全區**：上 220、下 380、右 120px 不放重要文字。內容**置中在 x = 540**（場景座標以 510 撰寫，再用 `REEL_DX = 30` 平移）；**文字寬度 ≤ 840px**，讓它落在 x 120～960。字幕框底貼齊 y = 1530，只放中文。每次改版都跑 `node tools/render.js bounds`，結果要是 0。
 - **第 0 格要有內容**（它就是縮圖，也是前 2 秒的鉤子）。每個場景都要有會動的事件，不可以有 0.2 秒以上完全靜止。
 - **字型用芫荽 Iansui**（教育部標準字形）。不要用霞鶩文楷 TC，它會把為、真畫成爲、眞。粗體用同色描邊。
 - **文字揭露的 clip／mask 寬度一律用 `measure()` 實測**，不要寫死像素（「誰付」的言字旁就是這樣被切掉的）。
@@ -57,7 +57,7 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 
 ## 每一輪的 QA（缺一不可）
 
-1. `tools/qa.py` 回報 `issues: 0`，且格數相符
+1. `tools/qa.py` 回報 `issues: 0`，且格數相符；`node tools/render.js bounds` 回報 0
 2. 每個場景的 guides 截圖：`node tools/render.js stills <秒數,...> <dir> guides`
 3. 同步表：每句旁白播到 60% 的那一格，確認對應的圖或字已經出現
 4. **全尺寸裁切**看文字、數字、標籤有沒有被切掉或相撞（縮圖看不出來）
