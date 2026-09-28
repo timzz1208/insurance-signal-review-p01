@@ -213,16 +213,17 @@ const SCENES = {
     const op = K.open(tl), spine = lerp(SPX0, SPX1, easeOut(op)), bob = Math.sin(tl * 1.4) * 3 * (1 - op);
     const strike = prog(tl, K.strike, 0.4), write = clamp((tl - K.write) / 0.9);
     const rx = 150;  // right page centre (relative to spine)
+    const WS = 84, WP = measure('誰付？', WS);   // the clip box follows the measured text, so no stroke is cut off
     let inside = T(rx, -110, '保多少？', { size: 66 }) +
       S(handLine([[rx - 115, -128], [rx, -122], [rx + 118, -132]], 2, 9, 30), strike, { w: 6 }) +
-      (write > 0 ? wipeG('whopay' + (card ? 'c' : ''), rx - 120, 10, 250, 120, write, T(rx, 96, '誰付？', { size: 92, fill: TH.teal })) : '') +
+      (write > 0 ? wipeG('whopay' + (card ? 'c' : ''), rx - WP / 2 - 24, -10, WP + 48, 150, write, T(rx, 96, '誰付？', { size: WS, fill: TH.teal })) : '') +
       S(handLine([[rx - 95, 124], [rx + 100, 120]], 2, 10, 30), prog(tl, K.write + 0.8, 0.4), { w: 4, stroke: TH.teal });
     const insideLeft = T(-150, -120, '保障內容', { size: 32, fill: TH.faint }) + S('M-250 -70h200M-250 -20h170M-250 30h190M-250 80h140M-250 130h180', 1, { w: 1.6, op: 0.45 });
     art += G(`translate(${f1(spine)} ${f1(PY + bob)})`, policy(prog(tl, K.L0 + 0.2, 1.2), op, { inside, insideLeft }));
     // the pen: strikes through, then writes
     let penX = null, penY = null;
     if (tl > K.strike - 0.4 && tl < K.strike + 0.7) { const u = clamp((tl - K.strike) / 0.4); penX = spine + rx - 115 + 233 * u; penY = PY - 128 + Math.sin(u * 20) * 2; }
-    if (tl > K.write - 0.4 && tl < K.write + 1.5) { const u = clamp((tl - K.write) / 0.9); penX = spine + rx - 110 + 220 * u; penY = PY + 70 + Math.sin(u * 40) * 14; }
+    if (tl > K.write - 0.4 && tl < K.write + 1.5) { const u = clamp((tl - K.write) / 0.9); penX = spine + rx - WP / 2 + WP * u; penY = PY + 70 + Math.sin(u * 40) * 14; }
     if (penX != null) art += G(`translate(${f1(penX)} ${f1(penY)})`, pen());
     // CTA
     const cy = card ? 900 : 1115;

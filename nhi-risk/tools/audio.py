@@ -192,7 +192,7 @@ mix = vo_st + music * gm[:, None] + sfx * gs[:, None] * 0.9 + amb * gs[:, None]
 fo = int(0.6 * SR); endi = int(T * SR); mix[endi - fo:endi] *= np.linspace(1, 0, fo)[:, None]; mix = mix[:endi]
 mix[:int(0.005 * SR)] *= np.linspace(0, 1, int(0.005 * SR))[:, None]
 mix *= 10 ** ((-15.0 - meter.integrated_loudness(mix)) / 20)
-def limiter(x, ceiling=10 ** (-2.8 / 20), look=int(0.005 * SR), rel=0.08):
+def limiter(x, ceiling=10 ** (-4.2 / 20), look=int(0.005 * SR), rel=0.08):
     a = np.max(np.abs(x), 1); need = np.minimum(1, ceiling / np.maximum(a, 1e-9))
     g = minimum_filter1d(need, size=2 * look + 1)
     out = np.empty_like(g); cur = 1.0; coef = np.exp(-1 / (rel * SR))
