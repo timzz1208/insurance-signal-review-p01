@@ -22,8 +22,11 @@ if not USE_EXT:
     from tts_common import make_tts
     tts = make_tts()
 
-def load_ext(path):  # decode any format to mono float32 at SR with ffmpeg
-    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-i", path, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
+TEMPO = float(script.get("voice_tempo", 1.0))   # e.g. 1.08 = 8% faster; ffmpeg atempo keeps the pitch
+if TEMPO != 1.0: print(f"voice tempo x{TEMPO}")
+def load_ext(path):  # decode any format to mono float32 at SR with ffmpeg (optionally time-stretched)
+    af = ["-af", f"atempo={TEMPO}"] if TEMPO != 1.0 else []
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-i", path, *af, "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True).stdout
     x = np.frombuffer(raw, np.float32).copy(); return x / max(1e-6, np.abs(x).max()) * 0.9
 
 def trim(x, thr=0.01, pad=0.05):

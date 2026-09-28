@@ -34,14 +34,17 @@ const DEFS = () => `<defs>
   <filter id="boilT" x="-2%" y="-2%" width="104%" height="104%"><feTurbulence id="turbT" type="fractalNoise" baseFrequency="0.03" numOctaves="1" seed="1" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter>
 </defs>`;
 
-// Subtitle line breaking: Chinese only, trailing 。 dropped; break at the punctuation nearest the middle.
-function subLines(zh) {
+// Subtitle line breaking: Chinese only, trailing 。 dropped. Break at the punctuation nearest the middle; if a half
+// is still too wide, step the font down (54 → 50 → 46) before ever splitting inside a phrase.
+function subLayout(zh) {
   const s = zh.replace(/。$/, '');
-  if (measure(s, SUB.size) <= SUB.maxW) return [s];
-  let best = -1, bd = 1e9;
-  [...s].forEach((c, i) => { if ('，：、；？'.includes(c) && i < s.length - 1) { const d = Math.abs(i + 1 - s.length / 2); if (d < bd) { bd = d; best = i + 1; } } });
-  if (best < 0 || measure(s.slice(0, best), SUB.size) > SUB.maxW || measure(s.slice(best), SUB.size) > SUB.maxW) best = Math.ceil(s.length / 2);
-  return [s.slice(0, best), s.slice(best)];
+  for (const size of [SUB.size, SUB.size - 4, SUB.size - 8]) {
+    if (measure(s, size) <= SUB.maxW) return { lines: [s], size };
+    let best = -1, bd = 1e9;
+    [...s].forEach((c, i) => { if ('，：、；？'.includes(c) && i < s.length - 1) { const d = Math.abs(i + 1 - s.length / 2); if (d < bd) { bd = d; best = i + 1; } } });
+    if (best > 0 && measure(s.slice(0, best), size) <= SUB.maxW && measure(s.slice(best), size) <= SUB.maxW) return { lines: [s.slice(0, best), s.slice(best)], size };
+  }
+  const h = Math.ceil(s.length / 2); return { lines: [s.slice(0, h), s.slice(h)], size: SUB.size - 8 };
 }
 function subtitles(t) {
   let out = '';
@@ -49,10 +52,10 @@ function subtitles(t) {
     const a = l.start - SUB.pre, b = l.start + l.dur + SUB.post;
     if (t < a || t > b) continue;
     const op = Math.min(clamp((t - a) / 0.12), clamp((b - t) / 0.12));
-    const lines = subLines(l.zh), lh = SUB.size * 1.32;
-    const bw = Math.max(...lines.map(s => measure(s, SUB.size))) + 56, bh = lines.length * lh + 30, by = SUB.bottom - bh;
+    const { lines, size } = subLayout(l.zh), lh = size * 1.32;
+    const bw = Math.max(...lines.map(s => measure(s, size))) + 56, bh = lines.length * lh + 30, by = SUB.bottom - bh;
     out += `<g opacity="${f3(op)}"><rect x="${f1(SUB.cx - bw / 2)}" y="${f1(by)}" width="${f1(bw)}" height="${f1(bh)}" rx="20" fill="#26211c" fill-opacity="0.8"/>` +
-      lines.map((s, i) => `<text x="${SUB.cx}" y="${f1(by + 15 + lh * i + SUB.size * 1.02)}" text-anchor="middle" font-family="${ZH}" font-size="${SUB.size}" fill="#fbf6ea" stroke="#fbf6ea" stroke-width="${boldW(SUB.size)}" stroke-linejoin="round">${esc(s)}</text>`).join('') + '</g>';
+      lines.map((s, i) => `<text x="${SUB.cx}" y="${f1(by + 15 + lh * i + size * 1.02)}" text-anchor="middle" font-family="${ZH}" font-size="${size}" fill="#fbf6ea" stroke="#fbf6ea" stroke-width="${boldW(size)}" stroke-linejoin="round">${esc(s)}</text>`).join('') + '</g>';
   }
   return out;
 }

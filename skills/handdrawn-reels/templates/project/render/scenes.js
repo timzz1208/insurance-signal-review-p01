@@ -233,10 +233,10 @@ const SCENES = {
     // ...and it carries over to the next problem, the next job
     K.cards.forEach(([lab, x, t0], i) => {
       const u = easeOut(clamp((tl - t0) / 0.5)); if (u <= 0) return;
-      const xx = lerp(x + 380, x, u), w = measure(lab, 36) + 110;
-      art += S(roundRect(xx - w / 2, 1180, w, 110, 14, 60 + i), 1, { fill: true, w: 2.6 });
-      txt += T(xx + 26, 1248, lab, { size: 36 });
-      const ip = prog(tl, t0 + 0.55, 0.4), ix = xx - w / 2 + 38;
+      const xx = x, dy = (1 - u) * 90, w = measure(lab, 36) + 110;   // rises into place (never passes the IG button column)
+      art += opG(clamp(u * 2), S(roundRect(xx - w / 2, 1180 + dy, w, 110, 14, 60 + i), 1, { fill: true, w: 2.6 }));
+      txt += opG(clamp(u * 2), T(xx + 26, 1248 + dy, lab, { size: 36 }));
+      const ip = prog(tl, t0 + 0.55, 0.4), ix = xx - w / 2 + 38;  // loop icon stamped once the card has landed
       art += S(spline(Array.from({ length: 13 }, (_, k) => { const aa = -1.2 + k / 12 * 5.2; return [ix + Math.cos(aa) * 18, 1235 + Math.sin(aa) * 18]; })), ip, { w: 3, stroke: TH.teal }) +
         S(`M${ix + 13} ${1225}l6 -9l5 10`, ip, { w: 3, stroke: TH.teal });
     });
