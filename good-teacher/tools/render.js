@@ -27,6 +27,8 @@ const VW = 1080, VH = 1920;
 async function openPage(browser, port, query = '', h = VH) {
   const page = await browser.newPage({ viewport: { width: VW, height: h }, deviceScaleFactor: 1 });
   const errs = []; page.on('pageerror', e => errs.push(e.message)); page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+  // THEME=finance|ai|growth overrides script.json's theme (for side-by-side previews)
+  if (process.env.THEME) query += (query.includes('?') ? '&' : '?') + 'theme=' + process.env.THEME;
   await page.goto(`http://127.0.0.1:${port}/${query}`);
   await page.waitForFunction(() => window.READY === true, null, { timeout: 120000 });
   if (errs.length) throw new Error('page errors: ' + errs.join('\n'));

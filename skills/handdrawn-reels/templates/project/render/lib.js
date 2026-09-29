@@ -26,7 +26,25 @@ function rng(seed) {
 const hashf = (i, s = 1) => { const r = rng(i * 9301 + s * 49297 + 233); r(); return r(); };
 
 // ---------- theme: warm paper, deep ink, one teal accent + vermilion reserved for 自費 / 缺口 ----------
-const TH = { ink: '#26211c', fill: '#f4eee1', faint: '#877e70', teal: '#1d6b66', tealL: '#9cc7c0', red: '#cc3b25', redL: '#eea593', paper2: '#ebe3d1' };
+// Three colour themes for three content lines; same paper, boil, font and layout, only the colours change.
+// Role names are kept for all scene code: teal = primary (the answer / the learner's own path),
+// red = warning (only for words that mean risk, gap, mistake, dependency). primary/warn are aliases.
+// Text contrast on the paper (WCAG): ink ≥ 13.5:1, primary ≥ 5.4:1, warn ≥ 4.2:1, faint ≥ 3.4:1.
+//   paperBlot / paperFibre / vignette tint the paper texture so each theme's paper feels different.
+const THEMES = {
+  finance: { label: '保險財經', ink: '#26211c', fill: '#f4eee1', faint: '#877e70', teal: '#1d6b66', tealL: '#9cc7c0', red: '#cc3b25', redL: '#eea593', paper2: '#ebe3d1',
+    paperBlot: '190,165,120', paperFibre: '120,98,66', vignette: '90,64,28', subBox: '#26211c', subText: '#fbf6ea' },
+  ai: { label: 'AI 學習', ink: '#1d2430', fill: '#eef1f2', faint: '#76808c', teal: '#2f4ea8', tealL: '#aebde6', red: '#a8590d', redL: '#f0c48f', paper2: '#e2e7ea',
+    paperBlot: '140,160,180', paperFibre: '80,95,115', vignette: '30,45,70', subBox: '#1d2430', subText: '#f4f7fa' },
+  growth: { label: '認知成長', ink: '#2b2224', fill: '#f6efe8', faint: '#8a7c78', teal: '#6b3f7a', tealL: '#cfb6d8', red: '#b8541f', redL: '#f0b894', paper2: '#ece2da',
+    paperBlot: '190,150,140', paperFibre: '115,85,85', vignette: '80,45,50', subBox: '#2b2224', subText: '#fbf5f1' },
+};
+const TH = {};
+function useTheme(name) {
+  const t = THEMES[name]; if (!t) throw new Error(`unknown theme "${name}" (use ${Object.keys(THEMES).join(' / ')})`);
+  Object.assign(TH, t, { primary: t.teal, primaryL: t.tealL, warn: t.red, warnL: t.redL, name });
+}
+useTheme('finance');
 // ---------- path construction ----------
 // Catmull-Rom spline through points -> cubic Bezier path.
 function spline(pts, closed = false, tension = 1) {

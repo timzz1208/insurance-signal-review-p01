@@ -1,7 +1,7 @@
 ---
 name: handdrawn-reels
 description: 製作手繪線稿風格的 IG Reels 直式動畫短片（1080×1920、30fps）與 4:5 輪播圖（1080×1350），包含事實查證、旁白稿、VoAI 旁白切句、依旁白實測秒數排時間軸、中文字幕燒錄＋.srt、程式合成配樂與音效、-15 LUFS、逐格 QA、截圖確認與交付。當使用者要做觀念型／知識型短影音、IG Reels、輪播圖、手繪動畫、解說動畫，或提到沿用 nhi-risk／jiuzhuang-mazu 的做法時使用。Use for hand-drawn line-art explainer Reels + carousel production with narration-timed animation.
-version: 1.6.0
+version: 1.7.0
 metadata:
   hermes:
     tags: [video, reels, instagram, animation, svg, carousel, narration, zh-TW]
@@ -51,7 +51,7 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 - **第 0 格要有內容**（它就是縮圖，也是前 2 秒的鉤子）。每個場景都要有會動的事件，不可以有 0.2 秒以上完全靜止。
 - **字型用芫荽 Iansui**（教育部標準字形）。不要用霞鶩文楷 TC，它會把為、真畫成爲、眞。粗體用同色描邊。
 - **文字揭露的 clip／mask 寬度一律用 `measure()` 實測**，不要寫死像素（「誰付」的言字旁就是這樣被切掉的）。
-- **一個主色＋一個警示色**；警示色只能用在語意上是警示的詞。
+- **一個主色＋一個警示色**；警示色只能用在語意上是警示的詞。三套主題配色（`finance` 原版／`ai`／`growth`）用 `script.json` 的 `theme` 選，說明在 style-guide.md 第 1.5 節。
 - **音效時間跟畫面用同一組時間函式**（`EVENTS` → `render.js events` → `build/events.json`），不要在 Python 裡另外手寫一份。
 - **響度**：-15 LUFS；limiter 上限 -4.2 dBFS，讓 AAC 編碼後的真峰值 ≤ -1.5 dBTP。**要量成品 MP4**（`ffmpeg -af ebur128=peak=true`）。
 - 輪播圖要重新排版（沒有字幕；加帳號、頁碼、滑動提示；最後一張放來源），**不能直接裁切影片畫面**。

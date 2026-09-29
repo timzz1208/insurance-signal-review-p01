@@ -2,6 +2,8 @@
   "title_zh": "好的老師，最後會讓學生慢慢不需要你",
   "fps": 30,
   "voice_tempo": 1.08,
+  "theme": "finance",
+  "series": "教學筆記",
   "scenes": [
     {
       "id": "hook",

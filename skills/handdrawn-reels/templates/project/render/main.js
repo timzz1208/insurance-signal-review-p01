@@ -14,17 +14,17 @@ function makeTexture() {
   const r = rng(42);
   g.fillStyle = TH.fill; g.fillRect(0, 0, W, H);
   for (let i = 0; i < 60; i++) { const x = r() * W, y = r() * H, rad = 60 + r() * 240; const gr = g.createRadialGradient(x, y, 0, x, y, rad);
-    const col = r() < 0.6 ? '190,165,120' : '255,255,248';
+    const col = r() < 0.6 ? TH.paperBlot : '255,255,248';
     gr.addColorStop(0, `rgba(${col},0.07)`); gr.addColorStop(1, `rgba(${col},0)`); g.fillStyle = gr; g.fillRect(x - rad, y - rad, rad * 2, rad * 2); }
   g.lineWidth = 0.7;
   for (let i = 0; i < 1300; i++) { const x = r() * W, y = r() * H, a = r() * 6.28, L = 4 + r() * 16;
-    g.strokeStyle = `rgba(120,98,66,${0.04 + r() * 0.07})`;
+    g.strokeStyle = `rgba(${TH.paperFibre},${0.04 + r() * 0.07})`;
     g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * L / 2 + r() * 3, y + Math.sin(a) * L / 2, x + Math.cos(a) * L, y + Math.sin(a) * L); g.stroke(); }
   const im = g.getImageData(0, 0, W, H), d = im.data;
   for (let i = 0; i < d.length; i += 4) { const n = (r() - 0.5) * 12; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
   g.putImageData(im, 0, 0);
   const vg = g.createRadialGradient(W / 2, H / 2, H * 0.42, W / 2, H / 2, H * 0.9);
-  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(90,64,28,0.16)');
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, `rgba(${TH.vignette},0.16)`);
   g.fillStyle = vg; g.fillRect(0, 0, W, H);
   return c.toDataURL('image/png');
 }
@@ -54,15 +54,18 @@ function subtitles(t) {
     const op = Math.min(clamp((t - a) / 0.12), clamp((b - t) / 0.12));
     const { lines, size } = subLayout(l.zh), lh = size * 1.32;
     const bw = Math.max(...lines.map(s => measure(s, size))) + 56, bh = lines.length * lh + 30, by = SUB.bottom - bh;
-    out += `<g opacity="${f3(op)}"><rect x="${f1(SUB.cx - bw / 2)}" y="${f1(by)}" width="${f1(bw)}" height="${f1(bh)}" rx="20" fill="#26211c" fill-opacity="0.8"/>` +
-      lines.map((s, i) => `<text x="${SUB.cx}" y="${f1(by + 15 + lh * i + size * 1.02)}" text-anchor="middle" font-family="${ZH}" font-size="${size}" fill="#fbf6ea" stroke="#fbf6ea" stroke-width="${boldW(size)}" stroke-linejoin="round">${esc(s)}</text>`).join('') + '</g>';
+    out += `<g opacity="${f3(op)}"><rect x="${f1(SUB.cx - bw / 2)}" y="${f1(by)}" width="${f1(bw)}" height="${f1(bh)}" rx="20" fill="${TH.subBox}" fill-opacity="0.8"/>` +
+      lines.map((s, i) => `<text x="${SUB.cx}" y="${f1(by + 15 + lh * i + size * 1.02)}" text-anchor="middle" font-family="${ZH}" font-size="${size}" fill="${TH.subText}" stroke="${TH.subText}" stroke-width="${boldW(size)}" stroke-linejoin="round">${esc(s)}</text>`).join('') + '</g>';
   }
   return out;
 }
 
 // Account signature: @handle (teal, bold) | series label. Reel: handle top-left just inside the IG safe area,
 // on its own layer so it stays put through scene crossfades. Card: top-left, page number top-right.
-const HANDLE = '@timzz1208', SERIES = '教學筆記';
+// SERIES comes from script.json "series" (default: the theme's label); theme from script.json "theme"
+// (finance | ai | growth), or ?theme=… in the URL for side-by-side previews.
+const HANDLE = '@timzz1208';
+let SERIES = '';
 function brand(x, y, size, series = true) {
   const w = measure(HANDLE, size), bar = measure('  ｜  ', size, 400);
   return T(x, y, HANDLE, { size, anchor: 'start', fill: TH.teal }) + (series ? T(x + w, y, '  ｜  ', { size, anchor: 'start', fill: TH.faint, weight: 400 }) +
@@ -135,6 +138,9 @@ function collectEvents() {
 
 async function init() {
   TLINE = await (await fetch('/build/timeline.json')).json();
+  const SCRIPT = await (await fetch('/script.json')).json();
+  useTheme(Q.get('theme') || SCRIPT.theme || 'finance');
+  SERIES = (Q.get('theme') ? TH.label : SCRIPT.series) || TH.label;   // previews show the theme's own label
   // every glyph the film will draw: render each scene's end state (Reel + card) once and harvest its text,
   // so the font subsets are loaded before frame 0 (no hand-maintained character list to fall out of date)
   let all = JSON.stringify(TLINE) + SOURCES.join('') + HANDLE + SERIES + ' ｜0123456789/ 往左滑→';
