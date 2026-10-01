@@ -8,7 +8,7 @@
 (function () {
   'use strict';
   const { COL, keys, seg, clamp, lerp, easeBack, easeOut, hash } = FF;
-  const TIME_MAP = [[0, 0], [56, 56]];
+  const TIME_MAP = [[0, 0], [57, 57]];
   const DURATION = TIME_MAP[TIME_MAP.length - 1][0];
   const W = 1080, CX = 540;
   const ctx = document.getElementById('stage').getContext('2d');
@@ -32,15 +32,15 @@
     L8: 30.2,        // A 版結束，開始倒帶
     REMAIN: 999, MATCH: 999, L9: 999, CATCH: 999, STAY: 999, END: 999,   // 舊轉折段落（已改成 B 版）
     // ---- B 版：換一個版本 ----
-    REW: 30.2, REW_END: 31.45, FLIP2: 31.85,
-    LIFE: 32.95,     // 「房貸壽險」
-    DECR: 35.3,      // 「保額跟著房貸一起變少」
-    CUT2: 38.55,     // 「萬一身故或完全失能」
-    PAYOUT: 40.3,    // 「保險金」
-    PAYOFF: 41.2,    // 「還清剩下的房貸」
-    PAID: 42.55,
-    CHK: [43.6, 44.9, 46.08],   // 存款不用動／房子不用賣／也不用開口借
-    E1: 47.6, E2: 48.7, E3: 50.05   // 收入會斷／家不用斷／先算清楚…
+    REW: 30.2, REW_END: 31.05, FLIP2: 32.45,   // 「換版」封面停 1.4 秒
+    LIFE: 33.55,     // 「房貸壽險」
+    DECR: 35.9,      // 「保額跟著房貸一起變少」
+    CUT2: 39.15,     // 「萬一身故或完全失能」
+    PAYOUT: 40.9,    // 「保險金」
+    PAYOFF: 41.8,    // 「還清剩下的房貸」
+    PAID: 43.15,
+    CHK: [44.2, 45.5, 46.68],   // 存款不用動／房子不用賣／也不用開口借
+    E1: 48.2, E2: 49.3, E3: 50.65   // 收入會斷／家不用斷／先算清楚…
   };
   const CHOICES = [{ s: T.C1, label: '動用存款' }, { s: T.C2, label: '賣掉房子' }, { s: T.C3, label: '跟家人借' }];
   const PILL = { y: 560, h: 76, w: 262, xs: [110, 409, 708] };
@@ -670,8 +670,8 @@
     }
 
     // ---- 場景 ----
-    const big = seg(t, 34.9, 35.6) * (1 - seg(t, 37.7, 38.3));     // 剩餘房貸圖放大
-    const sceneA = seg(t, T.FLIP2, T.FLIP2 + 0.2) * (1 - seg(t, 34.9, 35.4) + seg(t, 37.8, 38.3)) * (1 - seg(t, T.E1 - 0.4, T.E1));
+    const big = seg(t, T.DECR - 0.4, T.DECR + 0.3) * (1 - seg(t, T.DECR + 2.4, T.DECR + 3.0));     // 剩餘房貸圖放大
+    const sceneA = seg(t, T.FLIP2, T.FLIP2 + 0.2) * (1 - seg(t, T.DECR - 0.4, T.DECR + 0.1) + seg(t, T.DECR + 2.5, T.DECR + 3.0)) * (1 - seg(t, T.E1 - 0.4, T.E1));
     const cut = t >= T.CUT2, flowing = t >= T.PAYOUT && t < T.PAID, paid = t >= T.PAID;
     ctx.save();
     ctx.globalAlpha *= sceneA;
@@ -809,9 +809,8 @@
       const out = clamp((t - (T.FLIP2 - 0.12)) / 0.12);
       ctx.save(); ctx.globalAlpha *= 1 - out; ctx.translate(0, -140 * out);
       drawA(0.95, rt);
-      extraStamp(250, 560, 150, clamp((t - T.REW_END) / 0.22), COL.blue, '換版', 0.1);
+      extraStamp(330, 680, 210, clamp((t - T.REW_END) / 0.22), COL.blue, '換版', 0.1);
       ctx.restore();
-      if (out > 0) masthead();
     } else {
       drawB(t, rt);
     }
