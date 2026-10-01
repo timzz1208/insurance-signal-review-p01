@@ -9,7 +9,7 @@ def grab(path, pat):
     if not m: sys.exit(f"{path}: 找不到 TIME_MAP")
     nums = [float(x) for x in re.findall(r"-?\d+(?:\.\d+)?", m.group(1))]
     return list(zip(nums[0::2], nums[1::2]))
-v = grab("video.html", r"const TIME_MAP\s*=\s*\[(.*?)\];")
+v = grab("scene.js" if os.path.exists(os.path.join(here, "scene.js")) else "video.html", r"const TIME_MAP\s*=\s*\[(.*?)\];")
 a = grab("sound.py", r"TIME_MAP\s*=\s*\[(.*?)\]\s*\n")
 print("video.html:", v); print("sound.py  :", a)
 if v != a: sys.exit("✗ TIME_MAP 不一致：請把兩邊改成同一張表")

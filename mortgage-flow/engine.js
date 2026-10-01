@@ -14,14 +14,16 @@
   const W = 1080, H = 1920;
 
   const COL = {
-    paper: '#ECE8DF',
-    ink: '#1D1F25',
-    inkSoft: '#55565C',
-    mute: '#7B766C',
-    rule: 'rgba(29,31,37,0.28)',
-    verm: '#D8432A',     // 朱紅：家庭責任、中斷
-    blue: '#2C4C9E',     // 群青：緩衝
-    savings: '#1D1F25'
+    // 房貸責任流｜B 日報：新聞紙＋純黑＋芥末黃螢光筆，轉折用墨綠
+    paper: '#E8E3D5',
+    ink: '#141414',
+    inkSoft: '#4A4741',
+    mute: '#7A756A',
+    rule: 'rgba(20,20,20,0.28)',
+    acc: '#E8B931',      // 芥末黃：螢光筆底、網點（只當底色，不當字色）
+    verm: '#A9760A',     // 深芥末：需要對比的線、粒子、點擊
+    blue: '#2E6A4A',     // 墨綠：轉折色，故事轉折才第一次出現
+    savings: '#141414'
   };
 
   const SANS = '"Noto Sans TC","PingFang TC","Microsoft JhengHei","Heiti TC",sans-serif';
@@ -300,23 +302,23 @@
   }
 
   // 「家」的朱紅印章，邊緣有磨損
-  function stamp(ctx, x, y, s, ch, alpha) {
+  function stamp(ctx, x, y, s, ch, alpha, color) {
     ctx.save();
     ctx.globalAlpha *= alpha == null ? 1 : alpha;
     ctx.translate(x, y);
     ctx.rotate(-0.06);
-    const cv = stampCv(s, ch);
+    const cv = stampCv(s, ch, color);
     ctx.globalCompositeOperation = 'multiply';
     ctx.drawImage(cv, -s / 2 - 6, -s / 2 - 6);
     ctx.restore();
   }
   const stampCache = {};
-  function stampCv(s, ch) {
-    const key = s + ch;
+  function stampCv(s, ch, color) {
+    const key = s + ch + (color || '');
     if (stampCache[key]) return stampCache[key];
     const cv = makeCanvas(s + 12, s + 12), c = cv.getContext('2d'), r = rng(77);
     c.translate(6, 6);
-    c.fillStyle = COL.verm;
+    c.fillStyle = color || COL.verm;
     c.beginPath();
     if (c.roundRect) c.roundRect(0, 0, s, s, 14); else c.rect(0, 0, s, s);
     c.fill();
