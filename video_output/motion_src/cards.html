@@ -66,13 +66,24 @@
   .bad{font-weight:700;font-size:48px;color:#8A8F99}
   .caret{display:inline-block;width:5px;height:52px;background:#FFD60A;vertical-align:middle;margin-left:4px}
   .send{position:absolute;right:40px;bottom:36px;width:96px;height:96px;border-radius:50%;background:#FFD60A;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:54px;color:#111}
+
+  #flash{position:absolute;inset:0;background:#fff;opacity:0}
+  .ring{position:absolute;left:540px;top:400px;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;border:18px solid #FFD60A;opacity:0}
+  .red{color:#FF3B30}
+  #hook .l1wrap{top:330px !important;padding:10px 34px !important}
+  #hook .l1{font-size:100px !important}
+  #hook .l2{top:500px !important;font-size:132px !important;letter-spacing:4px !important;
+    text-shadow:0 8px 30px rgba(0,0,0,.6),0 3px 0 rgba(0,0,0,.4)}
+  #hook .tag{top:225px !important}
 </style></head>
 <body>
 <div id="hook" class="layer">
+  <div class="ring" id="ring1"></div><div class="ring" id="ring2"></div>
   <div class="tag">AI 剪片實測</div>
-  <div class="l1wrap"><div class="bar"></div><div class="l1" data-split>「幫我剪好看一點」</div></div>
-  <div class="row l2 shadow" data-split>真的<span class="yel">有用</span>嗎？</div>
+  <div class="l1wrap"><div class="bar"></div><div class="l1">「幫我剪好看一點」</div></div>
+  <div class="row l2" data-split>AI <span class="red">聽得懂</span>嗎？</div>
 </div>
+<div id="flash"></div>
 <div id="nope" class="layer"><div class="row t shadow" data-split>通常不會</div><div class="ul"></div></div>
 <div id="blur" class="layer"><div class="row a shadow yel" data-split>「好看」</div><div class="row b shadow">太模糊</div></div>
 <div id="qs" class="layer"><div class="chip c1">大字卡？</div><div class="chip c2">音效？</div></div>
@@ -134,13 +145,27 @@ function life(el,t,a,b,fin=.12,fout=.22){ // visibility envelope; returns exit p
   el.style.opacity=on?Math.min(p(t,a,fin),1-p(t,b,fout)):0; return p(t,b,fout)}
 function stagger(chars,t,s,gap,fn){chars.forEach((c,i)=>fn(c,t-s-i*gap))}
 window.render=function(t){
-  // HOOK
+  // HOOK — slam-in opener
   {const [a,b]=C.hook, L=$('#hook'), ex=life(L,t,a,b,.01,.3);
-   L.style.transform=`translateY(${-40*out3(ex)}px)`; L.style.filter=`blur(${8*ex}px)`;
-   const tg=$('#hook .tag'); const q=out3(p(t,a+.05,.35)); tg.style.opacity=q; tg.style.transform=`translateX(-50%) translateY(${(1-q)*-30}px)`;
-   $('#hook .bar').style.transform=`scaleX(${out3(p(t,a+.25,.45))})`;
-   stagger($$('#hook .l1 .ch'),t,a+.35,.035,(c,x)=>{const q=out3(cl(x/.35));c.style.opacity=q;c.style.transform=`translateY(${(1-q)*36}px)`});
-   stagger($$('#hook .l2 .ch'),t,a+.9,.06,(c,x)=>{const s=spring(x);c.style.opacity=cl(x/.12);c.style.transform=`translateY(${(1-s)*70}px) scale(${.6+.4*s})`;c.style.filter=`blur(${10*(1-cl(x/.3))}px)`});}
+   L.style.transform=`translateY(${-40*out3(ex)}px)`; L.style.filter=ex>0?`blur(${8*ex}px)`:'none';
+   const oexp=x=>x>=1?1:1-Math.pow(2,-10*x);
+   const shake=(x,amp)=>x<0?0:amp*Math.exp(-x*7)*Math.sin(x*75);
+   $('#flash').style.opacity=t<.25?Math.max(0,1-t/.22)*.95:0;
+   // line 1: slam from huge
+   const w=$('#hook .l1wrap'), x1=t-a-.03, q1=oexp(cl(x1/.2));
+   w.style.opacity=x1>=0?1:0; w.style.transform=`translateX(-50%) translate(${shake(x1-.2,14)}px,${shake(x1-.2,10)}px) scale(${3-2*q1}) rotate(${(1-q1)*-8}deg)`;
+   w.style.filter=`blur(${(1-q1)*18}px)`;
+   $('#hook .bar').style.transform='scaleX(1)';
+   [['#ring1',a+.18,0],['#ring2',a+.92,1]].forEach(([id,st,k])=>{const r=$(id),x=t-st,q=out3(cl(x/.45));
+     r.style.opacity=x>=0?(1-q)*.9:0; r.style.transform=`scale(${.3+3.2*q})`; r.style.top=k?'620px':'400px'; r.style.borderColor=k?'#FF3B30':'#FFD60A';});
+   // line 2: chars punch in, with RGB-split glitch on 聽得懂
+   const l2=$('#hook .l2');
+   stagger($$('#hook .l2 .ch'),t,a+.75,.045,(c,x)=>{const q=oexp(cl(x/.16));c.style.opacity=x>=0?1:0;
+     c.style.transform=`translateY(${(1-q)*-120}px) scale(${2.2-1.2*q})`;c.style.filter=`blur(${(1-q)*12}px)`});
+   const g=t-(a+.95), gl=g>0&&g<.35;
+   l2.style.transform=`translate(${shake(t-a-.95,16)}px,0)`;
+   $$('#hook .l2 .red .ch').forEach((c,i)=>{c.style.textShadow=gl?`${8*Math.sin(g*90+i)}px 0 0 rgba(0,255,255,.8), ${-8*Math.sin(g*90+i)}px 0 0 rgba(255,0,80,.8)`:'0 8px 30px rgba(0,0,0,.6)'});
+   const tg=$('#hook .tag'); const q=out3(p(t,a+1.4,.35)); tg.style.opacity=q; tg.style.transform=`translateX(-50%) translateY(${(1-q)*-30}px)`;}
   // NOPE
   {const [a,b]=C.nope, L=$('#nope'), ex=life(L,t,a,b,.01,.18);
    L.style.transform=`scale(${1+.12*ex})`; L.style.transformOrigin='540px 400px';
