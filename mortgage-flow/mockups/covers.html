@@ -1,0 +1,202 @@
+<!doctype html>
+<meta charset="utf-8">
+<!-- 房貸責任流：版面＋色調提案（封面定格）｜paper-ink-flow｜製作者：林彥廷 timzz1208@gmail.com -->
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-tc/chinese-traditional-500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-tc/chinese-traditional-700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-tc/chinese-traditional-800.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-tc/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-tc/800.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-tc/chinese-traditional-900.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-tc/900.css">
+<style>html,body{margin:0;background:#888}canvas{display:block}</style>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+const W = 1080, H = 1920;
+const SANS = '"Noto Sans TC",sans-serif', SERIF = '"Noto Serif TC",serif';
+const THEMES = {
+  // A 帳簿：淡綠帳簿紙、墨綠、琥珀強調、深青轉折
+  ledger: { paper: '#E4E8DD', ink: '#1F3A32', soft: '#4F635B', mute: '#7D8A80', acc: '#D6901C', turn: '#1C6E78', fib: [70, 90, 75] },
+  // B 頭版：新聞紙、純黑、芥末黃螢光筆、墨綠轉折
+  paper:  { paper: '#E8E3D5', ink: '#141414', soft: '#4A4741', mute: '#7A756A', acc: '#E8B931', turn: '#2E6A4A', fib: [90, 80, 60] },
+  // C 牛皮紙：牛皮紙、深棕、深紅強調、粉筆白轉折
+  kraft:  { paper: '#C8A57A', ink: '#2A1E14', soft: '#4D3A28', mute: '#6E5640', acc: '#A3261E', turn: '#F4EFE3', fib: [70, 50, 30] },
+};
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const rgba = (rgb, a) => `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`;
+
+function paper(c, T) {
+  const r = rng(20261001);
+  c.fillStyle = T.paper; c.fillRect(0, 0, W, H);
+  for (let i = 0; i < 30; i++) {
+    const x = r() * W, y = r() * H, rad = 180 + r() * 520, dark = r() < .55;
+    const g = c.createRadialGradient(x, y, 0, x, y, rad);
+    g.addColorStop(0, dark ? rgba(T.fib, .05) : 'rgba(255,255,250,.10)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+  }
+  c.lineCap = 'round';
+  for (let i = 0; i < 3200; i++) {
+    const x = r() * W, y = r() * H, len = 6 + r() * 30, ang = r() * 6.283, bend = (r() - .5) * 10;
+    c.strokeStyle = r() < .7 ? rgba(T.fib, .05 + r() * .1) : `rgba(255,255,255,${.1 + r() * .18})`;
+    c.lineWidth = .5 + r() * 1.1; c.beginPath(); c.moveTo(x, y);
+    c.quadraticCurveTo(x + Math.cos(ang) * len / 2 - Math.sin(ang) * bend, y + Math.sin(ang) * len / 2 + Math.cos(ang) * bend, x + Math.cos(ang) * len, y + Math.sin(ang) * len); c.stroke();
+  }
+  for (let i = 0; i < 700; i++) { c.fillStyle = rgba(T.fib, .1 + r() * .2); c.beginPath(); c.arc(r() * W, r() * H, .4 + r() * 1.3, 0, 6.283); c.fill(); }
+  const v = c.createRadialGradient(W / 2, H * .45, W * .35, W / 2, H * .5, H * .78);
+  v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, rgba(T.fib, .14)); c.fillStyle = v; c.fillRect(0, 0, W, H);
+}
+function grain(c) {
+  const r = rng(3), img = c.getImageData(0, 0, W, H), d = img.data;
+  for (let i = 0; i < d.length; i += 4) { const n = (r() - .5) * 18; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
+  c.putImageData(img, 0, 0);
+}
+// 網點填色（clip 後呼叫）
+function halftone(c, x0, y0, w, h, col, dens) {
+  c.fillStyle = col;
+  const s = 14;
+  for (let y = y0; y < y0 + h; y += s) for (let x = x0 + ((y / s) % 2 ? s / 2 : 0); x < x0 + w; x += s) {
+    const k = typeof dens === 'function' ? dens(x, y) : dens;
+    if (k <= 0) continue; c.beginPath(); c.arc(x, y, s * .5 * k, 0, 6.283); c.fill();
+  }
+}
+function hatch(c, x0, y0, w, h, col, gap, lw) {
+  c.strokeStyle = col; c.lineWidth = lw;
+  for (let k = -h; k < w; k += gap) { c.beginPath(); c.moveTo(x0 + k, y0 + h); c.lineTo(x0 + k + h, y0); c.stroke(); }
+}
+function housePath(c, x, y, w, h) { // x,y = 左下
+  const roof = h * .42;
+  c.beginPath(); c.moveTo(x, y); c.lineTo(x, y - h + roof); c.lineTo(x + w / 2, y - h); c.lineTo(x + w, y - h + roof); c.lineTo(x + w, y); c.closePath();
+}
+function house(c, T, x, y, w, h, fill) {
+  c.save(); housePath(c, x, y, w, h); c.clip(); fill(); c.restore();
+  c.save(); c.strokeStyle = T.ink; c.lineWidth = 7; c.lineJoin = 'round'; housePath(c, x, y, w, h); c.stroke();
+  // 門與窗
+  c.fillStyle = T.paper; c.strokeStyle = T.ink; c.lineWidth = 5;
+  const dw = w * .2, dh = h * .34; c.fillRect(x + w / 2 - dw / 2, y - dh, dw, dh); c.strokeRect(x + w / 2 - dw / 2, y - dh, dw, dh);
+  const ww = w * .17; for (const sx of [x + w * .14, x + w - w * .14 - ww]) { c.fillRect(sx, y - h * .5, ww, ww); c.strokeRect(sx, y - h * .5, ww, ww); }
+  c.restore();
+}
+// 墨點流（定格）：沿著 polyline
+function stream(c, pts, col, n, seed, spread, alpha) {
+  const r = rng(seed); c.save(); c.globalCompositeOperation = 'multiply'; c.fillStyle = col;
+  const seg = []; let tot = 0; for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(l); tot += l; }
+  for (let k = 0; k < n; k++) {
+    let d = r() * tot, i = 0; while (d > seg[i]) { d -= seg[i]; i++; }
+    const u = d / seg[i], a = pts[i], b = pts[i + 1];
+    const nx = -(b[1] - a[1]) / seg[i], ny = (b[0] - a[0]) / seg[i], o = (r() - .5) * spread;
+    c.globalAlpha = alpha * (.5 + r() * .5);
+    c.beginPath(); c.ellipse(a[0] + (b[0] - a[0]) * u + nx * o, a[1] + (b[1] - a[1]) * u + ny * o, 3 + r() * 4, 2 + r() * 3, Math.atan2(b[1] - a[1], b[0] - a[0]), 0, 6.283); c.fill();
+  }
+  c.restore();
+}
+function stamp(c, x, y, s, ch, col) {
+  c.save(); c.translate(x, y); c.rotate(-.06);
+  const cv = document.createElement('canvas'); cv.width = cv.height = s + 12; const k = cv.getContext('2d'), r = rng(77);
+  k.translate(6, 6); k.fillStyle = col; k.beginPath(); k.roundRect(0, 0, s, s, 14); k.fill();
+  k.globalCompositeOperation = 'destination-out'; k.font = `900 ${s * .62 | 0}px ${SERIF}`; k.textAlign = 'center'; k.textBaseline = 'middle'; k.fillStyle = '#000'; k.fillText(ch, s / 2, s / 2 + s * .04);
+  for (let i = 0; i < 90; i++) { k.globalAlpha = .2 + r() * .5; k.beginPath(); k.arc(r() * s, r() * s, .5 + r() * 1.6, 0, 6.283); k.fill(); }
+  c.drawImage(cv, -s / 2 - 6, -s / 2 - 6); c.restore();
+}
+function txt(c, s, x, y, font, col, align) { c.font = font; c.fillStyle = col; c.textAlign = align || 'left'; c.textBaseline = 'alphabetic'; c.fillText(s, x, y); }
+function marker(c, x, y, w, h, col) { // 螢光筆底
+  c.save(); c.globalCompositeOperation = 'multiply'; c.fillStyle = col; c.globalAlpha = .85;
+  c.beginPath(); c.moveTo(x - 6, y + 4); c.lineTo(x + w + 8, y); c.lineTo(x + w + 4, y + h); c.lineTo(x - 2, y + h + 5); c.closePath(); c.fill(); c.restore();
+}
+function disclaimer(c, T, y, align, x) { txt(c, '虛構家庭與數字，僅為示意', x || W / 2, y, `500 24px ${SANS}`, T.mute, align || 'center'); }
+
+// ---------- A 帳簿：置中標題＋左側 20 年帳列時間軸 ----------
+function A(c) {
+  const T = THEMES.ledger; paper(c, T);
+  // 帳簿格線
+  c.strokeStyle = rgba([31, 110, 90], .16); c.lineWidth = 2;
+  for (let y = 580; y <= 1500; y += 46) { c.beginPath(); c.moveTo(90, y); c.lineTo(990, y); c.stroke(); }
+  c.strokeStyle = rgba([200, 70, 50], .35); c.lineWidth = 2;
+  for (const x of [250, 256]) { c.beginPath(); c.moveTo(x, 560); c.lineTo(x, 1500); c.stroke(); }
+  // 版頭（置中）
+  txt(c, '家 庭 帳 本 ・ 第 二 冊', W / 2, 215, `700 26px ${SANS}`, T.soft, 'center');
+  c.fillStyle = T.ink; c.fillRect(380, 238, 320, 3);
+  // 標題置中
+  txt(c, '房貸還有 20 年', W / 2, 360, `900 92px ${SERIF}`, T.ink, 'center');
+  txt(c, '萬一收入斷了？', W / 2, 470, `900 92px ${SERIF}`, T.ink, 'center');
+  // 左側年份帳列
+  for (let i = 0; i < 20; i++) {
+    const y = 600 + i * 46;
+    txt(c, `第 ${i + 1} 年`, 230, y + 30, `500 24px ${SANS}`, i < 2 ? T.ink : T.mute, 'right');
+    c.fillStyle = T.ink; c.globalAlpha = .9;
+    const w = 380 * (1 - i / 20) + 14; // 剩餘房貸（示意）
+    c.save(); c.beginPath(); c.rect(280, y + 10, w, 26); c.clip(); halftone(c, 280, y + 10, w, 26, T.ink, .42); c.restore();
+    c.globalAlpha = 1;
+  }
+  txt(c, '剩餘房貸', 280, 590, `700 26px ${SANS}`, T.soft);
+  // 右上：收入 → 房子
+  house(c, T, 700, 1080, 230, 230, () => halftone(c, 700, 850, 230, 230, T.ink, (x, y) => .25 + (y - 850) / 230 * .5));
+  txt(c, '主要收入', 815, 640, `800 32px ${SANS}`, T.ink, 'center');
+  stream(c, [[815, 660], [815, 760], [815, 850]], T.ink, 160, 5, 26, .8);
+  txt(c, '每月房貸', 815, 1130, `700 26px ${SANS}`, T.soft, 'center');
+  txt(c, '30,000', 815, 1200, `900 64px ${SERIF}`, T.acc, 'center');
+  stream(c, [[815, 1215], [815, 1300], [560, 1330]], T.acc, 120, 8, 22, .9);
+  stamp(c, 920, 1420, 92, '家', T.acc);
+  disclaimer(c, T, 1580);
+  grain(c);
+}
+
+// ---------- B 頭版：報紙版頭＋巨大置中標題＋橫向 20 年尺 ----------
+function B(c) {
+  const T = THEMES.paper; paper(c, T);
+  c.fillStyle = T.ink; c.fillRect(90, 200, 900, 6); c.fillRect(90, 212, 900, 2);
+  txt(c, '家 庭 日 報', W / 2, 292, `900 64px ${SERIF}`, T.ink, 'center');
+  txt(c, '第 2 號　｜　責任流專題　｜　@timzz1208', W / 2, 340, `500 24px ${SANS}`, T.soft, 'center');
+  c.fillRect(90, 362, 900, 2);
+  // 巨大標題
+  marker(c, 290, 455, 500, 80, T.acc);
+  txt(c, '房貸還有', W / 2, 520, `900 120px ${SERIF}`, T.ink, 'center');
+  txt(c, '20 年', W / 2, 700, `900 188px ${SERIF}`, T.ink, 'center');
+  txt(c, '萬一，主要收入斷了？', W / 2, 800, `800 46px ${SANS}`, T.ink, 'center');
+  // 三欄：左收入、中房子、右房貸
+  c.fillRect(90, 850, 900, 2);
+  house(c, T, 400, 1260, 280, 290, () => halftone(c, 400, 970, 280, 290, T.ink, (x, y) => .3 + (y - 970) / 290 * .55));
+  txt(c, '主要收入', 220, 920, `800 32px ${SANS}`, T.ink, 'center');
+  stream(c, [[220, 940], [220, 1060], [400, 1120]], T.ink, 150, 4, 26, .8);
+  txt(c, '每月房貸', 860, 920, `800 32px ${SANS}`, T.ink, 'center');
+  marker(c, 760, 960, 200, 60, T.acc);
+  txt(c, '30,000', 860, 1010, `900 52px ${SERIF}`, T.ink, 'center');
+  stream(c, [[680, 1120], [860, 1060], [860, 1040]], T.ink, 110, 9, 20, .7);
+  // 橫向 20 年尺
+  const y = 1380; c.fillRect(140, y, 800, 4);
+  for (let i = 0; i <= 20; i++) { const x = 140 + i * 40, big = i % 5 === 0; c.fillRect(x - 1.5, y - (big ? 28 : 14), 3, big ? 28 : 14); if (big) txt(c, `${i}`, x, y + 44, `700 26px ${SANS}`, T.soft, 'center'); }
+  txt(c, '年', 965, y + 44, `700 26px ${SANS}`, T.soft, 'left');
+  c.save(); c.beginPath(); c.rect(140, y - 70, 800, 44); c.clip(); halftone(c, 140, y - 70, 800, 44, T.ink, (x) => .55 * (1 - (x - 140) / 800) + .05); c.restore();
+  txt(c, '剩餘房貸', 140, y - 84, `700 24px ${SANS}`, T.soft);
+  stamp(c, 880, 1500, 84, '家', T.ink);
+  disclaimer(c, T, 1580);
+  grain(c);
+}
+
+// ---------- C 牛皮紙：上半大房子、下半大字（海報式，文字在下） ----------
+function C(c) {
+  const T = THEMES.kraft; paper(c, T);
+  txt(c, '責任流　No.02', 110, 215, `700 26px ${SANS}`, T.ink);
+  txt(c, '@timzz1208', 970, 215, `700 26px ${SANS}`, T.ink, 'right');
+  c.fillStyle = T.ink; c.fillRect(110, 236, 860, 3);
+  // 大房子，木刻斜線
+  house(c, T, 230, 1000, 620, 620, () => hatch(c, 230, 380, 620, 620, T.ink, 16, 4));
+  txt(c, '主要收入', 160, 330, `800 32px ${SANS}`, T.ink);
+  stream(c, [[230, 350], [300, 420], [380, 520]], T.ink, 140, 6, 24, .8);
+  // 房貸出口，深紅
+  stream(c, [[540, 1000], [540, 1060], [800, 1090], [950, 1090]], T.acc, 170, 11, 24, .95);
+  txt(c, '每月房貸 30,000', 950, 1060, `800 30px ${SANS}`, T.acc, 'right');
+  // 下半大字
+  c.fillStyle = T.ink; c.fillRect(110, 1140, 860, 3);
+  txt(c, '房貸', 110, 1300, `900 150px ${SERIF}`, T.ink);
+  txt(c, '還有 20 年', 110, 1440, `900 120px ${SERIF}`, T.ink);
+  txt(c, '萬一，主要收入斷了？', 110, 1520, `800 44px ${SANS}`, T.acc);
+  stamp(c, 900, 1270, 120, '家', T.acc);
+  disclaimer(c, T, 1580, 'left', 110);
+  grain(c);
+}
+
+window.draw = async (v) => {
+  await document.fonts.load(`900 92px ${SERIF}`, '房貸還有年萬一收入斷了家庭帳本第二冊日報責任流專題號'); await document.fonts.load(`800 32px ${SANS}`, '主要收入每月房貸剩餘萬一斷了？責任流第號專題'); await document.fonts.load(`500 24px ${SANS}`, '虛構家庭與數字，僅為示意第年責任流專題號');
+  await document.fonts.load(`700 26px ${SANS}`, '家庭帳本・第二冊剩餘房貸年責任流'); await document.fonts.ready;
+  ({ A, B, C })[v](document.getElementById('c').getContext('2d'));
+};
+</script>
