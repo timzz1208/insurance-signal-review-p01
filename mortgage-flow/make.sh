@@ -7,7 +7,7 @@ NAME="${NAME:-mortgage-flow}"
 PY=$(command -v python3 || command -v python)
 FF=${FFMPEG:-$($PY -c "import imageio_ffmpeg as i;print(i.get_ffmpeg_exe())" 2>/dev/null || echo ffmpeg)}
 mkdir -p build output
-node render.js --out build/silent.mp4 --vbitrate ${VBITRATE:-4.3M} "$@"                                # 1. 逐格輸出畫面（無聲）
+node render.js --out build/silent.mp4 --vbitrate ${VBITRATE:-3.9M} "$@"                                # 1. 逐格輸出畫面（無聲）
 if [ -f voice/narration.wav ]; then                                          # 2. 音效＋配樂；有旁白就一起混
   $PY sound.py build/sfx.wav --voice voice/narration.wav --mix build/mix.wav
   AUDIO=build/mix.wav
