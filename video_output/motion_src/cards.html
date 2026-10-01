@@ -38,6 +38,34 @@
   #list .item{position:absolute;left:56px;height:76px;display:flex;align-items:center;gap:26px}
   #list .num{width:64px;height:64px;border-radius:50%;background:#FFD60A;color:#111;font-weight:900;font-size:40px;display:flex;align-items:center;justify-content:center}
   #list .txt{font-weight:700;font-size:54px;color:#fff;letter-spacing:2px}
+
+  #qs,#list{display:none}
+  .scene{position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:0;overflow:hidden;
+    background:radial-gradient(900px 700px at 80% 10%,rgba(255,214,10,.10),transparent 60%),
+      repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 2px,transparent 2px 80px),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 2px,transparent 2px 80px),#0E0F12}
+  .sc-kick{position:absolute;left:80px;top:250px;font-weight:700;font-size:40px;color:#FFD60A;letter-spacing:4px}
+  .sc-title{position:absolute;left:80px;top:310px;font-weight:900;font-size:80px;color:#fff;letter-spacing:2px;white-space:nowrap}
+  .panelA{position:absolute;left:60px;top:540px;width:960px;height:700px;border-radius:36px;background:#17191E;border:2px solid rgba(255,255,255,.10)}
+  .trk{position:absolute;left:30px;width:900px;height:110px}
+  .trk .lb{position:absolute;left:0;top:0;width:120px;height:110px;display:flex;align-items:center;font-weight:700;font-size:38px;color:#9AA0AA}
+  .trk .lane{position:absolute;left:130px;top:12px;width:770px;height:86px;border-radius:16px;background:#22252C}
+  .trk .lane.empty{background:transparent;border:3px dashed rgba(255,255,255,.18)}
+  .blk{position:absolute;top:8px;height:70px;border-radius:12px;background:#3B4150}
+  .wv{position:absolute;bottom:43px;width:6px;border-radius:3px;background:#6E7686;transform:translateY(50%)}
+  .ph{position:absolute;top:30px;width:6px;height:640px;border-radius:3px;background:#FFD60A;box-shadow:0 0 18px rgba(255,214,10,.7)}
+  .q{position:absolute;padding:12px 26px;border-radius:20px;background:#FFD60A;color:#111;font-weight:900;font-size:46px;white-space:nowrap;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+  .q:after{content:'';position:absolute;left:40px;bottom:-14px;border:14px solid transparent;border-bottom:0;border-top-color:#FFD60A}
+  .qm{position:absolute;font-weight:900;font-size:70px;color:#FFD60A;text-shadow:0 4px 14px rgba(0,0,0,.6)}
+  .card{position:absolute;left:60px;top:560px;width:960px;height:700px;border-radius:40px;background:#1A1C21;border:2px solid rgba(255,255,255,.12);box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .card .hd{position:absolute;left:44px;top:34px;display:flex;gap:14px;align-items:center;font-weight:700;font-size:34px;color:#9AA0AA}
+  .dot{width:20px;height:20px;border-radius:50%;background:#3A3D45}
+  .ln{position:absolute;left:44px;height:80px;display:flex;align-items:center;gap:22px;white-space:nowrap}
+  .tagc{padding:6px 18px;border-radius:14px;background:#FFD60A;color:#111;font-weight:900;font-size:38px}
+  .tx{font-weight:700;font-size:48px;color:#fff}
+  .bad{font-weight:700;font-size:48px;color:#8A8F99}
+  .caret{display:inline-block;width:5px;height:52px;background:#FFD60A;vertical-align:middle;margin-left:4px}
+  .send{position:absolute;right:40px;bottom:36px;width:96px;height:96px;border-radius:50%;background:#FFD60A;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:54px;color:#111}
 </style></head>
 <body>
 <div id="hook" class="layer">
@@ -56,6 +84,36 @@
   <div class="item" style="top:300px"><div class="num">3</div><div class="txt">哪一句最重要</div></div>
   <div class="item" style="top:380px"><div class="num">4</div><div class="txt">效果何時出現</div></div>
 </div></div>
+
+<div id="sA" class="scene">
+  <div class="sc-kick">對 AI 來說</div>
+  <div class="sc-title">你的影片只是一條<span class="yel">時間軸</span></div>
+  <div class="panelA">
+    <div class="trk" style="top:40px"><div class="lb">畫面</div><div class="lane" id="laneV"><div class="blk" style="left:8px;width:470px"></div><div class="blk" style="left:486px;width:276px"></div></div></div>
+    <div class="trk" style="top:200px"><div class="lb">口播</div><div class="lane" id="laneW"></div></div>
+    <div class="trk" style="top:360px"><div class="lb">字卡</div><div class="lane empty"></div></div>
+    <div class="trk" style="top:520px"><div class="lb">音效</div><div class="lane empty"></div></div>
+    <div class="ph" id="ph"></div>
+  </div>
+  <div class="q" id="q1" style="left:230px;top:660px">強調哪一句？</div>
+  <div class="qm" id="m1a" style="left:330px;top:770px">?</div><div class="qm" id="m1b" style="left:600px;top:760px">?</div><div class="qm" id="m1c" style="left:840px;top:775px">?</div>
+  <div class="q" id="q2" style="left:470px;top:500px">哪裡換畫面？</div>
+  <div class="q" id="q3" style="left:300px;top:858px">大字卡？</div>
+  <div class="q" id="q4" style="left:560px;top:1018px">音效？</div>
+</div>
+<div id="sB" class="scene">
+  <div class="sc-kick">好的剪輯指令</div>
+  <div class="sc-title">先把<span class="yel">判斷</span>講清楚</div>
+  <div class="card">
+    <div class="hd"><div class="dot"></div><div class="dot"></div><div class="dot"></div><span style="margin-left:10px">給 AI 的剪輯指令</span></div>
+    <div class="ln" id="lbad" style="top:130px"><span class="bad" id="badtx"></span><span class="caret" id="cbad"></span></div>
+    <div class="ln" data-i="0" style="top:130px"><span class="tagc">主題</span><span class="tx"></span></div>
+    <div class="ln" data-i="1" style="top:240px"><span class="tagc">段落</span><span class="tx"></span></div>
+    <div class="ln" data-i="2" style="top:350px"><span class="tagc">重點</span><span class="tx"></span></div>
+    <div class="ln" data-i="3" style="top:460px"><span class="tagc">效果</span><span class="tx"></span></div>
+    <div class="send" id="send">↑</div>
+  </div>
+</div>
 <script>
 // split text nodes into per-character spans (keeps inner spans' classes)
 document.querySelectorAll('[data-split]').forEach(el=>{
@@ -115,6 +173,39 @@ window.render=function(t){
      it.querySelector('.num').style.transform=`scale(${k})`;
      const nxt=i<3?its[i+1]:1e9, active=t>=its[i]&&t<nxt;
      it.querySelector('.txt').style.color=active?'#FFD60A':'#fff';});}
+};
+
+// waveform bars
+{const lw=document.getElementById('laneW');let r=7;const rnd=()=>{r=(r*16807)%2147483647;return r/2147483647};
+ for(let i=0;i<92;i++){const b=document.createElement('div');b.className='wv';const gap=(i%23>19);b.style.left=(10+i*8.2)+'px';b.style.height=(gap?4:12+rnd()*58)+'px';lw.appendChild(b)}}
+const BL=['這支影片在講什麼','要在哪裡切開','哪一句最重要','字卡、音效何時出現'];
+const BAD='幫我剪得很有質感';
+function sceneXY(el,t,a,b){ // whip in from right, out to left
+  const ein=p(t,a,.3), eout=b==null?0:p(t,b,.3);
+  const io=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  const x=1080*(1-io(ein)) - 1080*io(eout);
+  const bl=40*Math.sin(Math.PI*ein)+40*Math.sin(Math.PI*eout);
+  const vis=t>=a&&(b==null||t<=b+.3);
+  el.style.opacity=vis?1:0; el.style.transform=`translateX(${x}px)`; el.style.filter=bl>0.5?`blur(${bl}px)`:'none';}
+function pop(el,t,st){const x=t-st,k=spring(x);el.style.opacity=cl(x/.08);el.style.transform=`scale(${k})`;el.style.transformOrigin='30% 100%'}
+const _r=window.render;
+window.render=function(t){_r(t);
+  const A=C.sA;sceneXY($('#sA'),t,A.in,A.out);
+  $('#ph').style.left=(160+760*cl((t-A.in)/(A.out-A.in)))+'px';
+  pop($('#q1'),t,A.q1);['#m1a','#m1b','#m1c'].forEach((m,i)=>pop($(m),t,A.q1+.15+i*.12));
+  pop($('#q2'),t,A.q2);pop($('#q3'),t,A.q3);pop($('#q4'),t,A.q4);
+  const B=C.sB;sceneXY($('#sB'),t,B.in,null);
+  const nDel=Math.floor(cl((t-B.del)/(B.delEnd-B.del))*BAD.length);
+  $('#badtx').textContent=BAD.slice(0,BAD.length-nDel);
+  $('#lbad').style.opacity=t<B.delEnd+.05?1:0;
+  $('#cbad').style.opacity=(Math.floor(t*2.5)%2||t>B.del)?1:0;
+  $$('#sB .ln[data-i]').forEach((ln,i)=>{const st=B.lines[i],x=t-st;ln.style.opacity=x>=0?1:0;
+    const tag=ln.querySelector('.tagc'),k=spring(x);tag.style.transform=`scale(${k})`;
+    const n=Math.floor(cl(x/ (BL[i].length*.055))*BL[i].length);
+    const typing=x>=0&&(i==3||t<B.lines[i+1]);
+    ln.querySelector('.tx').innerHTML=BL[i].slice(0,n)+(typing?'<span class="caret"></span>':'');});
+  const sx=t-B.send, s=$('#send'); s.style.transform=`scale(${sx>0?1+.18*Math.exp(-sx*4)*Math.sin(sx*14):1})`;
+  s.style.boxShadow=sx>0?`0 0 ${40*Math.exp(-sx*2)}px rgba(255,214,10,.9)`:'none';
 };
 </script>
 </body></html>
