@@ -82,3 +82,9 @@ put(ding(),B['send'])
 mix=np.tanh(mix*1.1)/1.1
 wavfile.write('sfx.wav',SR,(np.stack([mix,mix],1)*32767*.95).astype(np.int16))
 print('sfx peak dBFS', 20*np.log10(np.max(np.abs(mix))), 'len', len(mix)/SR)
+# end card
+if 'sE' in C:
+    E=C['sE']['in']; mix2=np.zeros(len(mix))
+    put(whoosh(),E-.12); put(pop(900,400),E+.25,-4); put(pop(1100,500),E+.45,-4); put(pop(1300,600),E+.8,-2)
+    mix=np.tanh(mix*1.1)/1.1
+    wavfile.write('sfx.wav',SR,(np.stack([mix,mix],1)*32767*.95).astype(np.int16)); print('with end card')

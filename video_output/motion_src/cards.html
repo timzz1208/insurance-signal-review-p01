@@ -75,6 +75,11 @@
   #hook .l2{top:500px !important;font-size:132px !important;letter-spacing:4px !important;
     text-shadow:0 8px 30px rgba(0,0,0,.6),0 3px 0 rgba(0,0,0,.4)}
   #hook .tag{top:225px !important}
+
+  #sE .big{position:absolute;left:0;width:1080px;text-align:center;font-weight:900;font-size:104px;color:#fff;line-height:1.25;letter-spacing:3px}
+  #sE .cta{position:absolute;left:50%;top:1010px;transform:translateX(-50%);padding:22px 56px;border-radius:999px;background:#FFD60A;color:#111;font-weight:900;font-size:64px;white-space:nowrap;box-shadow:0 18px 50px rgba(255,214,10,.35)}
+  #sE .arr{position:absolute;left:50%;top:1150px;width:0;height:0;margin-left:-34px;border:34px solid transparent;border-top:44px solid #FFD60A;border-bottom:0}
+  #sE .foot{position:absolute;left:0;width:1080px;top:1330px;text-align:center;font-weight:500;font-size:38px;color:#9AA0AA;letter-spacing:2px}
 </style></head>
 <body>
 <div id="hook" class="layer">
@@ -124,6 +129,14 @@
     <div class="ln" data-i="3" style="top:460px"><span class="tagc">效果</span><span class="tx"></span></div>
     <div class="send" id="send">↑</div>
   </div>
+</div>
+
+<div id="sE" class="scene">
+  <div class="big" id="e1" style="top:560px">你都怎麼跟 <span class="yel">AI</span></div>
+  <div class="big" id="e2" style="top:700px">下剪輯指令？</div>
+  <div class="cta" id="ecta">留言告訴我</div>
+  <div class="arr" id="earr"></div>
+  <div class="foot" id="efoot">這支影片從挑段落到字卡音效，全部由 AI 剪輯</div>
 </div>
 <script>
 // split text nodes into per-character spans (keeps inner spans' classes)
@@ -231,6 +244,15 @@ window.render=function(t){_r(t);
     ln.querySelector('.tx').innerHTML=BL[i].slice(0,n)+(typing?'<span class="caret"></span>':'');});
   const sx=t-B.send, s=$('#send'); s.style.transform=`scale(${sx>0?1+.18*Math.exp(-sx*4)*Math.sin(sx*14):1})`;
   s.style.boxShadow=sx>0?`0 0 ${40*Math.exp(-sx*2)}px rgba(255,214,10,.9)`:'none';
+};
+
+const _r2=window.render;
+window.render=function(t){_r2(t); if(!C.sE) return;
+  const E=C.sE; sceneXY($('#sE'),t,E.in,null);
+  [['#e1',E.in+.25],['#e2',E.in+.45]].forEach(([id,st])=>{const e=$(id),x=t-st,k=spring(x);e.style.opacity=cl(x/.1);e.style.transform=`translateY(${(1-k)*60}px)`});
+  const c=$('#ecta'),x=t-(E.in+.8),k=spring(x); c.style.opacity=cl(x/.08); c.style.transform=`translateX(-50%) scale(${k})`;
+  const a=$('#earr'),xa=t-(E.in+1.0); a.style.opacity=cl(xa/.15); a.style.transform=`translateY(${xa>0?12*Math.sin(xa*7):0}px)`;
+  const f=$('#efoot'),xf=t-(E.in+1.1); f.style.opacity=cl(xf/.3);
 };
 </script>
 </body></html>
