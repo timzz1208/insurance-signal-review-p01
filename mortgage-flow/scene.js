@@ -8,7 +8,7 @@
 (function () {
   'use strict';
   const { COL, keys, seg, clamp, lerp, easeBack, easeOut, hash } = FF;
-  const TIME_MAP = [[0, 0], [50, 50]];
+  const TIME_MAP = [[0, 0], [56, 56]];
   const DURATION = TIME_MAP[TIME_MAP.length - 1][0];
   const W = 1080, CX = 540;
   const ctx = document.getElementById('stage').getContext('2d');
@@ -29,9 +29,18 @@
     C1: 16.85, DRAIN: 18.4, DRAIN_END: 20.4,
     C2: 21.25, CLEAR: 22.65, GONE: 23.75,
     C3: 25.45, GAP: 26.8, IOU: 27.9,
-    L8: 30.2, REMAIN: 33.3, MATCH: 36.1,
-    L9: 37.6, CATCH: 39.45, STAY: 41.1,
-    END: 43.0
+    L8: 30.2,        // A 版結束，開始倒帶
+    REMAIN: 999, MATCH: 999, L9: 999, CATCH: 999, STAY: 999, END: 999,   // 舊轉折段落（已改成 B 版）
+    // ---- B 版：換一個版本 ----
+    REW: 30.2, REW_END: 31.45, FLIP2: 31.85,
+    LIFE: 32.95,     // 「房貸壽險」
+    DECR: 35.3,      // 「保額跟著房貸一起變少」
+    CUT2: 38.55,     // 「萬一身故或完全失能」
+    PAYOUT: 40.3,    // 「保險金」
+    PAYOFF: 41.2,    // 「還清剩下的房貸」
+    PAID: 42.55,
+    CHK: [43.6, 44.9, 46.08],   // 存款不用動／房子不用賣／也不用開口借
+    E1: 47.6, E2: 48.7, E3: 50.05   // 收入會斷／家不用斷／先算清楚…
   };
   const CHOICES = [{ s: T.C1, label: '動用存款' }, { s: T.C2, label: '賣掉房子' }, { s: T.C3, label: '跟家人借' }];
   const PILL = { y: 560, h: 76, w: 262, xs: [110, 409, 708] };
@@ -171,6 +180,8 @@
     ctx.save();
     ctx.globalAlpha *= S.alpha;
     // 剩餘房貸：每年一階，墨色網點
+    ctx.save();
+    ctx.globalAlpha *= S.bandAlpha == null ? 1 : S.bandAlpha;
     const clearK = S.clear || 0;   // 賣房：由右往左清掉
     for (let i = 0; i < 20; i++) {
       const hh = g.hmax * rem(i) * (1 - clamp(clearK * 1.6 - (19 - i) / 20 * 0.6));
@@ -195,6 +206,7 @@
       }
       ctx.restore();
     }
+    ctx.restore();
     // 墨綠描邊：「準備就對應多少」
     const trace = S.trace || 0;
     if (trace > 0) {
@@ -274,14 +286,14 @@
     ctx.beginPath(); ctx.moveTo(x + 4, y - 6); ctx.lineTo(x + w, y - 2); ctx.lineTo(x + w - 5, y + hh); ctx.lineTo(x - 2, y + hh + 4); ctx.closePath(); ctx.fill();
     ctx.restore();
   }
-  function extraStamp(x, y, s, k) {   // 號外：墨黑方章、直排兩字
+  function extraStamp(x, y, s, k, col, chars, rot) {   // 號外：墨黑方章、直排兩字
     if (k <= 0) return;
-    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.13);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot == null ? -0.13 : rot);
     const sc = 1 + 0.8 * (1 - easeBack(clamp(k))); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(k * 3);
-    ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.roundRect(-s / 2, -s * 0.62, s, s * 1.24, 10); ctx.fill();
+    ctx.fillStyle = col || COL.ink; ctx.beginPath(); ctx.roundRect(-s / 2, -s * 0.62, s, s * 1.24, 10); ctx.fill();
     ctx.strokeStyle = COL.paper; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-s / 2 + 9, -s * 0.62 + 9, s - 18, s * 1.24 - 18, 6); ctx.stroke();
-    text('號', 0, -s * 0.08, { size: s * 0.5, weight: 900, serif: true, color: COL.paper, align: 'center' });
-    text('外', 0, s * 0.46, { size: s * 0.5, weight: 900, serif: true, color: COL.paper, align: 'center' });
+    text((chars || '號外')[0], 0, -s * 0.08, { size: s * 0.5, weight: 900, serif: true, color: COL.paper, align: 'center' });
+    text((chars || '號外')[1], 0, s * 0.46, { size: s * 0.5, weight: 900, serif: true, color: COL.paper, align: 'center' });
     // 磨損：咬掉一些點
     ctx.globalCompositeOperation = 'destination-out';
     for (let i = 0; i < 70; i++) { ctx.beginPath(); ctx.arc((hash(i, 5) - 0.5) * s, (hash(i, 6) - 0.5) * s * 1.24, 0.6 + hash(i, 7) * 1.8, 0, Math.PI * 2); ctx.fill(); }
@@ -547,10 +559,9 @@
     [T.CATCH + 0.3, T.END, '房貸越繳越少，需要接住的也越來越少。']
   ];
 
-  function renderAt(rt) {
-    const t = rt;
+  // A 版（0～30.2 秒）：rt 是粒子用的時間，倒帶時跟著倒轉
+  function drawA(t, rt) {
     ctx.save();
-    FF.background(ctx);
     const sh = shake(t);
     ctx.translate(sh.x, sh.y);
 
@@ -584,6 +595,226 @@
       text('虛構家庭與數字｜示意動畫\n不代表特定商品、核保結果或給付承諾', CX, 1420, { size: 27, weight: 500, color: COL.inkSoft, align: 'center', alpha: k2, lh: 1.55 });
     }
     ctx.restore();
+  }
+
+  // ---------- B 版：換一個版本（30.2 秒之後） ----------
+  const INS = { x: 200, y: 1190 };   // 房貸壽險節點
+  const PB = {
+    inc: P(220, 975, 240, 1010, 320, 1030, 450, 1050),
+    ins: P(236, 1190, 300, 1190, 350, 1200, 400, 1205)
+  };
+  function shakeB(t) {
+    let x = 0, y = 0;
+    const hit = (t0, amp, dur) => {
+      const a = t - t0;
+      if (a < 0 || a > dur) return;
+      const k = amp * Math.exp(-a * 14);
+      x += Math.sin(a * 95) * k; y += Math.cos(a * 71) * k;
+    };
+    hit(T.REW_END + 0.1, 10, 0.4);
+    hit(T.CUT2, 8, 0.4);
+    hit(T.PAID + 0.1, 6, 0.4);
+    hit(T.E2 + 0.15, 12, 0.5);
+    return { x, y };
+  }
+  function checkRow(s, y, t0, t) {
+    const a = seg(t, t0 - 0.05, t0 + 0.2);
+    if (a <= 0) return;
+    const bx = 150, s0 = 70;
+    ctx.save(); ctx.globalAlpha *= a;
+    ctx.strokeStyle = COL.ink; ctx.lineWidth = 4; ctx.strokeRect(bx, y - s0 + 8, s0, s0);
+    const p = clamp((t - t0 - 0.15) / 0.25);
+    if (p > 0) {   // 墨綠勾勾，一筆畫上
+      ctx.strokeStyle = COL.blue; ctx.lineWidth = 11; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      const pts = [[bx + 12, y - 26], [bx + 30, y - 4], [bx + 78, y - 70]];
+      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+      const q = p * 2;
+      if (q <= 1) ctx.lineTo(lerp(pts[0][0], pts[1][0], q), lerp(pts[0][1], pts[1][1], q));
+      else { ctx.lineTo(pts[1][0], pts[1][1]); ctx.lineTo(lerp(pts[1][0], pts[2][0], q - 1), lerp(pts[1][1], pts[2][1], q - 1)); }
+      ctx.stroke();
+    }
+    text(s, bx + s0 + 40, y, { size: 78, weight: 900, serif: true });
+    ctx.restore();
+  }
+
+  function drawB(t, rt) {
+    ctx.save();
+    const sh = shakeB(t);
+    ctx.translate(sh.x, sh.y);
+    masthead();
+    const endA = 1 - seg(t, T.E1 - 0.3, T.E1);
+
+    // ---- 標題區 ----
+    if (t < T.CUT2 - 0.35) {
+      const a = fadeIO(t, T.FLIP2, T.CUT2 - 0.35, 0.15, 0.2);
+      headline('市場上有一種', 470 + slideIn(t, T.FLIP2), { size: 44, weight: 800, color: COL.inkSoft, alpha: a });
+      const k = clamp((t - T.LIFE) / 0.24);
+      if (t >= T.LIFE) {
+        ctx.save(); ctx.translate(CX, 640); const sc = 1 + 0.6 * (1 - easeBack(k)); ctx.scale(sc, sc); ctx.translate(-CX, -640);
+        headline('房貸壽險', 640, { size: 150, weight: 900, serif: true, alpha: a * clamp(k * 3), mark: seg(t, T.LIFE + 0.3, T.LIFE + 0.6) });
+        ctx.restore();
+      }
+      headline('常見設計：保額跟著房貸一起變少', 770, { size: 44, weight: 800, color: COL.blue, alpha: a * seg(t, T.DECR, T.DECR + 0.3) });
+    } else if (t < T.CHK[0] - 0.25) {
+      const a = fadeIO(t, T.CUT2 - 0.35, T.CHK[0] - 0.25, 0.2, 0.2);
+      headline('萬一身故或完全失能，', 520 + slideIn(t, T.CUT2 - 0.35), { size: 72, weight: 900, serif: true, alpha: a });
+      headline('保險金可以用來', 640, { size: 46, weight: 800, color: COL.inkSoft, alpha: a * seg(t, T.PAYOUT, T.PAYOUT + 0.3) });
+      headline('還清剩下的房貸。', 770, { size: 96, weight: 900, serif: true, color: COL.blue, alpha: a * seg(t, T.PAYOFF, T.PAYOFF + 0.3) });
+    } else if (t < T.E1) {
+      const a = seg(t, T.CHK[0] - 0.25, T.CHK[0]) * endA;
+      ctx.save(); ctx.globalAlpha *= a;
+      checkRow('存款不用動', 540, T.CHK[0], t);
+      checkRow('房子不用賣', 660, T.CHK[1], t);
+      checkRow('不用開口借', 780, T.CHK[2], t);
+      ctx.restore();
+    }
+
+    // ---- 場景 ----
+    const big = seg(t, 34.9, 35.6) * (1 - seg(t, 37.7, 38.3));     // 剩餘房貸圖放大
+    const sceneA = seg(t, T.FLIP2, T.FLIP2 + 0.2) * (1 - seg(t, 34.9, 35.4) + seg(t, 37.8, 38.3)) * (1 - seg(t, T.E1 - 0.4, T.E1));
+    const cut = t >= T.CUT2, flowing = t >= T.PAYOUT && t < T.PAID, paid = t >= T.PAID;
+    ctx.save();
+    ctx.globalAlpha *= sceneA;
+    ctx.fillStyle = COL.ink; ctx.fillRect(90, 850, 900, 2);
+    // 主要收入
+    FF.pipe(ctx, PB.inc, cut ? COL.inkSoft : COL.ink, 0.5, 2, cut ? [4, 10] : null);
+    FF.stream(ctx, PB.inc, rt, { rate: 30, travel: 0.9, color: COL.ink, seed: 13, spread: 24, dens: (ts) => (ts < T.CUT2 ? 1 : 0) });
+    text('主要收入', INC.x, INC.y, { size: 34, weight: 800, align: 'center' });
+    if (cut) {
+      const la = seg(t, T.CUT2 + 0.1, T.CUT2 + 0.4);
+      const lw = measure('身故／完全失能', { size: 26, weight: 800 });
+      marker(INC.x - lw / 2, 940, lw, 30, la, 1);
+      text('身故／完全失能', INC.x, 962, { size: 26, weight: 800, align: 'center', alpha: la });
+    }
+    const sp = FF.bez(PB.inc, 0.35);
+    FF.spray(ctx, sp.x, sp.y, T.CUT2, t, COL.ink, 40, 39);
+    if (cut) FF.slash(ctx, sp.x, sp.y, clamp((t - T.CUT2) / 0.12) * 0.9, COL.ink);
+    // 房貸壽險
+    const insA = seg(t, T.LIFE, T.LIFE + 0.4);
+    if (insA > 0) {
+      ctx.save(); ctx.globalAlpha *= insA;
+      FF.pipe(ctx, PB.ins, COL.blue, 0.6, 3, t < T.PAYOUT ? [6, 10] : null);
+      FF.stream(ctx, PB.ins, rt, { rate: 40, travel: 0.7, color: COL.blue, seed: 83, spread: 22, size: 5, dens: (ts) => (ts >= T.PAYOUT && ts < T.PAID ? 1 : 0) });
+      const ring = t >= T.PAYOUT && t < T.PAYOUT + 1 ? seg(t, T.PAYOUT, T.PAYOUT + 1) : 0;
+      FF.node(ctx, INS.x, INS.y, 24, { mode: t < T.PAYOUT ? 'cut' : 'solid', color: COL.blue, ring });
+      text('房貸壽險', INS.x, INS.y - 46, { size: 32, weight: 900, color: COL.blue, align: 'center' });
+      text('保額隨房貸遞減', INS.x, INS.y + 62, { size: 22, weight: 700, color: COL.blue, align: 'center' });
+      ctx.restore();
+    }
+    // 房貸出口：保險金流入時變墨綠；還清後停止
+    FF.pipe(ctx, PATH.out, flowing ? COL.blue : COL.verm, paid ? 0.15 : 0.5, 2);
+    FF.stream(ctx, PATH.out, rt, { rate: 24, travel: 0.9, color: COL.verm, seed: 57, spread: 18, dens: (ts) => (ts < T.PAYOUT ? 1 : 0) });
+    FF.stream(ctx, PATH.out, rt, { rate: 44, travel: 0.7, color: COL.blue, seed: 91, spread: 20, size: 5, dens: (ts) => (ts >= T.PAYOUT && ts < T.PAID ? 1 : 0) });
+    text('每月房貸', PAY.x, PAY.y, { size: 34, weight: 800, align: 'center' });
+    const pw = measure('30,000', { size: 52, weight: 900, serif: true });
+    marker(PAY.x - pw / 2, 962, pw, 46, 1 - seg(t, T.PAID, T.PAID + 0.3), 1);
+    text('30,000', PAY.x, 1006, { size: 52, weight: 900, serif: true, align: 'center', color: paid ? COL.mute : COL.ink });
+    if (paid) {
+      const k = seg(t, T.PAID, T.PAID + 0.25);
+      ctx.fillStyle = COL.blue; ctx.fillRect(PAY.x - pw / 2 - 8, 988, (pw + 16) * k, 6);
+      text('已還清', PAY.x, 1056, { size: 30, weight: 900, color: COL.blue, align: 'center', alpha: k });
+    }
+    house({});
+    if (t >= T.PAID + 0.35) {
+      const k = clamp((t - T.PAID - 0.35) / 0.18);
+      FF.stamp(ctx, HOUSE.x + HOUSE.w / 2, HOUSE.base - 190, 78 * (1 + 0.5 * (1 - k)), '家', k, COL.blue);
+    }
+    ctx.restore();
+
+    // ---- 剩餘房貸圖（刻度尺） ----
+    const S = {
+      k: big,
+      alpha: seg(t, T.FLIP2, T.FLIP2 + 0.2) * (1 - seg(t, T.E1 - 0.4, T.E1)),
+      trace: seg(t, T.DECR + 0.1, T.DECR + 1.9),
+      buffer: seg(t, T.PAYOFF, T.PAID - 0.1),
+      bandAlpha: 1 - seg(t, T.PAID, T.PAID + 0.4),
+      label: big > 0.5 ? '剩餘房貸（墨點）與保額（綠線）' : '剩餘房貸'
+    };
+    if (t >= T.PAID) S.trace *= 1 - seg(t, T.PAID, T.PAID + 0.4);
+    chart(t, S);
+    if (big > 0.02) {
+      const g = chartGeom(big);
+      ctx.save(); ctx.globalAlpha *= big * S.alpha;
+      text('← 第 1 年　保額最高', g.x0 + (g.x1 - g.x0) * 0.2, g.base - 6 - g.hmax * 0.93, { size: 32, weight: 800, color: COL.blue, alpha: seg(t, T.DECR + 0.3, T.DECR + 0.6) });
+      text('第 20 年　歸零 ↓', g.x1, g.base - 6 - g.hmax * 0.34, { size: 32, weight: 800, color: COL.blue, align: 'right', alpha: seg(t, T.DECR + 1.4, T.DECR + 1.7) });
+      ctx.restore();
+    }
+    if (paid && t < T.E1) {
+      const k = clamp((t - T.PAID - 0.1) / 0.2);
+      ctx.save(); ctx.translate(CX, 1338); ctx.rotate(-0.04); const sc = 1 + 0.6 * (1 - easeBack(k)); ctx.scale(sc, sc);
+      ctx.globalAlpha *= clamp(k * 3) * endA;
+      ctx.fillStyle = COL.blue; ctx.beginPath(); ctx.roundRect(-150, -38, 300, 72, 8); ctx.fill();
+      text('房貸已還清', 0, 2, { size: 40, weight: 900, serif: true, color: COL.paper, align: 'center', baseline: 'middle' });
+      ctx.restore();
+    }
+    // 說明小字（全程）＋示意聲明
+    if (t < T.E1) {
+      text('＊房貸壽險主要保障身故、完全失能；失業不在保障範圍', CX, 1516, { size: 26, weight: 700, color: COL.inkSoft, align: 'center', alpha: seg(t, T.LIFE, T.LIFE + 0.4) * endA });
+      text('虛構家庭與數字，僅為示意', CX, 1580, { size: 24, weight: 500, color: COL.mute, align: 'center', alpha: endA });
+    }
+
+    // ---- 結尾頭條 ----
+    if (t >= T.E1 - 0.1) {
+      headline('收入會斷，', 620 + slideIn(t, T.E1), { size: 112, weight: 900, serif: true, alpha: seg(t, T.E1, T.E1 + 0.3) });
+      if (t >= T.E2) {
+        const k = clamp((t - T.E2) / 0.24);
+        ctx.save(); ctx.translate(CX, 830); const sc = 1 + 0.7 * (1 - easeBack(k)); ctx.scale(sc, sc); ctx.translate(-CX, -830);
+        headline('家不用斷。', 830, { size: 168, weight: 900, serif: true, alpha: clamp(k * 3), mark: seg(t, T.E2 + 0.3, T.E2 + 0.6) });
+        ctx.restore();
+        const ks = clamp((t - T.E2 - 0.15) / 0.2);
+        FF.stamp(ctx, CX, 1010, 110 * (1 + 0.5 * (1 - ks)), '家', ks, COL.blue);
+      }
+      const k3 = seg(t, T.E3, T.E3 + 0.4);
+      headline('先算清楚，再確認適合自己的保障方向。', 1170, { size: 40, weight: 800, alpha: k3 });
+      const k4 = seg(t, T.E3 + 0.6, T.E3 + 1.1);
+      ctx.fillStyle = COL.ink; ctx.fillRect(CX - 430 * k4, 1215, 860 * k4, 3); ctx.fillRect(CX - 430 * k4, 1222, 860 * k4, 1);
+      text('@timzz1208', CX, 1300, { size: 48, weight: 800, align: 'center', alpha: k4 });
+      headline('收藏起來，跟家人一起看', 1366, { size: 32, weight: 800, alpha: k4, mark: seg(t, T.E3 + 1.0, T.E3 + 1.4) });
+      text('虛構家庭與數字｜示意動畫\n不代表特定商品、核保結果或給付承諾', CX, 1436, { size: 26, weight: 500, color: COL.inkSoft, align: 'center', alpha: k4, lh: 1.5 });
+    }
+    ctx.restore();
+  }
+
+  // 倒帶時的「快轉線」與標籤
+  function rewindOverlay(t) {
+    const p = clamp((t - T.REW) / (T.REW_END - T.REW));
+    const a = Math.sin(Math.PI * Math.min(1, p * 1.15));
+    ctx.save();
+    ctx.globalAlpha *= 0.5 * a;
+    ctx.fillStyle = COL.ink;
+    for (let i = 0; i < 9; i++) {
+      const y = ((hash(i, 3) * 1920 + t * 2600 * (0.6 + hash(i, 4))) % 1920);
+      ctx.fillRect(0, y, 1080, 2 + hash(i, 5) * 5);
+    }
+    ctx.restore();
+    ctx.save(); ctx.globalAlpha *= a;
+    ctx.fillStyle = COL.ink; ctx.fillRect(CX - 250, 1440, 500, 84);
+    text('◀◀　換一個版本', CX, 1497, { size: 44, weight: 900, color: COL.paper, align: 'center' });
+    ctx.restore();
+  }
+
+  function renderAt(rt) {
+    const t = rt;
+    FF.background(ctx);
+    if (t < T.REW) {
+      drawA(t, rt);
+    } else if (t < T.REW_END) {
+      // 倒帶：真的把 A 版倒著播回封面（墨點也倒著流）
+      const p = clamp((t - T.REW) / (T.REW_END - T.REW));
+      const tv = T.REW - (T.REW - 0.95) * FF.ease(p);
+      drawA(tv, tv);
+      rewindOverlay(t);
+    } else if (t < T.FLIP2) {
+      // 回到封面，蓋上墨綠「換版」章
+      const out = clamp((t - (T.FLIP2 - 0.12)) / 0.12);
+      ctx.save(); ctx.globalAlpha *= 1 - out; ctx.translate(0, -140 * out);
+      drawA(0.95, rt);
+      extraStamp(250, 560, 150, clamp((t - T.REW_END) / 0.22), COL.blue, '換版', 0.1);
+      ctx.restore();
+      if (out > 0) masthead();
+    } else {
+      drawB(t, rt);
+    }
     FF.finish(ctx, rt);
   }
 
