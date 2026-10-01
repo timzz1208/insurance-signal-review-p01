@@ -15,7 +15,9 @@
 
   // ---------- 時間點（真實秒數，對齊旁白關鍵字） ----------
   const T = {
-    YEARS: 1.3,      // 「二十年」
+    STAMP: 0.3,      // 「號外」章砸下（視覺＋聲音鉤子）
+    YEARS: 1.3,      // 「二十年」：20 刷上螢光筆
+    FLIP: 2.3,       // 翻頁：封面 → 場景
     CUT: 4.5,        // 「斷了」
     L2: 5.7,         // 陳家每個月
     SLAM: 7.4,       // 「房貸三萬」
@@ -247,6 +249,7 @@
       const k = amp * Math.exp(-a * 14);
       x += Math.sin(a * 95) * k; y += Math.cos(a * 71) * k;
     };
+    hit(T.STAMP + 0.18, 12, 0.45);
     hit(T.CUT, 14, 0.5);
     hit(T.SLAM + 0.2, 10, 0.5);
     hit(T.GONE, 6, 0.4);
@@ -262,22 +265,76 @@
     ctx.fillStyle = COL.ink; ctx.fillRect(90, 362, 900, 2);
   }
 
+  // ---------- 封面 ----------
+  // 右側直排「房貸還有」、左側巨大的「20」＋「年」、號外章；0 格就是完整封面
+  function vmarker(x, y, w, h, p) {   // 直排用的螢光筆：由上往下刷
+    if (p <= 0) return;
+    ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.globalAlpha *= 0.88; ctx.fillStyle = COL.acc;
+    const hh = h * clamp(p);
+    ctx.beginPath(); ctx.moveTo(x + 4, y - 6); ctx.lineTo(x + w, y - 2); ctx.lineTo(x + w - 5, y + hh); ctx.lineTo(x - 2, y + hh + 4); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function extraStamp(x, y, s, k) {   // 號外：墨黑方章、直排兩字
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.13);
+    const sc = 1 + 0.8 * (1 - easeBack(clamp(k))); ctx.scale(sc, sc); ctx.globalAlpha *= clamp(k * 3);
+    ctx.fillStyle = COL.ink; ctx.beginPath(); ctx.roundRect(-s / 2, -s * 0.62, s, s * 1.24, 10); ctx.fill();
+    ctx.strokeStyle = COL.paper; ctx.lineWidth = 3; ctx.beginPath(); ctx.roundRect(-s / 2 + 9, -s * 0.62 + 9, s - 18, s * 1.24 - 18, 6); ctx.stroke();
+    text('號', 0, -s * 0.08, { size: s * 0.5, weight: 900, serif: true, color: COL.paper, align: 'center' });
+    text('外', 0, s * 0.46, { size: s * 0.5, weight: 900, serif: true, color: COL.paper, align: 'center' });
+    // 磨損：咬掉一些點
+    ctx.globalCompositeOperation = 'destination-out';
+    for (let i = 0; i < 70; i++) { ctx.beginPath(); ctx.arc((hash(i, 5) - 0.5) * s, (hash(i, 6) - 0.5) * s * 1.24, 0.6 + hash(i, 7) * 1.8, 0, Math.PI * 2); ctx.fill(); }
+    ctx.restore();
+  }
+  function cover(t) {
+    const out = clamp((t - T.FLIP) / 0.14);   // 硬切翻頁
+    if (out >= 1) return;
+    ctx.save();
+    ctx.globalAlpha *= 1 - out;
+    ctx.translate(0, -140 * out);
+    // 右欄：直排「房貸還有」
+    const cx = 892, y0 = 470, step = 122;
+    vmarker(cx - 62, y0 - 100, 124, step * 4 + 10, 1);
+    ['房', '貸', '還', '有'].forEach((ch, i) => text(ch, cx, y0 + i * step, { size: 112, weight: 900, serif: true, align: 'center' }));
+    ctx.fillStyle = COL.ink; ctx.fillRect(810, 400, 2, 460);   // 欄線
+    // 左：巨大的 20（「二十年」時刷上螢光筆、輕跳）
+    const kick = t > T.YEARS ? Math.sin(Math.PI * clamp((t - T.YEARS) / 0.35)) : 0;
+    ctx.save(); ctx.translate(400, 1000); ctx.scale(1 + 0.05 * kick, 1 + 0.05 * kick); ctx.translate(-400, -1000);
+    const nw = measure('20', { size: 500, weight: 900, serif: true });
+    marker(112, 890, nw - 10, 110, 1, seg(t, T.YEARS, T.YEARS + 0.3));
+    text('20', 100, 1000, { size: 500, weight: 900, serif: true });
+    ctx.restore();
+    text('年', 100 + nw + 8, 1000, { size: 130, weight: 900, serif: true });
+    // 號外章：0.3 秒砸下
+    const ks = t >= T.STAMP ? clamp((t - T.STAMP) / 0.22) : 0;
+    extraStamp(196, 520, 130, ks);
+    // 副標
+    ctx.fillStyle = COL.ink; ctx.fillRect(90, 1070, 900, 2);
+    headline('萬一，主要收入明天斷了？', 1160, { size: 54, weight: 800 });
+    ctx.restore();
+    // 號外章落下時噴出的墨點
+    FF.spray(ctx, 196, 520, T.STAMP + 0.18, t, COL.ink, 34, 29);
+  }
+
   // ---------- 上半：標題區（y 400～820） ----------
   function fadeIO(t, a, b, fi, fo) { return seg(t, a, a + (fi || 0.22)) * (1 - seg(t, b - (fo || 0.2), b)); }
   function slideIn(t, a) { return 18 * (1 - seg(t, a, a + 0.3)); }
 
   function headArea(t) {
-    // 封面（第 0 格就完整）
-    if (t < T.L2) {
-      const a = 1 - seg(t, T.L2 - 0.2, T.L2);
-      const pulse = 1 + 0.07 * Math.sin(Math.PI * clamp((t - T.YEARS) / 0.5)) * (t > T.YEARS ? 1 : 0);
-      headline('房貸還有', 520, { size: 120, weight: 900, serif: true, alpha: a, mark: 1 });
-      ctx.save(); ctx.translate(CX, 700); ctx.scale(pulse, pulse);
-      text('20 年', 0, 0, { size: 188, weight: 900, serif: true, align: 'center', alpha: a });
+    // 封面：直排標題＋巨大的「20」（跟上一支的橫排置中標題不同）
+    if (t < T.FLIP + 0.3) { cover(t); }
+    // 翻頁後：如果主要收入，明天斷了？
+    if (t >= T.FLIP && t < T.L2) {
+      const a = fadeIO(t, T.FLIP + 0.14, T.L2, 0.15, 0.2);
+      headline('如果主要收入，', 540 + slideIn(t, T.FLIP + 0.14), { size: 76, weight: 900, serif: true, alpha: a });
+      const k = t >= T.CUT ? clamp((t - T.CUT) / 0.2) : 0;
+      ctx.save(); ctx.translate(CX, 700); const sc = 1 + 0.35 * (1 - easeBack(k)) * (k > 0 ? 1 : 0); ctx.scale(sc, sc); ctx.translate(-CX, -700);
+      headline('明天斷了？', 700 + slideIn(t, T.FLIP + 0.3), { size: 120, weight: 900, serif: true, alpha: a * seg(t, T.FLIP + 0.3, T.FLIP + 0.55), mark: seg(t, T.CUT + 0.05, T.CUT + 0.3) });
       ctx.restore();
-      headline('萬一，主要收入斷了？', 800, { size: 46, weight: 800, alpha: a, mark: seg(t, T.CUT, T.CUT + 0.25) });
       return;
     }
+    if (t < T.L2) return;
     // 每月房貸 −30,000 砸下
     if (t < T.L3) {
       const a = fadeIO(t, T.L2, T.L3, 0.2, 0.2);
@@ -359,7 +416,7 @@
 
   // ---------- 下半：場景（y 880～1460） ----------
   function scene(t, rt) {
-    const sceneA = (1 - seg(t, T.L8 + 0.1, T.L8 + 0.8) + seg(t, T.CATCH - 0.1, T.CATCH + 0.5)) * (1 - seg(t, T.END - 0.1, T.END + 0.5));
+    const sceneA = seg(t, T.FLIP + 0.1, T.FLIP + 0.45) * (1 - seg(t, T.L8 + 0.1, T.L8 + 0.8) + seg(t, T.CATCH - 0.1, T.CATCH + 0.5)) * (1 - seg(t, T.END - 0.1, T.END + 0.5));
     const inC1 = t >= T.C1 && t < T.C2, inC2 = t >= T.C2 && t < T.C3, inC3 = t >= T.C3 && t < T.L8;
     const buffer = t >= T.CATCH;
     const cutOn = t >= T.CUT;

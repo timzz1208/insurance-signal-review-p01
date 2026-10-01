@@ -256,14 +256,42 @@ CUT, SLAM = 4.5, 7.4
 C1, C2, C3 = 16.85, 21.25, 25.45
 L8, MATCH, L9, CATCH, STAY, END = 30.2, 36.1, 37.6, 39.45, 41.1, 43.0
 
-# 0–4.5 鉤子：小調和弦＋時鐘滴答（二十年的時間感），「斷了」時整個抽掉
-pad([45, 52, 57, 60], 0.0, CUT, 0.0, 0.0, 0.5, hard_stop=True)
-tt = 0.0
+# ---------- 0–2.3 開頭鉤子（視覺＋聲音） ----------
+STAMP, YEARS, FLIP = 0.3, 1.3, 2.3
+
+
+def press_chunk():
+    """第 0 格：印刷機壓下的「喀嚓」— 金屬感的中頻敲擊＋紙張被壓的雜音＋低頻"""
+    d = 0.35
+    t = ts(d)
+    body = bp(noise(d), 300, 2200) * expdec(len(t), 0.05)
+    clack = (np.sin(2 * np.pi * 1450 * t) + 0.6 * np.sin(2 * np.pi * 2310 * t)) * expdec(len(t), 0.03)
+    thump = np.sin(2 * np.pi * (95 - 40 * t) * t) * expdec(len(t), 0.12)
+    return 0.8 * body + 0.35 * clack + 0.9 * thump
+
+
+place(press_chunk(), 0.0, 0.85, 0.0)
+place(sub(70, 38, 0.6, 0.18), 0.0, 0.55, dry=True)
+# 0.3 號外章砸下（0.48 落定）：重擊＋印章＋墨點碎聲
+place(bp(noise(0.18), 300, 1200) * np.hanning(int(0.18 * SR)), STAMP, 0.22)
+place(slam(), STAMP + 0.18, 0.85, dry=True)
+place(stamp_hit(), STAMP + 0.18, 1.0, dry=True)
+for i in range(10):
+    place(tick(rng.uniform(1800, 5000), 0.025), STAMP + 0.2 + rng.uniform(0, 0.3), 0.3 * rng.uniform(0.3, 1), rng.uniform(-0.8, 0.2))
+# 1.3「二十年」：螢光筆刷過＋數字一跳
+place(swish(0.3, 2500, 9000), YEARS, 0.3, -0.2)
+place(marimba(midi(64), 1.2), YEARS + 0.05, 0.25)
+# 2.3 翻頁：大一點的翻紙聲
+place(swish(0.45, 400, 5000), FLIP - 0.08, 0.45, 0.25)
+place(swish(0.3, 1200, 7000, up=False), FLIP + 0.12, 0.25, -0.2)
+
+# 小調和弦＋時鐘滴答（二十年的時間感），「斷了」時整個抽掉
+pad([45, 52, 57, 60], 0.0, CUT, 0.3, 0.0, 0.5, hard_stop=True)
+tt = 0.75
 while tt < CUT - 0.1:
     place(wood(1850 if int(tt * 2) % 2 == 0 else 1550, 0.1), tt, 0.3, 0.3)
     place(tick(3200, 0.03), tt, 0.2, 0.3)
     tt += 0.5
-place(marimba(midi(64), 1.2), 1.3, 0.22)   # 「二十年」數字輕輕一跳
 
 
 def rate_fn(t):
@@ -447,6 +475,9 @@ if vpath:
     duck_env = np.maximum(duck_env, signal.lfilter([1 - att], [1, -att], speech))
     duck_env = np.clip(duck_env * 1.4, 0, 1)
     duck = 1 - duck_env * (1 - 10 ** (-11 / 20))
+    # 開頭鉤子（0–0.8 秒）只壓 5 dB，讓印刷機與號外章的聲音打得出來
+    hook = int(0.8 * SR)
+    duck[:hook] = np.maximum(duck[:hook], 10 ** (-5 / 20))
     final = mix * 0.72 * duck + V[None, :] * np.array([[1.0], [1.0]])
     final *= 10 ** (-1 / 20) / max(1e-9, np.max(np.abs(final)))
     bg = mix * 0.72 * duck
