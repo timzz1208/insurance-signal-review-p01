@@ -1,0 +1,120 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden}
+  *{box-sizing:border-box}
+  body{font-family:'Noto Sans CJK TC',sans-serif;-webkit-font-smoothing:antialiased}
+  .layer{position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:0}
+  .ch{display:inline-block;will-change:transform}
+  .row{position:absolute;left:0;width:1080px;text-align:center;white-space:nowrap}
+  .shadow{text-shadow:0 6px 24px rgba(0,0,0,.55),0 2px 0 rgba(0,0,0,.35)}
+  .yel{color:#FFD60A}
+  /* hook */
+  #hook .tag{position:absolute;left:50%;top:205px;transform:translateX(-50%);padding:10px 26px;border-radius:999px;
+    background:rgba(15,15,18,.78);color:#fff;font-weight:700;font-size:34px;letter-spacing:4px;border:2px solid rgba(255,214,10,.85)}
+  #hook .l1wrap{position:absolute;left:50%;top:300px;transform:translateX(-50%);padding:6px 30px}
+  #hook .bar{position:absolute;inset:0;background:#FFD60A;border-radius:18px;transform-origin:left center}
+  #hook .l1{position:relative;color:#111;font-weight:900;font-size:86px;letter-spacing:2px;white-space:nowrap}
+  #hook .l2{top:440px;font-weight:900;font-size:104px;color:#fff;letter-spacing:4px}
+  /* nope */
+  #nope .t{top:300px;font-weight:900;font-size:176px;color:#fff;letter-spacing:6px}
+  #nope .ul{position:absolute;left:190px;top:520px;width:700px;height:22px;border-radius:11px;background:#FF3B30;transform-origin:left center}
+  /* blur */
+  #blur .a{top:250px;font-weight:900;font-size:150px}
+  #blur .b{top:430px;font-weight:900;font-size:132px;color:#fff;letter-spacing:8px}
+  /* question chips */
+  .chip{position:absolute;padding:16px 40px;border-radius:28px;font-weight:900;font-size:96px;box-shadow:0 14px 40px rgba(0,0,0,.45)}
+  #qs .c1{left:150px;top:270px;background:#FFD60A;color:#111}
+  #qs .c2{left:560px;top:450px;background:#fff;color:#111}
+  /* strike */
+  #strike .lab{position:absolute;left:50%;top:235px;transform:translateX(-50%);padding:8px 26px;border-radius:999px;background:#FF3B30;color:#fff;font-weight:900;font-size:40px;letter-spacing:3px}
+  #strike .t{top:330px;font-weight:900;font-size:112px;color:#fff;letter-spacing:2px}
+  #strike .line{position:absolute;left:110px;top:410px;width:860px;height:16px;border-radius:8px;background:#FF3B30;transform-origin:left center;box-shadow:0 4px 18px rgba(255,59,48,.6)}
+  /* list */
+  #list .panel{position:absolute;left:120px;top:165px;width:840px;height:470px;border-radius:40px;background:rgba(14,14,18,.80);
+    border:2px solid rgba(255,255,255,.14);box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden}
+  #list .head{position:absolute;left:56px;top:34px;font-weight:900;font-size:52px;color:#fff;letter-spacing:2px}
+  #list .head .acc{position:absolute;left:0;top:78px;height:8px;width:120px;border-radius:4px;background:#FFD60A;transform-origin:left center}
+  #list .item{position:absolute;left:56px;height:76px;display:flex;align-items:center;gap:26px}
+  #list .num{width:64px;height:64px;border-radius:50%;background:#FFD60A;color:#111;font-weight:900;font-size:40px;display:flex;align-items:center;justify-content:center}
+  #list .txt{font-weight:700;font-size:54px;color:#fff;letter-spacing:2px}
+</style></head>
+<body>
+<div id="hook" class="layer">
+  <div class="tag">AI 剪片實測</div>
+  <div class="l1wrap"><div class="bar"></div><div class="l1" data-split>「幫我剪好看一點」</div></div>
+  <div class="row l2 shadow" data-split>真的<span class="yel">有用</span>嗎？</div>
+</div>
+<div id="nope" class="layer"><div class="row t shadow" data-split>通常不會</div><div class="ul"></div></div>
+<div id="blur" class="layer"><div class="row a shadow yel" data-split>「好看」</div><div class="row b shadow">太模糊</div></div>
+<div id="qs" class="layer"><div class="chip c1">大字卡？</div><div class="chip c2">音效？</div></div>
+<div id="strike" class="layer"><div class="lab">✕ 不要這樣下指令</div><div class="row t shadow">「剪得很有質感」</div><div class="line"></div></div>
+<div id="list" class="layer"><div class="panel">
+  <div class="head">好的剪輯指令，要講清楚<div class="acc"></div></div>
+  <div class="item" style="top:140px"><div class="num">1</div><div class="txt">主題是什麼</div></div>
+  <div class="item" style="top:220px"><div class="num">2</div><div class="txt">段落怎麼分</div></div>
+  <div class="item" style="top:300px"><div class="num">3</div><div class="txt">哪一句最重要</div></div>
+  <div class="item" style="top:380px"><div class="num">4</div><div class="txt">效果何時出現</div></div>
+</div></div>
+<script>
+// split text nodes into per-character spans (keeps inner spans' classes)
+document.querySelectorAll('[data-split]').forEach(el=>{
+  const walk=n=>{[...n.childNodes].forEach(c=>{
+    if(c.nodeType===3){const f=document.createDocumentFragment();
+      [...c.textContent].forEach(ch=>{const s=document.createElement('span');s.className='ch';s.textContent=ch;f.appendChild(s)});
+      c.replaceWith(f)} else walk(c)})};
+  walk(el)});
+const C=window.CARDS;
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const p=(t,s,d)=>cl((t-s)/d);
+const out3=x=>1-Math.pow(1-x,3);
+const back=x=>{const c=1.7,c3=c+1;return 1+c3*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const spring=x=>x<=0?0:1-Math.exp(-6.5*x)*Math.cos(11*x); // x in seconds
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+function life(el,t,a,b,fin=.12,fout=.22){ // visibility envelope; returns exit progress
+  const on=t>=a-0.001&&t<=b+fout;
+  el.style.opacity=on?Math.min(p(t,a,fin),1-p(t,b,fout)):0; return p(t,b,fout)}
+function stagger(chars,t,s,gap,fn){chars.forEach((c,i)=>fn(c,t-s-i*gap))}
+window.render=function(t){
+  // HOOK
+  {const [a,b]=C.hook, L=$('#hook'), ex=life(L,t,a,b,.01,.3);
+   L.style.transform=`translateY(${-40*out3(ex)}px)`; L.style.filter=`blur(${8*ex}px)`;
+   const tg=$('#hook .tag'); const q=out3(p(t,a+.05,.35)); tg.style.opacity=q; tg.style.transform=`translateX(-50%) translateY(${(1-q)*-30}px)`;
+   $('#hook .bar').style.transform=`scaleX(${out3(p(t,a+.25,.45))})`;
+   stagger($$('#hook .l1 .ch'),t,a+.35,.035,(c,x)=>{const q=out3(cl(x/.35));c.style.opacity=q;c.style.transform=`translateY(${(1-q)*36}px)`});
+   stagger($$('#hook .l2 .ch'),t,a+.9,.06,(c,x)=>{const s=spring(x);c.style.opacity=cl(x/.12);c.style.transform=`translateY(${(1-s)*70}px) scale(${.6+.4*s})`;c.style.filter=`blur(${10*(1-cl(x/.3))}px)`});}
+  // NOPE
+  {const [a,b]=C.nope, L=$('#nope'), ex=life(L,t,a,b,.01,.18);
+   L.style.transform=`scale(${1+.12*ex})`; L.style.transformOrigin='540px 400px';
+   stagger($$('#nope .ch'),t,a,.06,(c,x)=>{const s=spring(x);c.style.opacity=cl(x/.08);c.style.transform=`scale(${s}) rotate(${(1-s)*-14}deg)`});
+   $('#nope .ul').style.transform=`scaleX(${out3(p(t,a+.3,.3))})`;}
+  // BLUR
+  {const [a,b]=C.blur, L=$('#blur'); life(L,t,a,b,.01,.25);
+   stagger($$('#blur .a .ch'),t,a,.05,(c,x)=>{const s=spring(x);c.style.opacity=cl(x/.08);c.style.transform=`translateY(${(1-s)*-60}px) scale(${.5+.5*s})`});
+   const bb=$('#blur .b'), x=t-(C.blurB), q=cl(x/.25);
+   bb.style.opacity=q; const amp=x>0?3.5+2.5*Math.sin(x*9):0;
+   bb.style.filter=`blur(${(1-q)*14+amp}px)`;
+   bb.style.textShadow=`${8*Math.sin(x*7)}px 0 0 rgba(255,255,255,.35), ${-8*Math.sin(x*7)}px 0 0 rgba(255,214,10,.35), 0 6px 24px rgba(0,0,0,.55)`;
+   bb.style.transform=`scale(${.9+.1*out3(q)})`;}
+  // QUESTION CHIPS
+  {const [a,b]=C.qs, L=$('#qs'); life(L,t,a,b,.01,.2);
+   [[ '#qs .c1',C.qs1,-5],[ '#qs .c2',C.qs2,4]].forEach(([s,st,r])=>{const e=$(s),x=t-st,k=spring(x);
+     e.style.opacity=cl(x/.08); e.style.transform=`scale(${k}) rotate(${r+(1-k)*-20}deg)`;});}
+  // STRIKE
+  {const [a,b]=C.strike, L=$('#strike'); life(L,t,a,b,.01,.2);
+   const lab=$('#strike .lab'), q=back(p(t,a,.35)); lab.style.transform=`translateX(-50%) scale(${q})`;
+   const tt=$('#strike .t'), q2=out3(p(t,a+.05,.3)); tt.style.opacity=q2; tt.style.transform=`translateY(${(1-q2)*30}px)`;
+   const ls=C.strikeAt, lp=out3(p(t,ls,.28)); $('#strike .line').style.transform=`scaleX(${lp}) rotate(-2deg)`;
+   const after=t-ls-.28; if(after>0){const sh=Math.exp(-after*8)*10*Math.sin(after*60); tt.style.transform=`translateX(${sh}px)`; tt.style.color=`rgba(255,255,255,${1-.45*cl(after/.2)})`;} else tt.style.color='#fff';}
+  // LIST
+  {const [a,...its]=C.list, L=$('#list'); life(L,t,a,C.end+1,.01,.2);
+   const pn=$('#list .panel'), s=spring(t-a); pn.style.transform=`translateY(${(1-s)*-50}px) scale(${.94+.06*s})`; pn.style.opacity=cl((t-a)/.15);
+   $('#list .acc').style.transform=`scaleX(${out3(p(t,a+.25,.35))})`;
+   $$('#list .item').forEach((it,i)=>{const x=t-its[i], q=out3(cl(x/.35)), k=spring(x);
+     it.style.opacity=cl(x/.12); it.style.transform=`translateX(${(1-q)*-60}px)`; it.style.filter=`blur(${(1-q)*6}px)`;
+     it.querySelector('.num').style.transform=`scale(${k})`;
+     const nxt=i<3?its[i+1]:1e9, active=t>=its[i]&&t<nxt;
+     it.querySelector('.txt').style.color=active?'#FFD60A':'#fff';});}
+};
+</script>
+</body></html>
