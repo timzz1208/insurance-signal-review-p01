@@ -1,0 +1,36 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub,Noto Sans CJK TC,66,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,2,0,1,6,2,2,70,70,520,1
+Style: Card,Noto Sans CJK TC,76,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,3,0,1,7,3,5,40,40,0,1
+Style: Big,Noto Sans CJK TC,120,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,4,0,1,9,4,5,40,40,0,1
+Style: List,Noto Sans CJK TC,60,&H00FFFFFF,&H00FFFFFF,&H00000000,&H80000000,-1,0,0,0,100,100,2,0,1,0,0,4,0,0,0,1
+Style: Box,Noto Sans CJK TC,20,&H50101010,&H50101010,&H50101010,&H00000000,0,0,0,0,100,100,0,0,1,0,0,7,0,0,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 1,0:00:00.00,0:00:02.05,Sub,,0,0,0,,你以為只要把一支口播影片
+Dialogue: 1,0:00:02.05,0:00:02.87,Sub,,0,0,0,,丟給AI
+Dialogue: 1,0:00:02.87,0:00:04.85,Sub,,0,0,0,,再跟它說「幫我剪好看一點」
+Dialogue: 1,0:00:04.85,0:00:05.63,Sub,,0,0,0,,它就能幫你做出
+Dialogue: 1,0:00:05.63,0:00:07.40,Sub,,0,0,0,,一支好看的短影音嗎？
+Dialogue: 1,0:00:08.62,0:00:09.54,Sub,,0,0,0,,因為「好看」兩個字
+Dialogue: 1,0:00:09.54,0:00:11.61,Sub,,0,0,0,,對AI來說太模糊了
+Dialogue: 1,0:00:11.61,0:00:13.40,Sub,,0,0,0,,它不知道你要強調哪一句
+Dialogue: 1,0:00:13.40,0:00:14.92,Sub,,0,0,0,,哪裡該換畫面
+Dialogue: 1,0:00:14.92,0:00:15.62,Sub,,0,0,0,,更不知道什麼時候
+Dialogue: 1,0:00:15.62,0:00:17.92,Sub,,0,0,0,,應該要加上大字卡和音效
+Dialogue: 1,0:00:17.92,0:00:19.32,Sub,,0,0,0,,所以好的剪輯指令
+Dialogue: 1,0:00:19.32,0:00:20.18,Sub,,0,0,0,,不是跟AI說
+Dialogue: 1,0:00:20.18,0:00:22.08,Sub,,0,0,0,,「幫我剪得很有質感」
+Dialogue: 1,0:00:22.08,0:00:23.18,Sub,,0,0,0,,而是要告訴它
+Dialogue: 1,0:00:23.18,0:00:24.90,Sub,,0,0,0,,這支影片的主題是什麼
+Dialogue: 1,0:00:24.90,0:00:26.04,Sub,,0,0,0,,段落要怎麼分
+Dialogue: 1,0:00:26.04,0:00:27.42,Sub,,0,0,0,,哪一句話最重要
+Dialogue: 1,0:00:27.42,0:00:28.52,Sub,,0,0,0,,以及每一種效果
+Dialogue: 1,0:00:28.52,0:00:30.10,Sub,,0,0,0,,在什麼時候出現
