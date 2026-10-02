@@ -1,7 +1,7 @@
 ---
 name: handdrawn-reels
 description: 製作手繪線稿風格的 IG Reels 直式動畫短片（1080×1920、30fps）與 4:5 輪播圖（1080×1350），包含事實查證、旁白稿、VoAI 旁白切句、依旁白實測秒數排時間軸、中文字幕燒錄＋.srt、程式合成配樂與音效、-15 LUFS、逐格 QA、截圖確認與交付。當使用者要做觀念型／知識型短影音、IG Reels、輪播圖、手繪動畫、解說動畫，或提到沿用 nhi-risk／jiuzhuang-mazu 的做法時使用。Use for hand-drawn line-art explainer Reels + carousel production with narration-timed animation.
-version: 1.7.0
+version: 1.8.0
 metadata:
   hermes:
     tags: [video, reels, instagram, animation, svg, carousel, narration, zh-TW]
@@ -13,7 +13,7 @@ metadata:
 一套已經實際交付過的製作管線：SVG 手繪線稿元件、線條邊畫邊出現、手繪抖動、米白紙紋理、
 依旁白實測秒數排時間軸、字幕燒錄＋.srt、合成配樂與音效、旁白時音樂自動壓低、-15 LUFS、逐格 QA。
 
-**開工前必讀**：`references/style-guide.md`（風格核心與分鏡方法：手繪抖動、每張都要有具體比喻物件，不能做成方框＋文字的簡報）、`references/pitfalls.md`（37 條真的踩過的雷）。完整做法在 `references/workflow.md`。
+**開工前必讀**：`references/style-guide.md`（風格核心與分鏡方法：手繪抖動、每張都要有具體比喻物件，不能做成方框＋文字的簡報）、`references/pitfalls.md`（37 條真的踩過的雷）。完整做法在 `references/workflow.md`。**選題和寫文案前**先讀 `references/audience.md`：這支要吸引客戶還是同業，題材評分、文案與 hashtag 怎麼寫。
 
 ## 快速開始
 
@@ -81,6 +81,7 @@ python3 tools/tts.py && node tools/render.js check          # 先確認能跑
 
 ## 檔案清單（全部都是這個 skill 的一部分，安裝時要一起取得）
 
+- `references/audience.md`
 - `references/pitfalls.md`
 - `references/style-guide.md`
 - `references/workflow.md`

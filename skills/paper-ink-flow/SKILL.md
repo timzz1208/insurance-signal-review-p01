@@ -1,7 +1,7 @@
 ---
 name: paper-ink-flow
 description: 製作「紙與墨」風格的程式化資訊流動畫（IG Reels 9:16，1080×1920，60fps）與互動模擬器：纖維紙底、墨黑＋一個強調色、網點／木刻斜線／印章取代發光，用粒子水流、水桶、節點、分岔選項演出「錢或責任怎麼流動、哪裡斷掉、有哪些選擇」。含旁白對時（TIME_MAP）、程式合成音效與配樂、旁白 ducking、逐格輸出與檢查。適合家庭財務、保險觀念、現金流、預算、風險情境等「流動與缺口」題材。範例作品為「家庭責任流：如果明天停薪，你家撐得了幾個月？」。Use for paper-and-ink programmatic motion graphics (particle flows, buckets, decision branches) for 9:16 explainer reels.
-version: 1.0.0
+version: 1.1.0
 author: 林彥廷 <timzz1208@gmail.com>
 metadata:
   hermes:
@@ -16,11 +16,14 @@ metadata:
 
 這個 skill 把「家庭責任流」那支影片的完整做法打包起來，任何 AI 助理都能照著重做一支同風格的新影片，包括 Claude Code、Hermes Agent、OpenAI Codex、claude.ai。
 
-**開工前必讀，依序讀：**
+**開工前必讀，依序讀：
+
+> 第二個範例：工作分支上的 `mortgage-flow/`（「家庭日報」版面、直排封面＋號外章鉤子、倒帶換版的 B 版結構）。**
 1. `references/method.md`：完整製作流程（12 步）
 2. `references/visual-language.md`：「紙與墨」視覺語言，哪些不能改
 3. `references/pitfalls.md`：踩過的雷
 4. `references/compliance.md`：保險、財經內容的紅線（做這類題材時一定要讀）
+5. `references/audience.md`：這支要吸引客戶還是同業？題材評分、文案與 hashtag、解法怎麼演
 
 ## 快速開始
 
@@ -38,6 +41,7 @@ bash make.sh                                               # 完整：畫面 →
 
 ## 流程與使用者確認點（細節見 method.md）
 
+0. **先問受眾**：這支要給客戶看，還是給同業／AI 受眾看？依 audience.md 挑題材、寫文案。
 1. **一句話訊息＋資料包**（主題、長度、品牌色或「交給你」、參考影片、結尾帳號）。缺了就先問。
 2. **事實查證與紅線**：保險、財經題材只用虛構家庭和示意數字，並加上聲明（compliance.md）。
 3. **旁白稿**：每秒 4～5 字，數字寫成中文字，句尾有標點。**請使用者先生成旁白，再開始做畫面。**
@@ -84,6 +88,7 @@ bash make.sh                                               # 完整：畫面 →
 - `references/pitfalls.md`
 - `references/compliance.md`
 - `references/storyboard-template.md`
+- `references/audience.md`
 - `scripts/setup_env.sh`
 - `scripts/new_project.sh`
 - `templates/project/README.md`
