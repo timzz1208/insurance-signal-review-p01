@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0E0F12;font-family:'Noto Sans CJK TC','Noto Sans TC',sans-serif}
+.bg{position:absolute;left:0;top:400px;width:1080px;filter:saturate(1.1) contrast(1.05)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,#0E0F12 0%,#0E0F12 18%,rgba(14,15,18,.55) 34%,rgba(14,15,18,0) 50%,rgba(14,15,18,0) 74%,rgba(14,15,18,.8) 90%)}
+.tag{position:absolute;left:50%;top:330px;transform:translateX(-50%);padding:10px 28px;border-radius:999px;border:3px solid #FFD60A;color:#fff;font-weight:700;font-size:38px;letter-spacing:4px;background:rgba(14,15,18,.7);white-space:nowrap}
+.t1{position:absolute;left:0;width:1080px;top:410px;text-align:center;font-weight:900;font-size:168px;color:#fff;letter-spacing:6px;text-shadow:0 10px 40px rgba(0,0,0,.6);white-space:nowrap}
+.yel{color:#FFD60A}.red{color:#FF3B30}
+.t2{position:absolute;left:50%;top:640px;transform:translateX(-50%) rotate(-2deg);padding:10px 38px;border-radius:22px;background:#FFD60A;color:#111;font-weight:900;font-size:104px;white-space:nowrap;box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.st{position:absolute;left:50%;top:1700px;transform:translateX(-50%);padding:12px 36px;border-radius:22px;background:#111;border:3px solid rgba(255,255,255,.18);color:#fff;font-weight:900;font-size:54px;white-space:nowrap}
+</style></head><body><img class="bg" id="bg"><div class="shade"></div>
+<div class="tag" id="tag"></div><div class="t1" id="t1"></div><div class="t2" id="t2"></div><div class="st" id="st"></div>
+<script>
+const C=window.COVER, md=s=>(s||'').replace(/<y>/g,'<span class="yel">').replace(/<r>/g,'<span class="red">').replace(/<\/[yr]>/g,'</span>');
+document.getElementById('bg').src=C.bg;
+for(const k of ['tag','t1','t2','st']){const e=document.getElementById(k);if(C[k])e.innerHTML=(k==='t1'?'<span id="t1i" style="display:inline-block">'+md(C[k])+'</span>':md(C[k]));else e.remove()}
+const ti=document.getElementById('t1i');if(ti){let fs=168;while(ti.offsetWidth>1000&&fs>80){fs-=6;ti.parentNode.style.fontSize=fs+'px'}}
+for(const e of document.querySelectorAll('.t2')){let fs=104;while(e.offsetWidth>1040&&fs>50){fs-=4;e.style.fontSize=fs+'px'}}
+</script></body></html>
