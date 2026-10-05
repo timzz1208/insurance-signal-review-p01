@@ -1,0 +1,150 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden;font-family:'Noto Sans CJK TC',sans-serif}
+.l{position:absolute;opacity:0}
+:root{--navy:rgba(22,33,62,.9);--amb:#E8B44A}
+#flash{position:absolute;inset:0;background:#fff;opacity:0}
+/* flashback */
+#fb{left:0;width:1080px;top:820px;text-align:center}
+#fb .t{display:inline-block;padding:18px 44px;border-radius:16px;background:rgba(0,0,0,.55);color:#fff;font-size:76px;font-weight:900;letter-spacing:10px}
+#fb .s{margin-top:18px;color:#ddd;font-size:36px;letter-spacing:6px}
+/* faucet highlight */
+#ring{width:300px;height:300px;border-radius:50%;border:8px solid var(--amb);box-shadow:0 0 30px rgba(232,180,74,.8)}
+#ringlab{padding:12px 28px;border-radius:999px;background:var(--navy);color:#fff;font-size:44px;font-weight:700;white-space:nowrap}
+/* consequence lower-thirds */
+.lt{left:60px;top:1280px;display:flex;align-items:center;gap:20px;padding:16px 34px 16px 18px;border-radius:999px;background:var(--navy);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.lt .n{width:64px;height:64px;border-radius:50%;background:var(--amb);color:#16213E;font-weight:900;font-size:40px;display:flex;align-items:center;justify-content:center}
+.lt .x{color:#fff;font-size:46px;font-weight:700;white-space:nowrap}
+/* stamp */
+#stamp{left:600px;top:560px;padding:14px 40px;border:10px solid #D9463B;border-radius:18px;color:#D9463B;font-size:96px;font-weight:900;letter-spacing:10px;background:rgba(255,255,255,.18);transform-origin:center}
+/* floor transition label */
+#down{left:0;width:1080px;top:880px;text-align:center}
+#down span{display:inline-block;padding:14px 40px;border-radius:999px;background:var(--navy);color:#fff;font-size:52px;font-weight:900;letter-spacing:6px}
+/* recap */
+#recap{left:60px;top:980px;width:960px;padding:30px 40px;border-radius:32px;background:var(--navy);box-shadow:0 18px 50px rgba(0,0,0,.4)}
+#recap .h{color:#fff;font-size:50px;font-weight:900}
+#recap .h b{color:var(--amb)}
+#recap .r{display:flex;align-items:center;gap:18px;margin-top:16px;opacity:0}
+#recap .r .n{width:50px;height:50px;border-radius:50%;background:var(--amb);color:#16213E;font-weight:900;font-size:32px;display:flex;align-items:center;justify-content:center}
+#recap .r .x{color:#fff;font-size:40px;font-weight:500}
+/* bumper */
+#bump{left:0;top:0;width:1080px;height:1920px;background:#16213E;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#bump .t{color:#fff;font-size:110px;font-weight:900;letter-spacing:12px}
+#bump .bar{width:180px;height:10px;border-radius:5px;background:var(--amb);margin-top:28px}
+#bump .s{color:#C9D3EA;font-size:40px;margin-top:24px;letter-spacing:6px}
+/* end cards */
+#main{left:90px;top:170px;width:900px;padding:28px 40px;border-radius:28px;background:rgba(22,33,62,.88);box-shadow:0 18px 50px rgba(0,0,0,.3)}
+#main .k{font-size:34px;color:#C9D3EA;letter-spacing:4px;font-weight:500}
+#main .t{font-size:78px;color:#fff;font-weight:900;letter-spacing:4px;margin-top:4px}
+#main .bar{height:6px;width:140px;border-radius:3px;background:var(--amb);margin-top:16px;transform-origin:left}
+#sub{font-size:36px;color:#fff;font-weight:500;overflow:hidden;max-height:0;opacity:0}
+#disc{left:120px;width:840px;top:1540px;padding:16px 24px;border-radius:20px;background:rgba(22,33,62,.78);text-align:center;font-size:34px;color:#fff;font-weight:500;line-height:1.5}
+/* notification */
+#notif{left:250px;top:1150px;width:780px;padding:30px 36px;border-radius:40px;background:rgba(245,245,247,.95);box-shadow:0 20px 60px rgba(0,0,0,.35);display:flex;gap:26px;align-items:flex-start}
+#notif .ic{width:84px;height:84px;border-radius:22px;background:#3C8D5A;flex:none}
+#notif .hd{display:flex;justify-content:space-between;font-size:34px;color:#6b6b70}
+#notif .who{font-size:40px;font-weight:700;color:#111;margin-top:6px}
+#notif .msg{font-size:44px;color:#111;margin-top:8px}
+
+.card{left:70px;width:940px;top:420px;padding:185px 56px 56px;border-radius:44px;background:rgba(18,28,54,.93);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.card .av{position:absolute;left:50%;top:-110px;margin-left:-110px;width:220px;height:220px;border-radius:50%;border:8px solid var(--amb);object-fit:cover;background:#222}
+.card .who{position:absolute;left:0;right:0;top:118px;text-align:center;color:#C9D3EA;font-size:32px;letter-spacing:6px}
+.card .k{color:#C9D3EA;font-size:44px;font-weight:700;text-align:center;margin-top:30px}
+.card .big{color:#fff;font-size:96px;font-weight:900;text-align:center;letter-spacing:4px;line-height:1.2}
+.card .pill{display:inline-block;padding:12px 34px;border-radius:999px;background:var(--amb);color:#16213E;font-size:48px;font-weight:900}
+.card .c{text-align:center;margin-top:26px}
+.card .body{color:#fff;font-size:46px;line-height:1.55;margin-top:30px;text-align:center}
+.card .body b{color:var(--amb)}
+.card .note{color:#AEB8D0;font-size:32px;margin-top:26px;text-align:center}
+.card .row{display:flex;gap:22px;align-items:flex-start;margin-top:30px}
+.card .row .n{flex:none;width:62px;height:62px;border-radius:50%;background:var(--amb);color:#16213E;font-weight:900;font-size:38px;display:flex;align-items:center;justify-content:center}
+.card .row .x{color:#fff;font-size:46px;line-height:1.35;font-weight:700}
+.card .row .x small{display:block;color:#AEB8D0;font-size:34px;font-weight:500;margin-top:4px}
+.card .disc{color:#AEB8D0;font-size:30px;margin-top:40px;text-align:center;line-height:1.5}
+
+#hk{position:absolute;left:0;top:0;width:1080px;height:1920px;opacity:0}
+#hk .ln{position:absolute;left:0;width:1080px;text-align:center;white-space:nowrap;font-weight:900}
+#hk .l1{top:760px;font-size:112px;color:#fff;letter-spacing:4px;text-shadow:0 0 0 #000,0 8px 30px rgba(0,0,0,.7);-webkit-text-stroke:3px rgba(0,0,0,.55)}
+#hk .l2w{position:absolute;left:50%;top:910px;padding:8px 36px;border-radius:18px;background:#E8B44A}
+#hk .l2{font-size:104px;color:#16213E;font-weight:900;white-space:nowrap;letter-spacing:4px}
+#hk .lab{top:1080px;font-size:40px;color:#fff;letter-spacing:6px;font-weight:700;text-shadow:0 3px 12px rgba(0,0,0,.8)}
+#hk .num{top:1120px;font-size:150px;color:#FF4A3D;letter-spacing:2px;-webkit-text-stroke:4px rgba(0,0,0,.35);text-shadow:0 10px 36px rgba(0,0,0,.7);font-variant-numeric:tabular-nums}
+#hk .num small{font-size:64px;color:#fff}
+</style></head><body>
+<div id="hk"><div class="ln l1" id="h1">出國忘了關水龍頭</div><div class="l2w" id="h2w"><div class="l2">飯店要你賠多少？</div></div>
+<div class="ln lab" id="hlab">真實理賠案例・換算新台幣</div><div class="ln num" id="hnum"></div></div>
+<div id="fb" class="l"><div class="t">30 分鐘前</div><div class="s">退房前</div></div>
+<div id="ring" class="l"></div><div id="ringlab" class="l">水龍頭還開著</div>
+<div id="down" class="l"><span>↓ 樓下</span></div>
+<div id="stamp" class="l">停用</div>
+<div id="notif" class="l"><div class="ic"></div><div style="flex:1"><div class="hd"><span>訊息</span><span>現在</span></div><div class="who">旅行團群組</div><div class="msg">我們先出發，你處理好再來。</div></div></div>
+<div id="recap" class="l"><div class="h">一個沒關的水龍頭，<b>換來</b></div></div>
+<div id="bump" class="l"><div class="t">球球解說</div><div class="bar"></div><div class="s">什麼是第三人責任？</div></div>
+
+<div id="c0" class="l card"><img class="av" src="v2/avatar.png"><div class="who">球球解說</div>
+  <div class="k">樓下那間房的損失</div><div class="big" data-at=".3">算誰的？</div>
+  <div class="c" data-at="1.2"><span class="pill">第三人的財物損失</span></div>
+  <div class="body" data-at="1.6">不是你自己的行李，<br>是<b>飯店和其他旅客</b>的財產</div></div>
+<div id="c1" class="l card"><img class="av" src="v2/avatar.png"><div class="who">球球解說</div>
+  <div class="c"><span class="pill" style="background:#D9463B;color:#fff">真實理賠案例</span></div>
+  <div class="big" style="font-size:76px;margin-top:20px">巴黎・飯店浴缸溢水</div>
+  <div class="body" data-at=".5" style="font-size:42px">樓下和周圍房間都不能使用<br>飯店向旅客求償</div>
+  <div class="c" data-at="1.4"><div style="color:#AEB8D0;font-size:34px">保險公司以「賠償責任保險金」理賠</div>
+    <div style="color:var(--amb);font-size:104px;font-weight:900;letter-spacing:2px;line-height:1.15"><span style="font-size:52px">約新台幣 </span>249<span style="font-size:52px"> 萬元</span></div><div style="color:#AEB8D0;font-size:30px;margin-top:6px">原始金額 12,438,470 日圓，以 2026 年匯率約 0.2 換算</div></div>
+  <div class="disc" data-at="1.8" style="font-size:27px;margin-top:22px">資料來源：損保ジャパン日本興亜〈保險金お支払事例：<br>他人の物を壊した場合〉（日本海外旅行保險之個人賠償責任）</div></div>
+<div id="c2" class="l card"><img class="av" src="v2/avatar.png"><div class="who">球球解說</div>
+  <div class="c"><span class="pill">旅遊不便險</span></div><div class="big" style="margin-top:22px">第三人責任保障</div>
+  <div class="body" data-at=".8">旅途中不小心造成<b>他人財物損失</b>，<br>依法要負的賠償責任，<br><b>可以申請理賠</b></div>
+  <div class="note" data-at="1.6">＊以保險金額為上限，可能有自負額</div></div>
+<div id="c3" class="l card"><img class="av" src="v2/avatar.png"><div class="who">球球解說</div>
+  <div class="big" style="font-size:72px">出發前，先看保單這 4 欄</div>
+  <div class="row" data-at=".7"><div class="n">1</div><div class="x">有沒有包含「第三人責任」</div></div>
+  <div class="row" data-at="1.25"><div class="n">2</div><div class="x">保險金額<small>最高可以賠多少</small></div></div>
+  <div class="row" data-at="1.8"><div class="n">3</div><div class="x">自負額<small>每次事故自己先付多少</small></div></div>
+  <div class="row" data-at="2.35"><div class="n">4</div><div class="x">除外責任<small>例如：自己入住的客房損壞是否另有約定</small></div></div></div>
+<div id="c4" class="l card"><img class="av" src="v2/avatar.png"><div class="who">球球解說</div>
+  <div class="big" style="font-size:84px">出國前<br>記得確認<br><span style="color:var(--amb)">第三人責任</span></div>
+  <div class="body" data-at=".6" style="font-size:42px">你的旅遊險有包含嗎？留言告訴我</div>
+  <div class="disc" data-at=".9">示意案例，實際承保範圍、限額及除外責任<br>依保單條款為準。</div></div>
+<div id="flash"></div>
+<script>
+const C=window.OV, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), e3=x=>1-Math.pow(1-x,3);
+const back=x=>{const c=1.6,c3=c+1;return 1+c3*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const $=id=>document.getElementById(id);
+const ITEMS=['水越過房門','樓下天花板滲水','地板拆開、除濕乾燥','樓下房間停用','旅行團先走了'];
+ITEMS.forEach((x,i)=>{const r=document.createElement('div');r.className='r';r.innerHTML=`<div class="n">${i+1}</div><div class="x">${x}</div>`;$('recap').appendChild(r)});
+C.lts.forEach((l,i)=>{const d=document.createElement('div');d.className='l lt';d.id='lt'+i;d.innerHTML=`<div class="n">${l.n}</div><div class="x">${l.text}</div>`;document.body.insertBefore(d,$('flash'))});
+function fade(e,t,a,b,din=.35,dout=.3,dx=0,dy=0){if(t<a||t>b+dout){e.style.opacity=0;return -1}
+  const qi=e3(cl((t-a)/din)),qo=cl((t-b)/dout);e.style.opacity=qi*(1-qo);e.style.transform=`translate(${(1-qi)*dx}px,${(1-qi)*dy}px)`;return qi}
+window.render=t=>{
+  // flashback title on freeze
+  {const e=$('fb'),q=fade(e,t,C.fb[0]+.08,C.fb[1],.25,.15,0,20);}
+  $('flash').style.opacity=(t>=C.fb[0]&&t<C.fb[0]+.12)?.7*(1-(t-C.fb[0])/.12):(t>=C.fb[1]&&t<C.fb[1]+.1?.5*(1-(t-C.fb[1])/.1):0);
+  // faucet ring
+  {const r=$('ring');r.style.left=(C.ring.x-150)+'px';r.style.top=(C.ring.y-150)+'px';const q=fade(r,t,C.ring.t[0],C.ring.t[1],.3,.2);
+   if(q>=0)r.style.transform=`scale(${1.4-.4*e3(cl((t-C.ring.t[0])/.35))})`;
+   const lb=$('ringlab');lb.style.left=(C.ring.x-160)+'px';lb.style.top=(C.ring.y+175)+'px';fade(lb,t,C.ring.t[0]+.2,C.ring.t[1],.3,.2,0,15);}
+  fade($('down'),t,C.down[0],C.down[1],.12,.2,0,-60);
+  C.lts.forEach((l,i)=>fade($('lt'+i),t,l.t[0],l.t[1],.35,.25,-60,0));
+  {const s=$('stamp');if(t<C.stamp[0]||t>C.stamp[1]+.25)s.style.opacity=0;else{const x=t-C.stamp[0],q=cl(x/.16);
+    s.style.opacity=Math.min(q,1-cl((t-C.stamp[1])/.25));s.style.transform=`rotate(-10deg) scale(${2.2-1.2*e3(q)})`;}}
+  fade($('notif'),t,C.notif[0],C.notif[1],.4,.3,0,-50);
+  {const r=$('recap');fade(r,t,C.recap[0],C.recap[1],.35,.3,0,30);
+   [...r.querySelectorAll('.r')].forEach((x,i)=>{const s=C.recap[0]+.35+i*.28,q=e3(cl((t-s)/.25));x.style.opacity=q;x.style.transform=`translateX(${(1-q)*-40}px)`});}
+  {const b=$('bump'),[a,e]=C.bump;if(t<a||t>e){b.style.opacity=0}else{b.style.opacity=1;const i=e3(cl((t-a)/.22)),o=e3(cl((t-(e-.22))/.22));
+    b.style.transform=`translateX(${(1-i)*-1080+o*1080}px)`;}}
+  C.cards.forEach((st,i)=>{const e=$('c'+i),last=i===C.cards.length-1,en=!last?C.cards[i+1]:C.end+1;
+    if(t<st||t>en){e.style.opacity=0;return}
+    const qi=e3(cl((t-st)/.4)),qo=!last?cl((t-(en-.3))/.3):0;e.style.opacity=qi*(1-qo);e.style.transform=`scale(${.96+.04*qi})`;
+    e.querySelectorAll('[data-at]').forEach(x=>{const q=e3(cl((t-st-+x.dataset.at)/.35));x.style.opacity=q;x.style.transform=`translateY(${(1-q)*24}px)`});});
+  {const H=$('hk'),[a,b]=C.hook;if(t<a||t>b+.3){H.style.opacity=0}else{H.style.opacity=1-cl((t-b)/.3);
+    const sh=(x,amp)=>x<0?0:amp*Math.exp(-x*8)*Math.sin(x*70), ox=(x,d)=>x>=d?1:1-Math.pow(2,-10*x/d);
+    const x1=t-a-.02,q1=ox(cl(x1/.18),1),h1=$('h1');h1.style.opacity=x1>=0?1:0;h1.style.transform=`translate(${sh(x1-.18,16)}px,0) scale(${2.6-1.6*q1})`;h1.style.filter=`blur(${(1-q1)*14}px)`;
+    const x2=t-a-.62,q2=ox(cl(x2/.18),1),h2=$('h2w');h2.style.opacity=x2>=0?1:0;h2.style.transform=`translateX(-50%) translate(${sh(x2-.18,14)}px,0) scale(${2.4-1.4*q2}) rotate(${(1-q2)*-6}deg)`;
+    const x3=t-a-1.15,lab=$('hlab');lab.style.opacity=x3>=0?e3(cl(x3/.2)):0;
+    const n=$('hnum'),x4=t-a-1.25,p=cl(x4/1.05),v=Math.round(249*(1-Math.pow(1-p,3)));n.style.opacity=x4>=0?1:0;
+    n.innerHTML='<small>約 </small>'+v+'<small> 萬元</small>';
+    const x5=t-a-2.3;n.style.transform=`translate(${sh(x5,20)}px,0) scale(${x5>0?1+.18*Math.exp(-x5*7):1})`;
+    n.style.textShadow=(x5>0&&x5<.3)?`${10*Math.sin(x5*80)}px 0 0 rgba(0,255,255,.7),${-10*Math.sin(x5*80)}px 0 0 rgba(255,0,80,.7),0 10px 36px rgba(0,0,0,.7)`:'0 10px 36px rgba(0,0,0,.7)';}
+    $('flash').style.opacity=Math.max($('flash').style.opacity||0,(t<.2?.9*(1-t/.2):(t>2.3&&t<2.42?.5*(1-(t-2.3)/.12):0)));}
+};
+</script></body></html>
