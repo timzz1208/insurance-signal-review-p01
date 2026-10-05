@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden;font-family:'Noto Sans CJK TC',sans-serif}
+.l{position:absolute;opacity:0}
+/* phone notification (generic, no brand) */
+#notif{left:250px;top:1150px;width:780px;padding:30px 36px;border-radius:40px;background:rgba(245,245,247,.94);box-shadow:0 20px 60px rgba(0,0,0,.35);display:flex;gap:26px;align-items:flex-start}
+#notif .ic{width:84px;height:84px;border-radius:22px;background:#3C8D5A;flex:none;display:flex;align-items:center;justify-content:center}
+#notif .ic div{width:44px;height:34px;border-radius:12px;background:#fff;position:relative}
+#notif .ic div:after{content:'';position:absolute;left:8px;bottom:-9px;border:8px solid transparent;border-top-color:#fff;border-left-color:#fff}
+#notif .hd{display:flex;justify-content:space-between;font-size:34px;color:#6b6b70;font-weight:500}
+#notif .who{font-size:40px;font-weight:700;color:#111;margin-top:6px}
+#notif .msg{font-size:44px;color:#111;margin-top:8px;font-weight:500}
+/* end cards */
+#main{left:90px;top:170px;width:900px;padding:28px 40px;border-radius:28px;background:rgba(22,33,62,.88);box-shadow:0 18px 50px rgba(0,0,0,.3)}
+#main .k{font-size:34px;color:#C9D3EA;letter-spacing:4px;font-weight:500}
+#main .t{font-size:78px;color:#fff;font-weight:900;letter-spacing:4px;margin-top:4px}
+#main .bar{height:6px;width:140px;border-radius:3px;background:#E8B44A;margin-top:16px;transform-origin:left}
+#sub{font-size:36px;color:#fff;font-weight:500;overflow:hidden;max-height:0;opacity:0;margin-top:0}
+#disc{left:120px;width:840px;top:1540px;padding:16px 24px;border-radius:20px;background:rgba(22,33,62,.78);text-align:center;font-size:34px;color:#fff;font-weight:500;line-height:1.5;text-shadow:0 2px 8px rgba(0,0,0,.8),0 0 2px rgba(0,0,0,.9)}
+</style></head><body>
+<div id="notif" class="l"><div class="ic"><div></div></div><div style="flex:1">
+  <div class="hd"><span>訊息</span><span>現在</span></div><div class="who">旅行團群組</div><div class="msg">我們先出發，你處理好再來。</div></div></div>
+<div id="main" class="l"><div class="k">球球解說</div><div class="t">第三人責任保障</div><div class="bar"></div><div id="sub">承保範圍、限額、除外責任，以實際保單為準</div></div>
+<div id="disc" class="l">示意案例，實際承保範圍、限額及除外責任<br>依保單條款為準。</div>
+<script>
+const C=window.OV, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), e3=x=>1-Math.pow(1-x,3);
+function show(id,t,a,b,dy=30,din=.45,dout=.35){const e=document.getElementById(id);
+  if(t<a||t>b+dout){e.style.opacity=0;return}
+  const qi=e3(cl((t-a)/din)), qo=cl((t-b)/dout); e.style.opacity=qi*(1-qo); e.style.transform=`translateY(${(1-qi)*dy - qo*dy*.5}px)`;return e}
+window.render=t=>{
+  show('notif',t,C.notif[0],C.notif[1],-60,.4,.3);
+  const m=show('main',t,C.main[0],C.end,26,.6,.01); if(m) m.querySelector('.bar').style.transform=`scaleX(${e3(cl((t-C.main[0]-.3)/.5))})`;
+  {const e=document.getElementById('sub'),q=e3(cl((t-C.sub[0])/.5));e.style.maxHeight=(q*70)+'px';e.style.marginTop=(q*16)+'px';e.style.opacity=q;} show('disc',t,C.disc[0],C.end,0,.6,.01);
+};
+</script></body></html>
