@@ -70,6 +70,16 @@
   .card .row .x small{display:block;color:#AEB8D0;font-size:34px;font-weight:500;margin-top:4px}
   .card .src{color:#AEB8D0;font-size:27px;margin-top:22px;text-align:center;line-height:1.5}
   .card .disc{color:#AEB8D0;font-size:30px;margin-top:36px;text-align:center;line-height:1.5}
+
+  /* free text */
+  .tx{left:0;width:1080px;text-align:center;white-space:nowrap;font-weight:900;color:#fff;text-shadow:0 6px 24px rgba(0,0,0,.65);-webkit-text-stroke:2px rgba(0,0,0,.45)}
+  .tx span.b{display:inline-block;padding:6px 30px;border-radius:16px}
+  /* clock bar (split-screen divider) */
+  .clk{left:0;width:1080px;height:84px;display:flex;align-items:center;justify-content:center;gap:18px;background:rgba(16,22,40,.92);border-top:3px solid var(--amb);border-bottom:3px solid var(--amb)}
+  .clk .ic{width:44px;height:44px;border-radius:50%;border:5px solid var(--amb);position:relative}
+  .clk .ic:after{content:'';position:absolute;left:15px;top:6px;width:5px;height:14px;background:var(--amb);border-radius:2px;transform-origin:bottom center}
+  .clk .tm{font-size:60px;font-weight:900;color:#fff;letter-spacing:4px;font-variant-numeric:tabular-nums}
+  .clk.red{border-color:var(--red)} .clk.red .tm{color:var(--red)} .clk.red .ic{border-color:var(--red)}
 </style></head><body><div id="flash"></div>
 <script>
 const D=window.OV, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), e3=x=>1-Math.pow(1-x,3), ox=x=>x>=1?1:1-Math.pow(2,-10*x);
@@ -80,6 +90,18 @@ function fade(e,t,a,b,din=.35,dout=.3,dx=0,dy=0){if(t<a||t>b+dout){e.style.opaci
   const qi=e3(cl((t-a)/din)),qo=cl((t-b)/dout);e.style.opacity=qi*(1-qo);e.style.transform=`translate(${(1-qi)*dx}px,${(1-qi)*dy}px)`;return qi}
 const flashes=[];
 const R={
+ flash:o=>{flashes.push([o.start,o.dur||.2,o.strength||.9]);return t=>{}},
+
+ text:o=>{const bg={navy:'var(--navy)',amber:'var(--amb)',red:'#D9463B',dark:'rgba(0,0,0,.55)'}[o.bg]||'';
+   const e=el('l tx',bg?`<span class="b" style="background:${bg};color:${o.bg==='amber'?'#16213E':'#fff'};-webkit-text-stroke:0">${md(o.text)}</span>`:md(o.text),`top:${o.y}px;font-size:${o.size||96}px;${o.color?'color:'+o.color:''}`);
+   return t=>{if(o.anim==='slam'){if(t<o.start||t>o.end+.25){e.style.opacity=0;return}const x=t-o.start,q=ox(cl(x/.18));e.style.opacity=Math.min(1,x/.04)*(1-cl((t-o.end)/.25));
+       e.style.transform=`translate(${sh(x-.18,12)}px,0) scale(${2.2-1.2*q})`;e.style.filter=`blur(${(1-q)*10}px)`}
+     else fade(e,t,o.start,o.end,.3,.25,0,o.anim==='rise'?30:0)}},
+ clock:o=>{const e=el('l clk'+(o.red?' red':''),'<div class="ic"></div><div class="tm"></div>',`top:${(o.y??960)-42}px`);const tm=e.querySelector('.tm'),hand=e.querySelector('.ic');
+   const toMin=s=>{const [h,m]=s.split(':').map(Number);return h*60+m};const a=toMin(o.from),b=toMin(o.to||o.from);
+   return t=>{fade(e,t,o.start,o.end,.15,.15);const p=cl((t-o.start)/Math.max(.01,o.end-o.start)),v=Math.round(a+(b-a)*Math.pow(p,o.accel??1.6));
+     tm.textContent=String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0');
+     if(o.red){const x=t-o.start;e.style.transform=`translate(${sh(x,10)}px,0)`}}},
  hook:o=>{const H=el('hk');const h1=el('ln l1',md(o.line1),null,H);const w=el('l2w',null,null,H);el('l2',md(o.line2),null,w);
    const lab=o.label?el('ln lab',md(o.label),null,H):null;const n=o.counter?el('ln num','',null,H):null;
    flashes.push([o.start,.2,.9]);if(n)flashes.push([o.start+2.3,.12,.5]);

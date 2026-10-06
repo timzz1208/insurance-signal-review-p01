@@ -124,6 +124,19 @@ def plucks(d):
         f = notes[k % len(notes)]; i = int(st * SR); tt = t[:len(t) - i]
         y[i:] += (np.sin(2 * np.pi * f * tt) + .3 * np.sin(4 * np.pi * f * tt)) * np.exp(-tt * 3.2) * np.minimum(1, tt / .005)
     return norm(lp(y, 3000) * np.minimum(1, (d - t) / 1.2), -31)
-SOUNDS = {'boom': boom, 'whoosh': lambda: whoosh(.42, True), 'whoosh_up': lambda: whoosh(.3, True), 'whoosh_down': lambda: whoosh(.45, False),
+def vibrate():
+    t = _t(.9); y = np.zeros_like(t)
+    for st in (0, .45):
+        m = (t >= st) & (t < st + .32); tt = t[m] - st
+        y[m] = (np.sin(2 * np.pi * 165 * tt) + .4 * np.sin(2 * np.pi * 330 * tt)) * np.minimum(1, tt / .01) * np.minimum(1, (.32 - tt) / .02)
+    return norm(lp(y, 1200), -12)
+def door():
+    t = _t(.35); body = np.sin(2 * np.pi * (95 + 40 * np.exp(-t * 50)) * t) * np.exp(-t * 18)
+    latch = bp(rng.standard_normal(len(t)), 2000, 6000) * np.exp(-np.maximum(0, t - .06) * 120) * (t > .06)
+    return norm(np.tanh(1.5 * body) + .35 * latch, -6)
+def drone(d):
+    t = _t(d); y = sum(np.sin(2 * np.pi * f * t) for f in (41.2, 61.7)) + .3 * lp(rng.standard_normal(len(t)), 200)
+    return norm(y * np.minimum(1, t / .4) * np.minimum(1, (d - t) / .3), -18)
+SOUNDS = {'vibrate': vibrate, 'door': door, 'drone': lambda: drone(1.6), 'boom': boom, 'whoosh': lambda: whoosh(.42, True), 'whoosh_up': lambda: whoosh(.3, True), 'whoosh_down': lambda: whoosh(.45, False),
           'pop': pop, 'click': click, 'ding': ding, 'glitch': glitch, 'thud': thud, 'swipe': swipe, 'buzz': buzz,
           'tick': tick, 'knock': knock, 'drip': drip, 'tape_stop': tape_stop, 'ping': ping}

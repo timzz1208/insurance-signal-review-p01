@@ -1,0 +1,512 @@
+{
+ "title": "EP02 他在吃早餐，浴缸在放水",
+ "shots": {
+  "A1": "src/A1-bathroom-start.mp4",
+  "A2": "src/A2-room-door-close.mp4",
+  "B1": "src/B1-bathtub-nearly-full.mp4",
+  "D1": "src/D1-downstairs-couple.mp4",
+  "F1": "src/F1-phone-call.mp4",
+  "G1": "src/G1-breakfast-plate.mp4",
+  "G2": "src/G2-breakfast-cup.mp4",
+  "L1": "src/L1-lobby-apology.mp4",
+  "M1": "src/M1-manager-at-door.mp4",
+  "Q8": "src/Q8.mp4"
+ },
+ "workdir": "work",
+ "output": "out/ep02.mp4",
+ "clean_output": "out/ep02_clean.mp4",
+ "size": [
+  1080,
+  1920
+ ],
+ "fps": 24,
+ "loudness": -14,
+ "sfx": true,
+ "pieces": [
+  {
+   "id": "hook",
+   "dur": 3.2,
+   "split": {
+    "top": {
+     "shot": "G2",
+     "in": 0.8,
+     "band_center": 0.33,
+     "audio_db": -8
+    },
+    "bottom": {
+     "shot": "B1",
+     "in": 0.2,
+     "band_center": 0.38
+    }
+   }
+  },
+  {
+   "id": "a1",
+   "shot": "A1",
+   "in": 0.0,
+   "out": 2.6,
+   "zoom": [
+    1.0,
+    1.04
+   ]
+  },
+  {
+   "id": "a1b",
+   "shot": "A1",
+   "in": 5.8,
+   "out": 7.4,
+   "zoom": [
+    1.1,
+    1.13
+   ]
+  },
+  {
+   "id": "a2",
+   "shot": "A2",
+   "in": 1.5,
+   "out": 2.5,
+   "zoom": [
+    1.0,
+    1.06
+   ],
+   "audio": false
+  },
+  {
+   "id": "s1",
+   "dur": 4.6,
+   "split": {
+    "top": {
+     "shot": "G1",
+     "in": 2.4,
+     "band_center": 0.36,
+     "audio_db": -4
+    },
+    "bottom": {
+     "shot": "B1",
+     "in": 0.55,
+     "band_center": 0.38,
+     "audio_db": -2
+    }
+   }
+  },
+  {
+   "id": "s2",
+   "dur": 4.2,
+   "split": {
+    "top": {
+     "shot": "G2",
+     "in": 3.8,
+     "band_center": 0.33,
+     "audio_db": -6
+    },
+    "bottom": {
+     "shot": "D1",
+     "in": 0.2,
+     "band_center": 0.5,
+     "audio": false
+    }
+   }
+  },
+  {
+   "id": "f1",
+   "shot": "F1",
+   "in": 3.3,
+   "out": 7.4,
+   "zoom": [
+    1.0,
+    1.08
+   ]
+  },
+  {
+   "id": "m1",
+   "shot": "M1",
+   "in": 0.0,
+   "out": 4.85,
+   "zoom": [
+    1.0,
+    1.05
+   ]
+  },
+  {
+   "id": "r",
+   "shot": "F1",
+   "in": 7.0,
+   "out": 8.0,
+   "zoom": [
+    1.25,
+    1.35
+   ],
+   "look": "flashback",
+   "hold": 0.5,
+   "audio": false
+  },
+  {
+   "id": "l1",
+   "shot": "L1",
+   "in": 0.0,
+   "out": 3.8,
+   "zoom": [
+    1.0,
+    1.04
+   ]
+  },
+  {
+   "id": "qa",
+   "shot": "Q8",
+   "in": 0.0,
+   "out": 3.0,
+   "audio_out": 2.55
+  },
+  {
+   "id": "qb",
+   "shot": "Q8",
+   "in": 2.6,
+   "out": 8.0,
+   "zoom": [
+    1.0,
+    1.05
+   ],
+   "hold": 6.4,
+   "look": "blur",
+   "transition_in": {
+    "type": "fade",
+    "dur": 0.4
+   },
+   "audio": false
+  }
+ ],
+ "subtitles": [
+  {
+   "text": "先去吃早餐，回來再泡！",
+   "start": "a1@0",
+   "end": "a1@2.45"
+  },
+  {
+   "text": "喂？",
+   "start": "f1@4.3",
+   "end": "f1@5.1"
+  },
+  {
+   "text": "先生，您房間的水，",
+   "start": "m1@0",
+   "end": "m1@2.1"
+  },
+  {
+   "text": "流到樓下客人的房間了。",
+   "start": "m1@2.1",
+   "end": "m1@4.8"
+  },
+  {
+   "text": "對不起……",
+   "start": "l1@0",
+   "end": "l1@1.8"
+  },
+  {
+   "text": "這要怎麼賠？",
+   "start": "l1@1.9",
+   "end": "l1@3.2"
+  },
+  {
+   "text": "第三人，就是不是你自己的那一方",
+   "start": "qa@0",
+   "end": "qa@2.5"
+  }
+ ],
+ "overlays": [
+  {
+   "type": "flash",
+   "start": 0,
+   "dur": 0.2,
+   "strength": 0.95
+  },
+  {
+   "type": "flash",
+   "start": "hook+0.55",
+   "dur": 0.12,
+   "strength": 0.6
+  },
+  {
+   "type": "text",
+   "start": "hook+0.05",
+   "end": "hook.end",
+   "text": "他在吃早餐",
+   "y": 740,
+   "size": 104,
+   "anim": "slam"
+  },
+  {
+   "type": "text",
+   "start": "hook+0.55",
+   "end": "hook.end",
+   "text": "浴缸在放水",
+   "y": 1050,
+   "size": 104,
+   "anim": "slam",
+   "color": "#7FD3FF"
+  },
+  {
+   "type": "text",
+   "start": "hook+1.3",
+   "end": "hook.end",
+   "text": "真實案例：一缸洗澡水，保險賠了約 <y>249 萬</y>",
+   "y": 140,
+   "size": 44,
+   "bg": "navy",
+   "anim": "rise"
+  },
+  {
+   "type": "clock",
+   "start": "hook+0",
+   "end": "hook.end",
+   "from": "08:02",
+   "to": "08:03"
+  },
+  {
+   "type": "notif",
+   "start": "a1+0.3",
+   "end": "a1b+1.2",
+   "title": "旅行團群組",
+   "msg": "早餐只到 8:30 喔～快下來！"
+  },
+  {
+   "type": "clock",
+   "start": "a2+0",
+   "end": "a2.end",
+   "from": "08:05",
+   "to": "08:05"
+  },
+  {
+   "type": "clock",
+   "start": "s1+0",
+   "end": "s1.end",
+   "from": "08:05",
+   "to": "08:21"
+  },
+  {
+   "type": "text",
+   "start": "s1+0.2",
+   "end": "s1.end",
+   "text": "8F・你的房間",
+   "y": 1010,
+   "size": 40,
+   "bg": "navy",
+   "anim": "fade"
+  },
+  {
+   "type": "clock",
+   "start": "s2+0",
+   "end": "s2.end",
+   "from": "08:21",
+   "to": "08:38"
+  },
+  {
+   "type": "text",
+   "start": "s2+0.2",
+   "end": "s2.end",
+   "text": "7F・樓下客人",
+   "y": 1010,
+   "size": 40,
+   "bg": "red",
+   "anim": "fade"
+  },
+  {
+   "type": "clock",
+   "start": "f1+0",
+   "end": "f1+1.4",
+   "from": "08:41",
+   "to": "08:41",
+   "red": true,
+   "y": 250
+  },
+  {
+   "type": "notif",
+   "start": "f1+0",
+   "end": "f1+1.3",
+   "title": "飯店櫃檯",
+   "msg": "來電中…",
+   "app": "來電",
+   "sfx": false
+  },
+  {
+   "type": "text",
+   "start": "r+0.1",
+   "end": "r.end",
+   "text": "這缸水，要賠多少？",
+   "y": 1220,
+   "size": 92,
+   "anim": "slam"
+  },
+  {
+   "type": "recap",
+   "start": "l1+0.9",
+   "end": "l1.end",
+   "title": "一缸洗澡水，<y>換來</y>",
+   "items": [
+    "浴室淹水",
+    "樓下天花板滲水",
+    "客人被迫換房",
+    "房間停用維修"
+   ]
+  },
+  {
+   "type": "bumper",
+   "start": "qa+-0.62",
+   "end": "qa+0.12",
+   "title": "球球解說",
+   "sub": "這算誰的責任？"
+  },
+  {
+   "type": "cards",
+   "end": "end",
+   "host": "球球解說",
+   "avatar": {
+    "shot": "Q8",
+    "t": 1.0,
+    "crop": [
+     0.19,
+     0.27,
+     0.62
+    ]
+   },
+   "cards": [
+    {
+     "start": "qa+3.0",
+     "sfx": [
+      {
+       "sound": "thud",
+       "at": 1.5,
+       "db": -8
+      },
+      {
+       "sound": "ding",
+       "at": 1.6,
+       "db": -14
+      }
+     ],
+     "html": "<div class=\"c\"><span class=\"pill red\">真實理賠案例</span></div><div class=\"big\" style=\"font-size:76px;margin-top:20px\">巴黎・飯店浴缸溢水</div><div class=\"body\" data-at=\".4\" style=\"font-size:42px\">樓下和周圍房間都不能使用<br>飯店向旅客求償</div><div class=\"c\" data-at=\"1.3\"><div class=\"note\" style=\"margin-top:0;font-size:34px\">保險公司以「賠償責任保險金」理賠</div><div class=\"amount\"><small>約新台幣 </small>249<small> 萬元</small></div><div class=\"note\" style=\"margin-top:6px;font-size:30px\">原始金額 12,438,470 日圓，以 2026 年匯率約 0.2 換算</div></div><div class=\"src\" data-at=\"1.8\">資料來源：損保ジャパン日本興亜〈保險金お支払事例：<br>他人の物を壊した場合〉（日本海外旅行保險之個人賠償責任）</div>"
+    },
+    {
+     "start": "qa+7.2",
+     "sfx": [
+      {
+       "sound": "pop",
+       "at": 0.8,
+       "db": -6
+      },
+      {
+       "sound": "pop",
+       "at": 1.9,
+       "db": -8
+      }
+     ],
+     "html": "<div class=\"c\"><span class=\"pill\">旅遊不便險</span></div><div class=\"big\" style=\"margin-top:22px\">第三人責任</div><div class=\"body\" data-at=\".6\">旅途中不小心造成<b>他人財物損失</b>，<br>依法要負的賠償責任，<b>可以申請理賠</b></div><div class=\"note\" data-at=\"1.6\" style=\"font-size:36px;color:#fff;margin-top:30px\">出發前看 4 欄：<b style=\"color:var(--amb)\">有沒有包含・保額・自負額・除外責任</b></div>"
+    },
+    {
+     "start": "qa+11.6",
+     "sfx": [
+      {
+       "sound": "ding",
+       "at": 0.4,
+       "db": -12
+      }
+     ],
+     "html": "<div class=\"big\" style=\"font-size:84px\">出國前<br>記得確認<br><span class=\"yel\">第三人責任</span></div><div class=\"body\" data-at=\".5\" style=\"font-size:42px\">你的旅遊險有包含嗎？留言告訴我</div><div class=\"disc\" data-at=\".8\">示意案例，實際承保範圍、限額及除外責任<br>依保單條款為準。</div>"
+    }
+   ]
+  }
+ ],
+ "sfx_events": [
+  {
+   "sound": "boom",
+   "at": "hook+0",
+   "db": -3
+  },
+  {
+   "sound": "whoosh_up",
+   "at": "hook+0",
+   "db": -8
+  },
+  {
+   "sound": "boom",
+   "at": "hook+0.55",
+   "db": -6
+  },
+  {
+   "sound": "glitch",
+   "at": "hook+0.55",
+   "db": -4
+  },
+  {
+   "sound": "ding",
+   "at": "hook+1.3",
+   "db": -10
+  },
+  {
+   "sound": "tick",
+   "at": "hook+0",
+   "repeat": 6,
+   "every": 0.5
+  },
+  {
+   "sound": "door",
+   "at": "a2+0.15",
+   "db": -2
+  },
+  {
+   "sound": "tick",
+   "at": "s1+0",
+   "repeat": 11,
+   "every": 0.4
+  },
+  {
+   "sound": "tick",
+   "at": "s2+0",
+   "repeat": 14,
+   "every": 0.3
+  },
+  {
+   "sound": "drip",
+   "at": "s2+0.6"
+  },
+  {
+   "sound": "drip",
+   "at": "s2+1.8",
+   "db": 2
+  },
+  {
+   "sound": "drip",
+   "at": "s2+3.0",
+   "db": 3
+  },
+  {
+   "sound": "vibrate",
+   "at": "f1+0.05"
+  },
+  {
+   "sound": "drone",
+   "at": "r+0"
+  },
+  {
+   "sound": "boom",
+   "at": "r+0.1",
+   "db": -12
+  }
+ ],
+ "cover": {
+  "bg": {
+   "shot": "G2",
+   "t": 1.0
+  },
+  "stamp": {
+   "text": "浴缸在放水",
+   "x": 560,
+   "y": 980
+  },
+  "tag": "真實案例改編",
+  "t1": "他在吃早餐",
+  "t2": "保險賠了 <b>249</b> 萬",
+  "st": "一缸洗澡水，你的旅遊險有<y>第三人責任</y>嗎？",
+  "output": "out/cover.jpg"
+ },
+ "opener_fx": true
+}

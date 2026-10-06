@@ -33,7 +33,7 @@ class TL:
     def __init__(s, pieces):
         s.p = {}; t = 0.0
         for i, pc in enumerate(pieces):
-            src_len = pc['dur'] if 'freeze' in pc else pc['out'] - pc['in']
+            src_len = pc['dur'] if ('freeze' in pc or 'split' in pc) else pc['out'] - pc['in']
             L = src_len + pc.get('hold', 0)
             tr = pc.get('transition_in')
             st = t - tr['dur'] if (tr and i) else t
@@ -78,7 +78,17 @@ def main():
             f = os.path.join(vd, pc['id'] + '.mkv'); zs, ze = pc.get('zoom', [1.0, 1.0])
             c = pc.get('center', [[.5, .5]]); c0 = c[0]; c1 = c[-1]
             look = LOOKS[pc.get('look', 'none')]
-            if 'freeze' in pc:
+            if 'split' in pc:
+                d = pc['dur']; halves = []
+                for k in ('top', 'bottom'):
+                    h = pc['split'][k]; hf = os.path.join(vd, f"{pc['id']}_{k}.mkv"); y = int(max(0, min(H - H // 2, h.get('band_center', .5) * H - H // 4)))
+                    hz = h.get('zoom', 1.0); cw, ch = int(W / hz) // 2 * 2, int((H // 2) / hz) // 2 * 2
+                    vf = (f"fps={FPS},scale={W}:{H}:force_original_aspect_ratio=increase:flags=lanczos,crop={W}:{H},crop={W}:{H//2}:0:{y},"
+                          f"crop={cw}:{ch}:{(W-cw)//2}:{(H//2-ch)//2},scale={W}:{H//2}:flags=lanczos,unsharp=5:5:0.6,setsar=1")
+                    run(['ffmpeg', '-loglevel', 'error', '-y', '-ss', str(h['in']), '-t', f'{d:.3f}', '-i', shots[h['shot']], '-an', '-vf', vf,
+                         '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '12', '-pix_fmt', 'yuv420p', hf]); halves.append(hf)
+                run(f'ffmpeg -loglevel error -y -i "{halves[0]}" -i "{halves[1]}" -filter_complex "[0:v][1:v]vstack=2,format=yuv420p[v]" -map "[v]" -c:v libx264 -preset veryfast -crf 12 "{f}"')
+            elif 'freeze' in pc:
                 fr = pc['freeze']; d = pc['dur']; n = round(d * FPS); png = os.path.join(vd, pc['id'] + '.png')
                 run(['ffmpeg', '-loglevel', 'error', '-y', '-ss', str(fr['t']), '-i', shots[fr['shot']], '-frames:v', '1', png])
                 vf = (f"scale={int(W*1.25)}:{int(H*1.25)}:flags=lanczos,zoompan=z='{zs}+({ze}-{zs})*on/{n}':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=1:s={W}x{H}:fps={FPS}{look},setsar=1")
@@ -102,6 +112,14 @@ def main():
                 files.append((f, tl.p[pc['id']]['len']))
         open(os.path.join(vd, 'list.txt'), 'w').write(''.join(f"file '{os.path.basename(f)}'\n" for f, _ in files))
         run(f'ffmpeg -loglevel error -y -f concat -safe 0 -i "{vd}/list.txt" -c copy "{video}"')
+        if P.get('opener_fx'):  # punch-in + shake + RGB split on the first 2 s only (zoompan on the whole stream drops frames)
+            Z = "1+0.22*exp(-it*6)+gte(it,0.55)*0.10*exp(-(it-0.55)*8)"
+            SX = "lt(it,1.8)*(16*exp(-it*6)*sin(it*70)+gte(it,0.55)*12*exp(-(it-0.55)*7)*sin((it-0.55)*75))"
+            vfx = (f"zoompan=z='{Z}':x='iw/2-(iw/zoom/2)+({SX})':y='ih/2-(ih/zoom/2)+0.6*({SX})':d=1:s={W}x{H}:fps={FPS},"
+                   f"rgbashift=rh=-14:bh=14:enable='between(t,0,0.08)+between(t,0.55,0.8)'")
+            n = 2 * FPS; tmp = os.path.join(wd, 'video_fx.mkv')
+            run(f'ffmpeg -loglevel error -y -i "{video}" -filter_complex "[0:v]split[a][b];[a]trim=end_frame={n},setpts=PTS-STARTPTS,{vfx}[h];[b]trim=start_frame={n},setpts=PTS-STARTPTS[t];[h][t]concat=n=2:v=1:a=0[v]" -map "[v]" -c:v libx264 -preset veryfast -crf 12 "{tmp}"')
+            os.replace(tmp, video)
         print(f'[video] {len(pieces)} pieces -> {TOTAL:.2f}s')
 
     # ---------- 2. overlays (resolve times, avatar) ----------
@@ -134,6 +152,12 @@ def main():
         return cache[k]
     segs = []
     for i, pc in enumerate(pieces):
+        if 'split' in pc:
+            for k in ('top', 'bottom'):
+                h = pc['split'][k]
+                if h.get('audio', True) is not False:
+                    segs.append(dict(shot=h['shot'], a=h['in'], b=h['in'] + pc['dur'], at=tl.p[pc['id']]['start'], db=h.get('audio_db', 0), fo=.06))
+            continue
         if 'freeze' in pc or pc.get('audio') is False: continue
         aout = pc.get('audio_out', pc['out']); nxt = pieces[i + 1] if i + 1 < len(pieces) else None
         fo = nxt['transition_in']['dur'] if nxt and nxt.get('transition_in') and aout == pc['out'] else .06
