@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0E0F12;font-family:'Noto Sans CJK TC','Noto Sans TC',sans-serif}
+.bg{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;filter:saturate(1.05) contrast(1.05)}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,28,.35) 0%,rgba(10,14,28,0) 18%,rgba(10,14,28,0) 48%,rgba(10,14,28,.78) 62%,rgba(10,14,28,.92) 100%)}
+.stamp{position:absolute;padding:10px 30px;border:8px solid #FF4A3D;border-radius:16px;color:#FF4A3D;font-size:58px;font-weight:900;letter-spacing:6px;transform:rotate(-8deg);background:rgba(255,255,255,.75);white-space:nowrap}
+.tag{position:absolute;left:80px;top:1110px;padding:10px 28px;border-radius:999px;background:#E8B44A;color:#16213E;font-size:44px;font-weight:900;letter-spacing:4px;white-space:nowrap}
+.t1{position:absolute;left:80px;top:1190px;font-size:132px;color:#fff;font-weight:900;letter-spacing:4px;white-space:nowrap;text-shadow:0 8px 30px rgba(0,0,0,.6)}
+.t2{position:absolute;left:80px;top:1360px;font-size:86px;color:#fff;font-weight:900;white-space:nowrap;line-height:1.2}
+.t2 b{color:#FF4A3D;font-size:118px}
+.st{position:absolute;left:80px;top:1530px;font-size:44px;color:#D5DBEA;font-weight:700;letter-spacing:2px;white-space:nowrap}
+.yel{color:#E8B44A}.red{color:#FF4A3D}
+</style></head><body><img class="bg" id="bg"><div class="shade"></div>
+<div class="stamp" id="stamp"></div><div class="tag" id="tag"></div><div class="t1" id="t1"></div><div class="t2" id="t2"></div><div class="st" id="st"></div>
+<script>
+// window.COVER = {bg, stamp:{text,x,y}, tag, t1, t2 (use <b>number</b>), st}. Text auto-shrinks to stay inside x 80..1000.
+const C=window.COVER,md=s=>(s||'').replace(/<y>/g,'<span class="yel">').replace(/<r>/g,'<span class="red">').replace(/<\/[yr]>/g,'</span>');
+document.getElementById('bg').src=C.bg;
+const s=document.getElementById('stamp');if(C.stamp){s.innerHTML=md(C.stamp.text);s.style.left=(C.stamp.x??600)+'px';s.style.top=(C.stamp.y??330)+'px'}else s.remove();
+for(const k of ['tag','t1','t2','st']){const e=document.getElementById(k);if(!C[k]){e.remove();continue}e.innerHTML=md(C[k]);
+  let fs=parseFloat(getComputedStyle(e).fontSize);while(e.getBoundingClientRect().right>1000&&fs>30){fs-=4;e.style.fontSize=fs+'px';e.querySelectorAll('b').forEach(b=>b.style.fontSize=(fs*1.37)+'px')}}
+</script></body></html>

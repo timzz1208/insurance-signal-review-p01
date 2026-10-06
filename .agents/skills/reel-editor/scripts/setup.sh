@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-time environment setup for talking-head-reel. Safe to re-run.
+# One-time environment setup for reel-editor. Safe to re-run.
 set -e
 need_sudo(){ if [ "$(id -u)" = 0 ]; then "$@"; else sudo "$@"; fi; }
 if ! command -v ffmpeg >/dev/null; then

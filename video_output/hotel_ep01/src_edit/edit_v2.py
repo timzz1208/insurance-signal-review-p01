@@ -3,7 +3,7 @@
 import json, os, subprocess, sys
 import numpy as np
 from scipy.io import wavfile
-sys.path.insert(0, '/home/user/insurance-signal-review-p01/.agents/skills/talking-head-reel/scripts')
+sys.path.insert(0, '/home/user/insurance-signal-review-p01/.agents/skills/reel-editor/scripts')
 import sfx as S
 W, H, FPS, SR = 1080, 1920, 24, 48000
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

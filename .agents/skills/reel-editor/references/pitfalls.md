@@ -12,3 +12,9 @@
 | YouTube 下載失敗（要求登入） | 雲端 IP 被擋 | 改用 Google Drive / 直接上傳 |
 | 字卡寬度超出畫面 | 字太多 | 標題 ≤ 11 字（80px）、大字 ≤ 6 字（168px）；或調 `size` |
 | 交付檔案太大 | 平台上限 | `ffmpeg -i out.mp4 -c:v libx264 -crf 26 -maxrate 1600k -bufsize 3200k -c:a copy small.mp4` |
+| 字卡偏右、右邊被切掉 | CSS 寬度沒有包含內距（940 加內距 112 等於 1052px） | 所有盒子用 `box-sizing:border-box`；輸出後看 bounds check |
+| 字卡在暫停時看起來歪 | 進場是從側邊滑進來的 | 片尾說明字卡改成原地淡入加輕微放大 |
+| 轉場、音效、標籤時間差了 0.35 秒 | xfade 的第二段從 offset 開始，不是從第一段結束才開始 | drama_build 用 `transition_in` 自動計算 |
+| 只有環境音的片段轉出奇怪的句子 | Whisper 在噪音上幻聽 | 用畫面和分鏡判斷，不要相信這些字 |
+| WebFetch 摘要裡的金額不對 | 摘要模型抄錯 | 用 curl 抓原始網頁，grep 金額 |
+| AI 生成的素材 576 寬，放大後糊 | 原始解析度低 | 放大不要超過 1.6 倍；特寫畫面請使用者另外生成插入鏡頭 |

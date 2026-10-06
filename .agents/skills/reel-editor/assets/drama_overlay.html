@@ -1,0 +1,116 @@
+<!doctype html><html><head><meta charset="utf-8">
+<!-- Overlay layer for the multi-shot drama flow. drama_build.py injects window.OV = {total, items:[...]} with all times in OUTPUT seconds
+     and calls render(t) per frame. Text accepts <y>amber</y>, <r>red</r>, <b>bold</b>. All boxes use border-box sizing. -->
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;width:1080px;height:1920px;background:transparent;overflow:hidden;font-family:'Noto Sans CJK TC','Noto Sans TC',sans-serif}
+  :root{--navy:rgba(22,33,62,.9);--amb:#E8B44A;--red:#FF4A3D}
+  .l{position:absolute;opacity:0}
+  .yel{color:var(--amb)} .red{color:var(--red)}
+  #flash{position:absolute;inset:0;background:#fff;opacity:0}
+  /* hook */
+  .hk{position:absolute;inset:0;opacity:0}
+  .hk .ln{position:absolute;left:0;width:1080px;text-align:center;white-space:nowrap;font-weight:900}
+  .hk .l1{top:760px;font-size:112px;color:#fff;letter-spacing:4px;text-shadow:0 8px 30px rgba(0,0,0,.7);-webkit-text-stroke:3px rgba(0,0,0,.55)}
+  .hk .l2w{position:absolute;left:50%;top:910px;padding:8px 36px;border-radius:18px;background:var(--amb)}
+  .hk .l2{font-size:104px;color:#16213E;font-weight:900;white-space:nowrap;letter-spacing:4px}
+  .hk .lab{top:1080px;font-size:40px;color:#fff;letter-spacing:6px;font-weight:700;text-shadow:0 3px 12px rgba(0,0,0,.8)}
+  .hk .num{top:1120px;font-size:150px;color:var(--red);letter-spacing:2px;-webkit-text-stroke:4px rgba(0,0,0,.35);text-shadow:0 10px 36px rgba(0,0,0,.7)}
+  .hk .num small{font-size:64px;color:#fff}
+  /* flashback title */
+  .fb{left:0;width:1080px;top:820px;text-align:center}
+  .fb .t{display:inline-block;padding:18px 44px;border-radius:16px;background:rgba(0,0,0,.55);color:#fff;font-size:76px;font-weight:900;letter-spacing:10px}
+  .fb .s{margin-top:18px;color:#ddd;font-size:36px;letter-spacing:6px}
+  /* highlight ring */
+  .ring{width:300px;height:300px;border-radius:50%;border:8px solid var(--amb);box-shadow:0 0 30px rgba(232,180,74,.8)}
+  .ringlab{padding:12px 28px;border-radius:999px;background:var(--navy);color:#fff;font-size:44px;font-weight:700;white-space:nowrap}
+  /* lower third */
+  .lt{left:60px;top:1280px;display:flex;align-items:center;gap:20px;padding:16px 34px 16px 18px;border-radius:999px;background:var(--navy);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+  .lt .n{width:64px;height:64px;border-radius:50%;background:var(--amb);color:#16213E;font-weight:900;font-size:40px;display:flex;align-items:center;justify-content:center}
+  .lt .x{color:#fff;font-size:46px;font-weight:700;white-space:nowrap}
+  /* stamp */
+  .stamp{padding:14px 40px;border:10px solid #D9463B;border-radius:18px;color:#D9463B;font-size:96px;font-weight:900;letter-spacing:10px;background:rgba(255,255,255,.18)}
+  /* section label (e.g. ↓ 樓下) */
+  .tag{left:0;width:1080px;top:880px;text-align:center}
+  .tag span{display:inline-block;padding:14px 40px;border-radius:999px;background:var(--navy);color:#fff;font-size:52px;font-weight:900;letter-spacing:6px}
+  /* phone notification (generic, no brand) */
+  .notif{left:250px;top:1150px;width:780px;padding:30px 36px;border-radius:40px;background:rgba(245,245,247,.95);box-shadow:0 20px 60px rgba(0,0,0,.35);display:flex;gap:26px;align-items:flex-start}
+  .notif .ic{width:84px;height:84px;border-radius:22px;background:#3C8D5A;flex:none}
+  .notif .hd{display:flex;justify-content:space-between;font-size:34px;color:#6b6b70}
+  .notif .who{font-size:40px;font-weight:700;color:#111;margin-top:6px}
+  .notif .msg{font-size:44px;color:#111;margin-top:8px}
+  /* recap */
+  .recap{left:60px;top:980px;width:960px;padding:30px 40px;border-radius:32px;background:var(--navy);box-shadow:0 18px 50px rgba(0,0,0,.4)}
+  .recap .h{color:#fff;font-size:50px;font-weight:900}
+  .recap .r{display:flex;align-items:center;gap:18px;margin-top:16px;opacity:0}
+  .recap .r .n{width:50px;height:50px;border-radius:50%;background:var(--amb);color:#16213E;font-weight:900;font-size:32px;display:flex;align-items:center;justify-content:center}
+  .recap .r .x{color:#fff;font-size:40px;font-weight:500}
+  /* bumper */
+  .bump{left:0;top:0;width:1080px;height:1920px;background:#16213E;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .bump .t{color:#fff;font-size:110px;font-weight:900;letter-spacing:12px}
+  .bump .bar{width:180px;height:10px;border-radius:5px;background:var(--amb);margin-top:28px}
+  .bump .s{color:#C9D3EA;font-size:40px;margin-top:24px;letter-spacing:6px}
+  /* explainer cards */
+  .card{left:70px;width:940px;top:420px;padding:185px 56px 56px;border-radius:44px;background:rgba(18,28,54,.93);box-shadow:0 30px 80px rgba(0,0,0,.45)}
+  .card .av{position:absolute;left:50%;top:-110px;margin-left:-110px;width:220px;height:220px;border-radius:50%;border:8px solid var(--amb);object-fit:cover;background:#222}
+  .card .who{position:absolute;left:0;right:0;top:118px;text-align:center;color:#C9D3EA;font-size:32px;letter-spacing:6px}
+  .card .k{color:#C9D3EA;font-size:44px;font-weight:700;text-align:center;margin-top:30px}
+  .card .big{color:#fff;font-size:96px;font-weight:900;text-align:center;letter-spacing:4px;line-height:1.2}
+  .card .pill{display:inline-block;padding:12px 34px;border-radius:999px;background:var(--amb);color:#16213E;font-size:48px;font-weight:900}
+  .card .pill.red{background:#D9463B;color:#fff}
+  .card .c{text-align:center;margin-top:22px}
+  .card .body{color:#fff;font-size:46px;line-height:1.55;margin-top:26px;text-align:center}
+  .card .body b,.card .big b{color:var(--amb)}
+  .card .amount{color:var(--amb);font-size:104px;font-weight:900;text-align:center;line-height:1.15}
+  .card .amount small{font-size:52px}
+  .card .note{color:#AEB8D0;font-size:32px;margin-top:20px;text-align:center}
+  .card .row{display:flex;gap:22px;align-items:flex-start;margin-top:28px}
+  .card .row .n{flex:none;width:62px;height:62px;border-radius:50%;background:var(--amb);color:#16213E;font-weight:900;font-size:38px;display:flex;align-items:center;justify-content:center}
+  .card .row .x{color:#fff;font-size:46px;line-height:1.35;font-weight:700}
+  .card .row .x small{display:block;color:#AEB8D0;font-size:34px;font-weight:500;margin-top:4px}
+  .card .src{color:#AEB8D0;font-size:27px;margin-top:22px;text-align:center;line-height:1.5}
+  .card .disc{color:#AEB8D0;font-size:30px;margin-top:36px;text-align:center;line-height:1.5}
+</style></head><body><div id="flash"></div>
+<script>
+const D=window.OV, cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x)), e3=x=>1-Math.pow(1-x,3), ox=x=>x>=1?1:1-Math.pow(2,-10*x);
+const sh=(x,amp)=>x<0?0:amp*Math.exp(-x*8)*Math.sin(x*70);
+const md=s=>(s||'').replace(/<y>/g,'<span class="yel">').replace(/<r>/g,'<span class="red">').replace(/<\/[yr]>/g,'</span>');
+function el(cls,html,style,parent){const e=document.createElement('div');e.className=cls;if(html!=null)e.innerHTML=html;if(style)e.style.cssText=style;(parent||document.body).insertBefore(e,parent?null:document.getElementById('flash'));return e}
+function fade(e,t,a,b,din=.35,dout=.3,dx=0,dy=0){if(t<a||t>b+dout){e.style.opacity=0;return -1}
+  const qi=e3(cl((t-a)/din)),qo=cl((t-b)/dout);e.style.opacity=qi*(1-qo);e.style.transform=`translate(${(1-qi)*dx}px,${(1-qi)*dy}px)`;return qi}
+const flashes=[];
+const R={
+ hook:o=>{const H=el('hk');const h1=el('ln l1',md(o.line1),null,H);const w=el('l2w',null,null,H);el('l2',md(o.line2),null,w);
+   const lab=o.label?el('ln lab',md(o.label),null,H):null;const n=o.counter?el('ln num','',null,H):null;
+   flashes.push([o.start,.2,.9]);if(n)flashes.push([o.start+2.3,.12,.5]);
+   return t=>{const a=o.start;if(t<a||t>o.end+.3){H.style.opacity=0;return}H.style.opacity=1-cl((t-o.end)/.3);
+     const x1=t-a-.02,q1=ox(cl(x1/.18));h1.style.opacity=x1>=0?1:0;h1.style.transform=`translate(${sh(x1-.18,16)}px,0) scale(${2.6-1.6*q1})`;h1.style.filter=`blur(${(1-q1)*14}px)`;
+     const x2=t-a-.62,q2=ox(cl(x2/.18));w.style.opacity=x2>=0?1:0;w.style.transform=`translateX(-50%) translate(${sh(x2-.18,14)}px,0) scale(${2.4-1.4*q2}) rotate(${(1-q2)*-6}deg)`;
+     if(lab)lab.style.opacity=t-a-1.15>=0?e3(cl((t-a-1.15)/.2)):0;
+     if(n){const c=o.counter,x4=t-a-1.25,p=cl(x4/1.05),v=c.to*(1-Math.pow(1-p,3));n.style.opacity=x4>=0?1:0;
+       const s=c.decimals?v.toFixed(c.decimals):Math.round(v).toLocaleString('en-US');
+       n.innerHTML=(c.prefix?`<small>${c.prefix}</small>`:'')+s+(c.suffix?`<small>${c.suffix}</small>`:'');
+       const x5=t-a-2.3;n.style.transform=`translate(${sh(x5,20)}px,0) scale(${x5>0?1+.18*Math.exp(-x5*7):1})`;
+       n.style.textShadow=(x5>0&&x5<.3)?`${10*Math.sin(x5*80)}px 0 0 rgba(0,255,255,.7),${-10*Math.sin(x5*80)}px 0 0 rgba(255,0,80,.7)`:'0 10px 36px rgba(0,0,0,.7)'}}},
+ flashback:o=>{const e=el('l fb',`<div class="t">${md(o.title)}</div>`+(o.sub?`<div class="s">${md(o.sub)}</div>`:''));flashes.push([o.start,.12,.7],[o.end,.1,.5]);
+   return t=>fade(e,t,o.start+.08,o.end,.25,.15,0,20)},
+ ring:o=>{const r=el('l ring','',`left:${o.x-150}px;top:${o.y-150}px`),lb=o.label?el('l ringlab',md(o.label),`left:${o.x-160}px;top:${o.y+175}px`):null;
+   return t=>{const q=fade(r,t,o.start,o.end,.3,.2);if(q>=0)r.style.transform=`scale(${1.4-.4*e3(cl((t-o.start)/.35))})`;if(lb)fade(lb,t,o.start+.2,o.end,.3,.2,0,15)}},
+ lower_third:o=>{const e=el('l lt',`<div class="n">${o.n}</div><div class="x">${md(o.text)}</div>`);return t=>fade(e,t,o.start,o.end,.35,.25,-60,0)},
+ tag:o=>{const e=el('l tag',`<span>${md(o.text)}</span>`);return t=>fade(e,t,o.start,o.end,.12,.2,0,-60)},
+ stamp:o=>{const e=el('l stamp',md(o.text),`left:${o.x||600}px;top:${o.y||560}px`);
+   return t=>{if(t<o.start||t>o.end+.25){e.style.opacity=0;return}const q=cl((t-o.start)/.16);e.style.opacity=Math.min(q,1-cl((t-o.end)/.25));e.style.transform=`rotate(-10deg) scale(${2.2-1.2*e3(q)})`}},
+ notif:o=>{const e=el('l notif',`<div class="ic"></div><div style="flex:1"><div class="hd"><span>${o.app||'訊息'}</span><span>現在</span></div><div class="who">${md(o.title)}</div><div class="msg">${md(o.msg)}</div></div>`);
+   return t=>fade(e,t,o.start,o.end,.4,.3,0,-50)},
+ recap:o=>{const e=el('l recap',`<div class="h">${md(o.title)}</div>`);const rs=o.items.map((x,i)=>el('r',`<div class="n">${i+1}</div><div class="x">${md(x)}</div>`,null,e));
+   return t=>{fade(e,t,o.start,o.end,.35,.3,0,30);rs.forEach((x,i)=>{const q=e3(cl((t-o.start-.35-i*.28)/.25));x.style.opacity=q;x.style.transform=`translateX(${(1-q)*-40}px)`})}},
+ bumper:o=>{const e=el('l bump',`<div class="t">${md(o.title)}</div><div class="bar"></div>`+(o.sub?`<div class="s">${md(o.sub)}</div>`:''));
+   return t=>{if(t<o.start||t>o.end){e.style.opacity=0;return}e.style.opacity=1;const i=e3(cl((t-o.start)/.22)),q=e3(cl((t-(o.end-.22))/.22));e.style.transform=`translateX(${(1-i)*-1080+q*1080}px)`}},
+ cards:o=>{const cs=o.cards.map(c=>{const e=el('l card',(o.avatar?`<img class="av" src="${o.avatar}">`:'')+(o.host?`<div class="who">${md(o.host)}</div>`:'')+c.html);return e});
+   return t=>cs.forEach((e,i)=>{const st=o.cards[i].start,last=i===cs.length-1,en=last?o.end+1:o.cards[i+1].start;
+     if(t<st||t>en){e.style.opacity=0;return}const qi=e3(cl((t-st)/.4)),qo=last?0:cl((t-(en-.3))/.3);e.style.opacity=qi*(1-qo);e.style.transform=`scale(${.96+.04*qi})`;
+     e.querySelectorAll('[data-at]').forEach(x=>{const q=e3(cl((t-st-+x.dataset.at)/.35));x.style.opacity=q;x.style.transform=`translateY(${(1-q)*24}px)`})})},
+};
+const fns=D.items.map(o=>{if(!R[o.type])throw new Error('unknown overlay '+o.type);return R[o.type](o)});
+window.render=t=>{fns.forEach(f=>f(t));let fl=0;for(const [a,d,m] of flashes)if(t>=a&&t<a+d)fl=Math.max(fl,m*(1-(t-a)/d));document.getElementById('flash').style.opacity=fl};
+</script></body></html>

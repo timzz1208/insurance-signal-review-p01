@@ -96,3 +96,34 @@ def build(cards, total, path):
             put(whoosh(), a - .12); put(pop(900, 400), a + .25, -4); put(pop(1100, 500), a + .45, -4); put(pop(1300, 600), a + .8, -2)
     mix = np.tanh(mix * 1.1) / 1.1
     wavfile.write(path, SR, (np.stack([mix, mix], 1) * 32767 * .95).astype(np.int16))
+
+# ---- extra sounds used by the drama flow ----
+def _t(d): return np.arange(int(d * SR)) / SR
+def tick():
+    t = _t(.04); return norm(bp(rng.standard_normal(len(t)), 2500, 7000) * np.exp(-t * 300) + np.sin(2 * np.pi * 3200 * t) * np.exp(-t * 400) * .5, -24)
+def knock():
+    t = _t(.18); body = np.sin(2 * np.pi * (140 + 80 * np.exp(-t * 60)) * t) * np.exp(-t * 35)
+    return norm(np.tanh(2 * (body + .5 * lp(rng.standard_normal(len(t)), 1800) * np.exp(-t * 90))), -8)
+def drip():
+    t = _t(.25); f = 900 + 1400 * np.exp(-t * 40); return norm(np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 22) * np.minimum(1, t / .002), -16)
+def tape_stop():
+    t = _t(.45); f = 220 * (1 - t / .45) ** 2 + 30
+    y = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)) * .3 + np.sin(2 * np.pi * np.cumsum(f * 2) / SR) * .5
+    return norm(lp(y * np.linspace(1, .2, len(t)), 2500), -14)
+def ping():
+    t = _t(.5); y = np.zeros_like(t)
+    for st, f in ((0, 1568), (.11, 2093)):
+        tt = t - st; m = tt >= 0; y[m] += np.sin(2 * np.pi * f * tt[m]) * np.exp(-tt[m] * 9) * np.minimum(1, tt[m] / .004)
+    return norm(y, -14)
+def pad(d):
+    t = _t(d); y = sum(np.sin(2 * np.pi * f * t + np.sin(2 * np.pi * .13 * t) * .5) for f in (55, 82.4, 110.2, 164.8))
+    return norm(lp(y, 900) * np.minimum(1, t / 2.5) * np.minimum(1, (d - t) / .25) * (0.6 + 0.4 * t / d), -30)
+def plucks(d):
+    t = _t(d); y = np.zeros_like(t); notes = [523.25, 659.25, 783.99, 659.25, 587.33, 783.99, 880.0, 783.99]
+    for k, st in enumerate(np.arange(.2, max(.3, d - .8), .9)):
+        f = notes[k % len(notes)]; i = int(st * SR); tt = t[:len(t) - i]
+        y[i:] += (np.sin(2 * np.pi * f * tt) + .3 * np.sin(4 * np.pi * f * tt)) * np.exp(-tt * 3.2) * np.minimum(1, tt / .005)
+    return norm(lp(y, 3000) * np.minimum(1, (d - t) / 1.2), -31)
+SOUNDS = {'boom': boom, 'whoosh': lambda: whoosh(.42, True), 'whoosh_up': lambda: whoosh(.3, True), 'whoosh_down': lambda: whoosh(.45, False),
+          'pop': pop, 'click': click, 'ding': ding, 'glitch': glitch, 'thud': thud, 'swipe': swipe, 'buzz': buzz,
+          'tick': tick, 'knock': knock, 'drip': drip, 'tape_stop': tape_stop, 'ping': ping}

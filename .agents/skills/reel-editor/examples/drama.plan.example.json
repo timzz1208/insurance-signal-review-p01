@@ -1,0 +1,497 @@
+{
+ "title": "樓下那間房不能住了（EP01）",
+ "shots": {
+  "s1": "src/shot01.mp4",
+  "s2": "src/shot02.mp4",
+  "s3": "src/shot03.mp4",
+  "s4": "src/shot04.mp4",
+  "s5": "src/shot05.mp4",
+  "s6": "src/shot06.mp4",
+  "s7": "src/shot07.mp4",
+  "s8": "src/shot08.mp4"
+ },
+ "workdir": "work",
+ "output": "out/reel.mp4",
+ "clean_output": "out/reel_clean.mp4",
+ "size": [
+  1080,
+  1920
+ ],
+ "fps": 24,
+ "loudness": -14,
+ "sfx": true,
+ "music_bed": null,
+ "pieces": [
+  {
+   "id": "p1",
+   "shot": "s1",
+   "in": 0.0,
+   "out": 5.1,
+   "zoom": [
+    1.22,
+    1.04
+   ],
+   "ease": 0.7
+  },
+  {
+   "id": "p1f",
+   "freeze": {
+    "shot": "s1",
+    "t": 5.05
+   },
+   "dur": 0.8,
+   "zoom": [
+    1.04,
+    1.09
+   ],
+   "look": "flashback"
+  },
+  {
+   "id": "p2a",
+   "shot": "s2",
+   "in": 0.6,
+   "out": 1.7,
+   "zoom": [
+    1.0,
+    1.02
+   ]
+  },
+  {
+   "id": "p2b",
+   "shot": "s2",
+   "in": 1.7,
+   "out": 2.9,
+   "zoom": [
+    1.5,
+    1.56
+   ],
+   "center": [
+    [
+     0.66,
+     0.55
+    ]
+   ]
+  },
+  {
+   "id": "p2c",
+   "shot": "s2",
+   "in": 2.9,
+   "out": 5.0,
+   "zoom": [
+    1.0,
+    1.04
+   ]
+  },
+  {
+   "id": "p3",
+   "shot": "s3",
+   "in": 0.0,
+   "out": 4.65,
+   "zoom": [
+    1.0,
+    1.07
+   ]
+  },
+  {
+   "id": "p4",
+   "shot": "s4",
+   "in": 0.9,
+   "out": 4.3,
+   "zoom": [
+    1.6,
+    1.0
+   ],
+   "center": [
+    [
+     0.5,
+     0.12
+    ],
+    [
+     0.5,
+     0.5
+    ]
+   ],
+   "ease": 1.8,
+   "transition_in": {
+    "type": "slideup",
+    "dur": 0.35
+   },
+   "audio_out": 8.0
+  },
+  {
+   "id": "p5a",
+   "shot": "s5",
+   "in": 0.5,
+   "out": 2.3,
+   "zoom": [
+    1.0,
+    1.04
+   ],
+   "audio_db": -8
+  },
+  {
+   "id": "p5b",
+   "shot": "s5",
+   "in": 2.3,
+   "out": 4.2,
+   "zoom": [
+    1.35,
+    1.42
+   ],
+   "center": [
+    [
+     0.55,
+     0.74
+    ]
+   ],
+   "audio_db": -8
+  },
+  {
+   "id": "p6",
+   "shot": "s6",
+   "in": 0.0,
+   "out": 5.167,
+   "zoom": [
+    1.0,
+    1.03
+   ]
+  },
+  {
+   "id": "p7",
+   "shot": "s7",
+   "in": 2.6,
+   "out": 8.0,
+   "zoom": [
+    1.0,
+    1.07
+   ],
+   "hold": 0.5
+  },
+  {
+   "id": "p8a",
+   "shot": "s8",
+   "in": 0.0,
+   "out": 3.0,
+   "audio_out": 2.55
+  },
+  {
+   "id": "p8b",
+   "shot": "s8",
+   "in": 2.6,
+   "out": 8.0,
+   "zoom": [
+    1.0,
+    1.06
+   ],
+   "hold": 13.6,
+   "look": "blur",
+   "transition_in": {
+    "type": "fade",
+    "dur": 0.4
+   },
+   "audio": false
+  }
+ ],
+ "subtitles": [
+  {
+   "text": "先生，樓下那間房",
+   "start": "p1@0",
+   "end": "p1@3.1"
+  },
+  {
+   "text": "現在不能住了",
+   "start": "p1@3.44",
+   "end": "p1@4.95"
+  },
+  {
+   "text": "好，我拿完護照就下去！",
+   "start": "p2a@3.11",
+   "end": "p2a@4.85"
+  },
+  {
+   "text": "先生？",
+   "start": "p3@0",
+   "end": "p3@0.6"
+  },
+  {
+   "text": "房間有人嗎？",
+   "start": "p3@2.19",
+   "end": "p3@4.0"
+  },
+  {
+   "text": "初步看，水已經滲進樓板層",
+   "start": "p4@1.29",
+   "end": "p4@3.95"
+  },
+  {
+   "text": "地板要拆開檢查、乾燥",
+   "start": "p4@4.6",
+   "end": "p4@6.4"
+  },
+  {
+   "text": "這間房也要先停用",
+   "start": "p4@6.75",
+   "end": "p4@8.0"
+  },
+  {
+   "text": "飯店的損失，",
+   "start": "p7@4.85",
+   "end": "p7@5.75"
+  },
+  {
+   "text": "也算我要負的責任嗎？",
+   "start": "p7@6.0",
+   "end": "p7@7.8"
+  },
+  {
+   "text": "第三人，就是不是你自己的那一方",
+   "start": "p8a@0",
+   "end": "p8a@2.5"
+  }
+ ],
+ "overlays": [
+  {
+   "type": "hook",
+   "start": 0,
+   "end": 3.3,
+   "line1": "出國忘了關水龍頭",
+   "line2": "飯店要你賠多少？",
+   "label": "真實理賠案例・換算新台幣",
+   "counter": {
+    "to": 249,
+    "prefix": "約 ",
+    "suffix": " 萬元"
+   }
+  },
+  {
+   "type": "flashback",
+   "start": "p1f+0",
+   "end": "p2a+0",
+   "title": "30 分鐘前",
+   "sub": "退房前"
+  },
+  {
+   "type": "ring",
+   "start": "p2b+0.1",
+   "end": "p2b+1.15",
+   "x": 756,
+   "y": 730,
+   "label": "水龍頭還開著"
+  },
+  {
+   "type": "lower_third",
+   "start": "p3+0.4",
+   "end": "p4+-0.05",
+   "n": 1,
+   "text": "水越過房門"
+  },
+  {
+   "type": "tag",
+   "start": "p4+-0.05",
+   "end": "p4+0.7",
+   "text": "↓ 樓下"
+  },
+  {
+   "type": "lower_third",
+   "start": "p4+0.6",
+   "end": "p5a+-0.1",
+   "n": 2,
+   "text": "樓下天花板滲水"
+  },
+  {
+   "type": "lower_third",
+   "start": "p5a+0.2",
+   "end": "p6+-0.2",
+   "n": 3,
+   "text": "地板拆開、除濕乾燥"
+  },
+  {
+   "type": "stamp",
+   "start": "p4@6.75",
+   "end": "p6+-0.1",
+   "text": "停用",
+   "x": 600,
+   "y": 560
+  },
+  {
+   "type": "notif",
+   "start": "p6+1.0",
+   "end": "p6+4.9",
+   "title": "旅行團群組",
+   "msg": "我們先出發，你處理好再來。"
+  },
+  {
+   "type": "recap",
+   "start": "p7+0.2",
+   "end": "p7+2.3",
+   "title": "一個沒關的水龍頭，<y>換來</y>",
+   "items": [
+    "水越過房門",
+    "樓下天花板滲水",
+    "地板拆開、除濕乾燥",
+    "樓下房間停用",
+    "旅行團先走了"
+   ]
+  },
+  {
+   "type": "bumper",
+   "start": "p8a+-0.62",
+   "end": "p8a+0.12",
+   "title": "球球解說",
+   "sub": "什麼是第三人責任？"
+  },
+  {
+   "type": "cards",
+   "end": "end",
+   "host": "球球解說",
+   "avatar": {
+    "shot": "s8",
+    "t": 1.0,
+    "crop": [
+     0.19,
+     0.27,
+     0.62
+    ]
+   },
+   "cards": [
+    {
+     "start": "p8a+3.0",
+     "sfx": [
+      {
+       "sound": "pop",
+       "at": 1.2,
+       "db": -6
+      }
+     ],
+     "html": "<div class=\"k\">樓下那間房的損失</div><div class=\"big\" data-at=\".3\">算誰的？</div><div class=\"c\" data-at=\"1.2\"><span class=\"pill\">第三人的財物損失</span></div><div class=\"body\" data-at=\"1.6\">不是你自己的行李，<br>是<b>飯店和其他旅客</b>的財產</div>"
+    },
+    {
+     "start": "p8a+6.4",
+     "sfx": [
+      {
+       "sound": "thud",
+       "at": 1.5,
+       "db": -8
+      },
+      {
+       "sound": "ding",
+       "at": 1.6,
+       "db": -14
+      }
+     ],
+     "html": "<div class=\"c\"><span class=\"pill red\">真實理賠案例</span></div><div class=\"big\" style=\"font-size:76px;margin-top:20px\">巴黎・飯店浴缸溢水</div><div class=\"body\" data-at=\".5\" style=\"font-size:42px\">樓下和周圍房間都不能使用<br>飯店向旅客求償</div><div class=\"c\" data-at=\"1.4\"><div class=\"note\" style=\"margin-top:0;font-size:34px\">保險公司以「賠償責任保險金」理賠</div><div class=\"amount\"><small>約新台幣 </small>249<small> 萬元</small></div><div class=\"note\" style=\"margin-top:6px;font-size:30px\">原始金額 12,438,470 日圓，以 2026 年匯率約 0.2 換算</div></div><div class=\"src\" data-at=\"1.8\">資料來源：損保ジャパン日本興亜〈保險金お支払事例：<br>他人の物を壊した場合〉（日本海外旅行保險之個人賠償責任）</div>"
+    },
+    {
+     "start": "p8a+11.0",
+     "sfx": [
+      {
+       "sound": "pop",
+       "at": 0.8,
+       "db": -6
+      }
+     ],
+     "html": "<div class=\"c\"><span class=\"pill\">旅遊不便險</span></div><div class=\"big\" style=\"margin-top:22px\">第三人責任保障</div><div class=\"body\" data-at=\".8\">旅途中不小心造成<b>他人財物損失</b>，<br>依法要負的賠償責任，<br><b>可以申請理賠</b></div><div class=\"note\" data-at=\"1.6\">＊以保險金額為上限，可能有自負額</div>"
+    },
+    {
+     "start": "p8a+14.8",
+     "sfx": [
+      {
+       "sound": "pop",
+       "at": 0.7,
+       "db": -8
+      },
+      {
+       "sound": "pop",
+       "at": 1.25,
+       "db": -8
+      },
+      {
+       "sound": "pop",
+       "at": 1.8,
+       "db": -8
+      },
+      {
+       "sound": "pop",
+       "at": 2.35,
+       "db": -8
+      }
+     ],
+     "html": "<div class=\"big\" style=\"font-size:62px;white-space:nowrap\">出發前，先看保單這 4 欄</div><div class=\"row\" data-at=\".7\"><div class=\"n\">1</div><div class=\"x\">有沒有包含「第三人責任」</div></div><div class=\"row\" data-at=\"1.25\"><div class=\"n\">2</div><div class=\"x\">保險金額<small>最高可以賠多少</small></div></div><div class=\"row\" data-at=\"1.8\"><div class=\"n\">3</div><div class=\"x\">自負額<small>每次事故自己先付多少</small></div></div><div class=\"row\" data-at=\"2.35\"><div class=\"n\">4</div><div class=\"x\">除外責任<small>例如：自己入住的客房損壞是否另有約定</small></div></div>"
+    },
+    {
+     "start": "p8a+19.0",
+     "sfx": [
+      {
+       "sound": "ding",
+       "at": 0.4,
+       "db": -12
+      }
+     ],
+     "html": "<div class=\"big\" style=\"font-size:84px\">出國前<br>記得確認<br><span class=\"yel\">第三人責任</span></div><div class=\"body\" data-at=\".6\" style=\"font-size:42px\">你的旅遊險有包含嗎？留言告訴我</div><div class=\"disc\" data-at=\".9\">示意案例，實際承保範圍、限額及除外責任<br>依保單條款為準。</div>"
+    }
+   ]
+  }
+ ],
+ "sfx_events": [
+  {
+   "sound": "tick",
+   "at": "p2a+0",
+   "repeat": 9,
+   "every": 0.5
+  },
+  {
+   "sound": "knock",
+   "at": "p3@1.15"
+  },
+  {
+   "sound": "knock",
+   "at": "p3@1.42"
+  },
+  {
+   "sound": "drip",
+   "at": "p4+0.25",
+   "db": 0
+  },
+  {
+   "sound": "drip",
+   "at": "p4+1.1",
+   "db": -3
+  }
+ ],
+ "cover": {
+  "bg": {
+   "shot": "s4",
+   "t": 0.4
+  },
+  "stamp": {
+   "text": "樓下淹水",
+   "x": 600,
+   "y": 330
+  },
+  "tag": "真實理賠案例",
+  "t1": "忘了關水龍頭",
+  "t2": "保險賠了 <b>249</b> 萬",
+  "st": "你的旅遊險有<y>「第三人責任」</y>嗎？",
+  "output": "out/cover.jpg"
+ },
+ "caption_notes": {
+  "hook_options": [
+   "出國忘了關水龍頭，樓下房間不能住，誰要賠？",
+   "一個沒關的水龍頭，保險賠了約 249 萬台幣。",
+   "你的旅遊險，有「第三人責任」這一欄嗎？"
+  ],
+  "must_include": [
+   "案例來源：損保ジャパン日本興亜公開理賠案例（巴黎飯店浴缸溢水 12,438,470 日圓，以 2026 年匯率約 0.2 換算約新台幣 249 萬元）",
+   "示意案例，實際承保範圍、限額及除外責任依保單條款為準。"
+  ],
+  "hashtags": [
+   "#旅遊不便險",
+   "#旅平險",
+   "#第三人責任",
+   "#出國必看",
+   "#保險知識",
+   "#日本旅遊",
+   "#飯店"
+  ]
+ }
+}
